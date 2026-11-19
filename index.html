@@ -209,36 +209,6 @@
           #box1-text,#box2-text { font-size:15px; }
         }
 
-
-        /* Toast Notification */
-        #toast-notification {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #1e293b;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 9999px;
-            font-size: 13px;
-            font-weight: 600;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
-            opacity: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            pointer-events: none;
-        }
-        #toast-notification.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        body.dark #toast-notification {
-            background: #f8fafc;
-            color: #0f172a;
-        }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
@@ -265,10 +235,7 @@
                 <button id="focus-toggle" type="button" onclick="toggleFocusMode()" class="w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 text-slate-600 flex items-center justify-center transition-colors" title="تفعيل وضع التركيز" aria-label="وضع التركيز" aria-pressed="false">
                     <i id="focus-toggle-icon" data-lucide="scan-eye" class="w-4 h-4"></i>
                 </button>
-                <button id="settings-toggle" type="button" onclick="openSettingsModal()" class="w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 text-slate-600 flex items-center justify-center transition-colors" title="إعدادات مفاتيح API" aria-label="إعدادات مفاتيح API">
-                    <i data-lucide="key-round" class="w-4 h-4"></i>
-                </button>
-                <div id="engine-badge" onclick="toggleDiagnosticBanner()" class="hidden cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all" title="اضغط لعرض أو إخفاء تفاصيل اتصال Gemini">
+                <div id="engine-badge" onclick="toggleDiagnosticBanner()" class="cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all" title="اضغط لعرض أو إخفاء تفاصيل اتصال Gemini">
                     <span id="engine-dot" class="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
                     <span id="engine-status-text" class="ltr-text truncate max-w-[160px] sm:max-w-none">Gemini Primary</span>
                 </div>
@@ -335,11 +302,10 @@
                 </div>
             </div>
 
-            <!-- زر التبديل في المنتصف بين الصندوقين (متجاوب للموبايل والكمبيوتر) -->
-            <div class="flex justify-center items-center lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 z-20 my-0.5 lg:my-0">
-                <button type="button" onclick="swapBoxes()" class="px-5 py-2 lg:p-0 lg:w-11 lg:h-11 rounded-full bg-white hover:bg-blue-600 text-blue-600 hover:text-white border-2 border-blue-100 hover:border-blue-600 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-90 group" title="تبديل اللغتين والنصوص">
-                    <i data-lucide="arrow-left-right" class="w-4 h-4 lg:w-5 lg:h-5 rotate-90 lg:rotate-0 transition-transform duration-300 group-hover:scale-110"></i>
-                    <span class="text-xs font-bold lg:hidden">تبديل اللغتين</span>
+            <!-- زر التبديل الدائري في المنتصف بين الصندوقين (Swap Button) -->
+            <div class="flex justify-center items-center lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 z-20 -my-1.5 lg:my-0">
+                <button type="button" onclick="swapBoxes()" class="w-11 h-11 rounded-full bg-white hover:bg-blue-600 text-blue-600 hover:text-white border-2 border-blue-100 hover:border-blue-600 shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-200 active:scale-90 group" title="تبديل اللغتين والنصوص">
+                    <i data-lucide="arrow-left-right" class="w-5 h-5 rotate-90 lg:rotate-0 transition-transform duration-300 group-hover:scale-110"></i>
                 </button>
             </div>
 
@@ -392,18 +358,12 @@
             </div>
         </div>
 
-        <!-- زر Submit الرئيسي وزر مسح الكل -->
+        <!-- زر Submit الرئيسي -->
         <div class="mt-5 sm:mt-6 flex flex-col items-center justify-center">
-            <div class="w-full sm:w-auto flex items-center justify-center gap-2.5">
-                <button id="submit-btn" type="button" onclick="executeTranslation()" class="flex-1 sm:flex-initial sm:min-w-[260px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg shadow-blue-200/80 hover:shadow-blue-300 transition-all duration-200 flex items-center justify-center gap-2.5 active:scale-[0.98]">
-                    <i data-lucide="sparkles" class="w-5 h-5"></i>
-                    <span>Submit / ترجم وحلل</span>
-                </button>
-                <button type="button" onclick="clearAllBoxes()" class="px-4 py-3.5 rounded-2xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 border border-slate-200 hover:border-red-200 font-bold text-sm shadow-xs transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-[0.98]" title="مسح الصندوقين معاً">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    <span class="hidden sm:inline">مسح الكل</span>
-                </button>
-            </div>
+            <button id="submit-btn" type="button" onclick="executeTranslation()" class="w-full sm:w-auto sm:min-w-[260px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg shadow-blue-200/80 hover:shadow-blue-300 transition-all duration-200 flex items-center justify-center gap-2.5 active:scale-[0.98]">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                <span>Submit / ترجم وحلل</span>
+            </button>
             <span class="hidden sm:inline-block text-[11px] text-slate-400 mt-2">اختصارات: <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Enter</kbd> للترجمة · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Esc</kbd> للإلغاء · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Shift + H</kbd> للسجل</span>
         </div>
 
@@ -758,13 +718,6 @@
 
     </main>
 
-
-    <!-- Toast Notification -->
-    <div id="toast-notification" role="status" aria-live="polite">
-        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
-        <span id="toast-message">تم نسخ النص إلى الحافظة بنجاح</span>
-    </div>
-
     <!-- التذييل (Footer) -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
@@ -814,8 +767,8 @@
         // ============================================================================
         // Convenience defaults requested by the site owner. These are client-side keys.
         // Anyone receiving this HTML can inspect them; rotate and move to a backend before public launch.
-        const DEFAULT_GEMINI_KEY = "";
-        const DEFAULT_GROQ_KEY = "";
+        const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6LLveWHfGaKQ48JVE-sQzSat94BG1t2mBiME2a9hgjp7g";
+        const DEFAULT_GROQ_KEY = "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";
 
         const KEY_VERSION = "v13_owner_defaults_enabled";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
@@ -1542,18 +1495,12 @@
                 else languageDetectionTimers[boxNum] = setTimeout(() => {
                     const latest = document.getElementById(`box${boxNum}-text`).value.trim();
                     updateDetectedDisplay(boxNum, detectLanguageFromText(latest));
-                }, 250);
+                }, 110);
             } else {
                 clearTimeout(languageDetectionTimers[boxNum]);
                 clearBtn.classList.add("hidden");
                 resetDetectedDisplay(boxNum);
             }
-        }
-
-        function clearAllBoxes() {
-            clearBox(1);
-            clearBox(2);
-            showToast("تم مسح جميع النصوص");
         }
 
         function clearBox(boxNum) {
@@ -1611,55 +1558,27 @@
             document.getElementById("box2-clear-btn").classList.toggle("hidden", t2.value.trim().length === 0);
         }
 
-        let toastTimer = null;
-        function showToast(message) {
-            const toast = document.getElementById("toast-notification");
-            const msgEl = document.getElementById("toast-message");
-            if (!toast || !msgEl) return;
-            msgEl.textContent = message;
-            toast.classList.add("show");
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => {
-                toast.classList.remove("show");
-            }, 2000);
-        }
-
         function copyBoxText(elementId, btnElement) {
             const el = document.getElementById(elementId);
             const textToCopy = el.value;
             if (!textToCopy || textToCopy.trim() === "") return;
 
-            const onCopySuccess = () => {
-                showToast("تم نسخ النص إلى الحافظة بنجاح");
-                if (btnElement) {
-                    const originalHTML = btnElement.innerHTML;
-                    btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">Copied!</span>`;
-                    btnElement.classList.add("border-emerald-300", "bg-emerald-50");
-                    lucide.createIcons({ nodes: [btnElement] });
-
-                    setTimeout(() => {
-                        btnElement.innerHTML = originalHTML;
-                        btnElement.classList.remove("border-emerald-300", "bg-emerald-50");
-                        lucide.createIcons({ nodes: [btnElement] });
-                    }, 1500);
-                }
-            };
-
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(textToCopy).then(onCopySuccess).catch(() => fallbackCopy(textToCopy, onCopySuccess));
-            } else {
-                fallbackCopy(textToCopy, onCopySuccess);
-            }
-        }
-
-        function fallbackCopy(textToCopy, onSuccess) {
             const tempTextarea = document.createElement("textarea");
             tempTextarea.value = textToCopy;
             document.body.appendChild(tempTextarea);
             tempTextarea.select();
             try {
                 document.execCommand("copy");
-                onSuccess();
+                const originalHTML = btnElement.innerHTML;
+                btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">Copied!</span>`;
+                btnElement.classList.add("border-emerald-300", "bg-emerald-50");
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    btnElement.innerHTML = originalHTML;
+                    btnElement.classList.remove("border-emerald-300", "bg-emerald-50");
+                    lucide.createIcons();
+                }, 1500);
             } catch (err) {
                 console.error("Copy failed", err);
             } finally {
@@ -1983,14 +1902,14 @@ USER INPUT TEXT:
                     const attempts=[];
                     if(state.geminiKey.trim()) attempts.push(geminiAttempt());
                     if(state.groqKey.trim()) attempts.push(groqAttempt());
-                    if(!attempts.length) { openSettingsModal(); throw new Error("يرجى إدخال مفتاح Gemini أو Groq في نافذة الإعدادات أولاً"); }
+                    if(!attempts.length) throw new Error("No API keys configured");
                     try { winner=await Promise.any(attempts); }
                     catch(aggregate) { throw new Error((aggregate.errors||[]).map(e=>e.message).join(" | ")||"All providers failed"); }
                 } else {
                     // Short lookups use one fast primary to avoid spending two provider quotas on every simple word.
                     try { if(state.geminiKey.trim()) winner=await geminiAttempt(); } catch(e) { if(e.name==="AbortError") throw e; }
                     if(!winner && state.groqKey.trim()) winner=await groqAttempt();
-                    if(!winner) { if(!state.geminiKey.trim() && !state.groqKey.trim()) { openSettingsModal(); throw new Error("يرجى إدخال مفتاح Gemini أو Groq في نافذة الإعدادات أولاً"); } throw new Error("All configured translation providers failed"); }
+                    if(!winner) throw new Error((!state.geminiKey.trim() && !state.groqKey.trim()) ? "No API keys configured" : "All configured translation providers failed");
                 }
                 if(requestId!==activeTranslationId) return;
                 if(winner.provider==="gemini") { groqController.abort(); updateEngineBadge(`Gemini (${winner.modelUsed})`,false); }
@@ -2256,7 +2175,7 @@ USER INPUT TEXT:
 
             dictSection.classList.remove("hidden");
             scheduleSmartInsights(data, effectiveSrcLang, effectiveTgtLang);
-            lucide.createIcons({ nodes: [dictSection] });
+            lucide.createIcons();
         }
 
         function scheduleSmartInsights(data, sourceLang, targetLang) {
@@ -2333,7 +2252,7 @@ USER INPUT TEXT:
             const dot = document.getElementById("engine-dot");
             const text = document.getElementById("engine-status-text");
 
-            badge.className = "hidden cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all";
+            badge.className = "cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all";
             dot.className = isFallback
                 ? "w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"
                 : "w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0";
