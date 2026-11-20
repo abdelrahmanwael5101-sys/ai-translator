@@ -716,9 +716,9 @@
             </div>
             <div class="p-4 sm:p-6 space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">1. رابط Cloudflare Worker للترجمة والتحليل</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">1. رابط Cloudflare Worker الأساسي</label>
                     <input id="worker-url-input" type="url" dir="ltr" class="w-full text-left text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="https://your-worker.your-subdomain.workers.dev">
-                    <p class="mt-1 text-[11px] text-slate-500">يرسل الطلب إلى الـ Worker الذي يستخدم المفاتيح السرية المخزّنة في Cloudflare.</p>
+                    <p class="mt-1 text-[11px] text-slate-500">يستدعي تلقائياً المسارين <span class="ltr-text font-mono">/api/groq</span> و <span class="ltr-text font-mono">/api/gemini</span> على الـ Worker.</p>
                 </div>
                 <div class="pt-3 border-t border-slate-200">
                     <label class="block text-xs font-bold text-slate-700 mb-1.5">2. عنوان محرك المعرفة / ملف JSON (Knowledge Backend)</label>
@@ -747,11 +747,12 @@
         // ============================================================================
         // 1. إعدادات Cloudflare Worker بدون أي مفاتيح سرية في الواجهة
         // ============================================================================
+        // غيّر هذا الرابط إلى رابط الـ Worker الخاص بك بعد النشر على Cloudflare
         const DEFAULT_WORKER_URL = "https://your-worker.your-subdomain.workers.dev";
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const KEY_VERSION = "v14_cloudflare_worker_no_embedded_keys";
+        const KEY_VERSION = "v15_worker_sse_groq_gemini";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -761,14 +762,12 @@
         const GROQ_MODELS = [
             "llama-3.3-70b-versatile",
             "openai/gpt-oss-120b",
-            "qwen/qwen3-32b",
+            "openai/gpt-oss-20b",
             "llama-3.1-8b-instant"
         ];
 
         let GEMINI_MODELS = [
-            "gemini-2.5-flash",
-            "gemini-2.5-pro",
-            "gemini-2.0-flash"
+            "gemini-2.5-flash"
         ];
 
         let lastGeminiError = "";
@@ -1712,42 +1711,19 @@ USER INPUT TEXT:
         }
 
         // ============================================================================
-        // 6. الاتصال بـ Cloudflare Worker (مع دعم الاتصال المباشر عند وجود مفتاح محلي فقط)
+        // 6. الاتصال بـ Cloudflare Worker عبر مساري /api/groq و /api/gemini مع بث SSE
         // ============================================================================
-        function isConfiguredWorkerUrl(url) {
-            const clean = String(url || "").trim();
-            return /^https?:\/\//i.test(clean) && !clean.includes("your-worker.your-subdomain.workers.dev");
+        function getWorkerBaseUrl() {
+            const raw = (state.workerUrl || DEFAULT_WORKER_URL || "").trim().replace(/\/+$/, "");
+            if (!raw || raw.includes("your-worker.your-subdomain.workers.dev")) {
+                throw new Error("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL أو من إعدادات الربط.");
+            }
+            return raw;
         }
 
-        async function callCloudflareWorker(payloadObj, signal, onText) {
-            const workerUrl = (state.workerUrl || "").trim();
-            if (!isConfiguredWorkerUrl(workerUrl)) {
-                throw new Error("يرجى ضبط رابط Cloudflare Worker الصحيح في الإعدادات (DEFAULT_WORKER_URL).");
-            }
-            const response = await fetch(workerUrl, {
-                method: "POST",
-                signal,
-                headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                body: JSON.stringify(payloadObj)
-            });
-            const rawText = await response.text();
-            if (!response.ok) {
-                throw new Error(`Worker HTTP ${response.status}: ${rawText.slice(0, 240)}`);
-            }
-            onText?.(rawText);
-            const parsed = parseSafeJSON(rawText);
-            if (parsed && parsed.data && typeof parsed.data === "object") {
-                return {
-                    data: parsed.data,
-                    provider: parsed.provider || "cloudflare-worker",
-                    modelUsed: parsed.modelUsed || parsed.model || "Worker AI"
-                };
-            }
-            return {
-                data: parsed,
-                provider: parsed?.provider || "cloudflare-worker",
-                modelUsed: parsed?.modelUsed || parsed?.model || "Worker AI"
-            };
+        function isConfiguredWorkerUrl(url) {
+            const clean = String(url || "").trim().replace(/\/+$/, "");
+            return /^https?:\/\//i.test(clean) && !clean.includes("your-worker.your-subdomain.workers.dev");
         }
 
         function updateStreamPreview(rawText, targetBoxNum) {
@@ -1797,6 +1773,58 @@ USER INPUT TEXT:
             return parseSafeJSON(raw);
         }
 
+        async function callWorkerGroqStream(prompt, signal, onText) {
+            const baseUrl = getWorkerBaseUrl();
+            let lastErr = null;
+            for (const modelName of GROQ_MODELS) {
+                if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
+                try {
+                    const response = await fetch(`${baseUrl}/api/groq`, {
+                        method: "POST",
+                        signal,
+                        headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
+                        body: JSON.stringify({ model: modelName, prompt })
+                    });
+                    if (!response.ok) {
+                        const errBody = (await response.text()).slice(0, 300);
+                        throw new Error(`Worker Groq (${modelName}) HTTP ${response.status}: ${errBody}`);
+                    }
+                    const parsed = await readSSE(response, onText, "groq", signal);
+                    return { data: parsed, modelUsed: modelName, provider: "groq" };
+                } catch (err) {
+                    lastErr = err;
+                    if (err.name === "AbortError") throw err;
+                }
+            }
+            throw lastErr || new Error("Groq via Worker failed");
+        }
+
+        async function callWorkerGeminiStream(prompt, signal, onText) {
+            const baseUrl = getWorkerBaseUrl();
+            let lastErr = null;
+            for (const modelName of GEMINI_MODELS) {
+                if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
+                try {
+                    const response = await fetch(`${baseUrl}/api/gemini`, {
+                        method: "POST",
+                        signal,
+                        headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
+                        body: JSON.stringify({ model: modelName, prompt })
+                    });
+                    if (!response.ok) {
+                        const errBody = (await response.text()).slice(0, 300);
+                        throw new Error(`Worker Gemini (${modelName}) HTTP ${response.status}: ${errBody}`);
+                    }
+                    const parsed = await readSSE(response, onText, "gemini", signal);
+                    return { data: parsed, modelUsed: modelName, provider: "gemini" };
+                } catch (err) {
+                    lastErr = err;
+                    if (err.name === "AbortError") throw err;
+                }
+            }
+            throw lastErr || new Error("Gemini via Worker failed");
+        }
+
         async function sendGeminiModelRequest(modelName, apiKey, payload, signal, onText) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
             const response = await fetch(url, { method: "POST", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
@@ -1807,7 +1835,7 @@ USER INPUT TEXT:
             return parseSafeJSON(text);
         }
 
-        async function callGeminiAPI(prompt, signal, onText) {
+        async function callDirectGeminiAPI(prompt, signal, onText) {
             const apiKey = state.geminiKey.trim();
             if (!apiKey) throw new Error("Missing local Gemini API Key");
             const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.1, responseMimeType: "application/json" } };
@@ -1817,7 +1845,7 @@ USER INPUT TEXT:
                 try {
                     const parsed = await sendGeminiModelRequest(modelName, apiKey, payload, signal, onText);
                     lastGeminiError = "";
-                    return { data: parsed, modelUsed: modelName };
+                    return { data: parsed, modelUsed: modelName, provider: "gemini" };
                 } catch (err) {
                     lastErr = err;
                     lastGeminiError = err.message;
@@ -1827,7 +1855,7 @@ USER INPUT TEXT:
             throw lastErr || new Error("All Gemini models failed");
         }
 
-        async function callGroqWithModel(prompt, modelName, apiKey, signal, onText) {
+        async function callDirectGroqWithModel(prompt, modelName, apiKey, signal, onText) {
             const url = "https://api.groq.com/openai/v1/chat/completions";
             const systemMsg = { role: "system", content: "You are a precise bilingual lexicographer and translation API. Output strictly valid JSON matching the exact schema and rules." };
             const userMsg = { role: "user", content: prompt };
@@ -1844,15 +1872,15 @@ USER INPUT TEXT:
             return parseSafeJSON(text);
         }
 
-        async function callGroqAPI(prompt, signal, onText) {
+        async function callDirectGroqAPI(prompt, signal, onText) {
             const apiKey = state.groqKey.trim();
             if (!apiKey) throw new Error("Missing local Groq API Key");
             let lastError = null;
             for (const modelName of GROQ_MODELS) {
                 if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
                 try {
-                    const result = await callGroqWithModel(prompt, modelName, apiKey, signal, onText);
-                    return { data: result, modelUsed: modelName };
+                    const result = await callDirectGroqWithModel(prompt, modelName, apiKey, signal, onText);
+                    return { data: result, modelUsed: modelName, provider: "groq" };
                 } catch (err) {
                     lastError = err;
                     if (err.name === "AbortError" || err.message.includes("HTTP 401")) throw err;
@@ -1875,8 +1903,8 @@ USER INPUT TEXT:
             const clean = String(text || "").trim();
             const hasArabic = /[\u0600-\u06FF]/.test(clean);
             const complex = clean.length > 90 || /[؟?!;:]/.test(clean) || /\b(although|unless|whereas|provided that|in spite of)\b/i.test(clean) || (hasArabic && /\s/.test(clean)) || /\b(figure out|break down|give up|look forward|piece of cake|under the weather)\b/i.test(clean);
-            if (complex) return { mode: "quality_parallel", label: "Complex · parallel quality route", parallel: true };
-            return { mode: "fast_primary", label: "Short · fast model route", parallel: false };
+            if (complex) return { mode: "quality_parallel", label: "Complex · Worker Groq → Gemini", parallel: true };
+            return { mode: "fast_primary", label: "Short · Worker Groq → Gemini", parallel: false };
         }
 
         function setLoadingStage(message) {
@@ -1897,7 +1925,7 @@ USER INPUT TEXT:
         function togglePerformance() { document.getElementById("performance-panel")?.classList.toggle("hidden"); }
 
         // ============================================================================
-        // 7. تنفيذ الترجمة عبر Cloudflare Worker
+        // 7. تنفيذ الترجمة عبر Cloudflare Worker (/api/groq ثم /api/gemini)
         // ============================================================================
         async function executeTranslation() {
             let srcNum = state.activeInputBox, tgtNum = srcNum === 1 ? 2 : 1;
@@ -1951,7 +1979,7 @@ USER INPUT TEXT:
             if (!hasWorker && !hasLocalKeys) {
                 activeRequestSignature = "";
                 setLoading(false);
-                showAlert("يرجى ضبط رابط Cloudflare Worker في إعدادات الربط (DEFAULT_WORKER_URL) لتفعيل الترجمة.");
+                showAlert("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL أو من إعدادات الربط.");
                 return;
             }
 
@@ -1979,31 +2007,33 @@ USER INPUT TEXT:
             try {
                 let winner = null;
                 if (hasWorker) {
-                    winner = await callCloudflareWorker({
-                        text: inputText,
-                        sourceLang: effectiveSrcLang,
-                        targetLang: effectiveTgtLang,
-                        prompt,
-                        knowledgeContext,
-                        lexicalHints,
-                        route: route.mode
-                    }, controller.signal, onStreamText);
+                    try {
+                        winner = await callWorkerGroqStream(prompt, controller.signal, onStreamText);
+                    } catch (groqErr) {
+                        if (groqErr.name === "AbortError") throw groqErr;
+                        lastGeminiError = groqErr.message;
+                        try {
+                            winner = await callWorkerGeminiStream(prompt, controller.signal, onStreamText);
+                        } catch (gemErr) {
+                            if (gemErr.name === "AbortError") throw gemErr;
+                            throw new Error(`${groqErr.message} | Fallback: ${gemErr.message}`);
+                        }
+                    }
                 } else if (state.groqKey.trim()) {
-                    const groqRes = await callGroqAPI(prompt, controller.signal, onStreamText);
-                    winner = { provider: "groq", ...groqRes };
+                    winner = await callDirectGroqAPI(prompt, controller.signal, onStreamText);
                 } else {
-                    const gemRes = await callGeminiAPI(prompt, controller.signal, onStreamText);
-                    winner = { provider: "gemini", ...gemRes };
+                    winner = await callDirectGeminiAPI(prompt, controller.signal, onStreamText);
                 }
 
                 if (requestId !== activeTranslationId) return;
-                updateEngineBadge(`${winner.modelUsed || "Worker AI"}`, winner.provider !== "gemini");
+                lastGeminiError = "";
+                updateEngineBadge(`${winner.modelUsed || winner.provider || "Worker AI"}`, winner.provider !== "gemini");
 
                 if (knowledgeContext) {
                     winner.data._knowledgeSource = knowledgeContext.verifiedOxford ? "Oxford" : knowledgeContext.source;
                     winner.data._knowledgeVerified = !!knowledgeContext.verifiedOxford;
                 } else {
-                    winner.data._knowledgeSource = hasWorker ? "Cloudflare Worker + AI" : "AI";
+                    winner.data._knowledgeSource = hasWorker ? `Cloudflare Worker (${winner.provider || "AI"})` : "Local AI";
                     winner.data._knowledgeVerified = false;
                 }
                 winner.data._route = route.label;
@@ -2013,7 +2043,7 @@ USER INPUT TEXT:
                 latestTranslationText = winner.data.translation || "";
 
                 const aiMs = performance.now() - aiStart;
-                updatePerformance({ total: performance.now() - totalStart, knowledge: knowledgeMs, ai: aiMs, source: knowledgeContext ? (knowledgeContext.source || "Knowledge + AI") : (hasWorker ? "Cloudflare Worker" : "Local AI"), route: route.label });
+                updatePerformance({ total: performance.now() - totalStart, knowledge: knowledgeMs, ai: aiMs, source: knowledgeContext ? (knowledgeContext.source || "Knowledge + Worker") : (hasWorker ? `Worker (${winner.provider})` : "Local AI"), route: route.label });
 
                 activeControllers = [];
                 activeRequestSignature = "";
@@ -2199,12 +2229,12 @@ USER INPUT TEXT:
                 if (data._knowledgeVerified === true && /oxford/i.test(sourceName)) {
                     sourceBadge.textContent = "Oxford verified data + AI";
                     sourceBadge.className = "text-[10px] sm:text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg";
-                } else if (sourceName !== "AI" && sourceName !== "Cloudflare Worker + AI") {
+                } else if (sourceName !== "Local AI" && !sourceName.startsWith("Cloudflare Worker")) {
                     sourceBadge.textContent = `Reference: ${sourceName} + AI`;
                     sourceBadge.className = "text-[10px] sm:text-[11px] font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg";
                 } else {
                     sourceBadge.textContent = sourceName;
-                    sourceBadge.className = "text-[10px] sm:text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg";
+                    sourceBadge.className = "text-[10px] sm:text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg";
                 }
             }
 
@@ -2539,7 +2569,7 @@ USER INPUT TEXT:
         }
 
         function saveApiKeys() {
-            const wUrl = document.getElementById("worker-url-input").value.trim().replace(/\/$/, "");
+            const wUrl = document.getElementById("worker-url-input").value.trim().replace(/\/+$/, "");
             const gKey = document.getElementById("gemini-key-input").value.trim();
             const grKey = document.getElementById("groq-key-input").value.trim();
 
@@ -2554,7 +2584,7 @@ USER INPUT TEXT:
             if (grKey) localStorage.setItem("smart_trans_groq_key", grKey);
             else localStorage.removeItem("smart_trans_groq_key");
 
-            const knowledgeEndpoint = document.getElementById("knowledge-endpoint-input").value.trim().replace(/\/$/, "");
+            const knowledgeEndpoint = document.getElementById("knowledge-endpoint-input").value.trim().replace(/\/+$/, "");
             const endpointChanged = knowledgeEndpoint !== (state.knowledgeEndpoint || "");
             state.knowledgeEndpoint = knowledgeEndpoint;
             localStorage.setItem("smart_trans_knowledge_endpoint", knowledgeEndpoint);
