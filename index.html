@@ -374,7 +374,6 @@
             </label>
             <button type="button" onclick="toggleHistory()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سجل الترجمات <span id="history-count" class="font-en">0</span></button>
             <button type="button" onclick="togglePerformance()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سرعة الموقع</button>
-            <button type="button" onclick="openSettingsModal()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">إعدادات الربط</button>
         </div>
         <section id="performance-panel" class="hidden mt-3 bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 animate-fade-in">
             <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm">مراقبة الأداء</h3><span id="perf-route" class="text-[11px] text-slate-500">لم تبدأ عملية بعد</span></div>
@@ -702,53 +701,11 @@
         </div>
     </footer>
 
-    <!-- نافذة إعدادات الربط مع Cloudflare Worker -->
-    <div id="settings-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden">
-            <div class="px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="cloud" class="w-5 h-5 text-blue-600 shrink-0"></i>
-                    <h3 class="text-sm sm:text-base font-bold text-slate-800">إعدادات Cloudflare Worker والمعرفة</h3>
-                </div>
-                <button type="button" onclick="closeSettingsModal()" class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-            <div class="p-4 sm:p-6 space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">1. رابط Cloudflare Worker الأساسي</label>
-                    <input id="worker-url-input" type="url" dir="ltr" class="w-full text-left text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="https://your-worker.your-subdomain.workers.dev">
-                    <p class="mt-1 text-[11px] text-slate-500">يستدعي تلقائياً المسارين <span class="ltr-text font-mono">/api/groq</span> و <span class="ltr-text font-mono">/api/gemini</span> على الـ Worker.</p>
-                </div>
-                <div class="pt-3 border-t border-slate-200">
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">2. عنوان محرك المعرفة / ملف JSON (Knowledge Backend)</label>
-                    <input id="knowledge-endpoint-input" type="url" dir="ltr" class="w-full text-left text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="https://your-domain.com/api/knowledge/search">
-                </div>
-                <div class="pt-3 border-t border-slate-200 space-y-3">
-                    <p class="text-[11px] font-bold text-slate-600">اختياري (للتجربة المحلية فقط — يُفضّل إبقاؤها فارغة واستخدام Cloudflare Worker):</p>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">مفتاح Gemini محلي (اختياري)</label>
-                        <input id="gemini-key-input" type="password" autocomplete="off" class="w-full ltr-text text-xs px-3.5 py-2 rounded-xl border border-slate-300 focus:border-blue-500 outline-none" placeholder="اتركه فارغاً عند الاعتماد على Cloudflare Worker">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">مفتاح Groq محلي (اختياري)</label>
-                        <input id="groq-key-input" type="password" autocomplete="off" class="w-full ltr-text text-xs px-3.5 py-2 rounded-xl border border-slate-300 focus:border-blue-500 outline-none" placeholder="اتركه فارغاً عند الاعتماد على Cloudflare Worker">
-                    </div>
-                </div>
-            </div>
-            <div class="px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2">
-                <button type="button" onclick="resetDefaultKeys()" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-200 transition-colors">مسح المفاتيح المحلية</button>
-                <button type="button" onclick="saveApiKeys()" class="px-5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors">حفظ الإعدادات</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ============================================================================
         // 1. إعدادات Cloudflare Worker بدون أي مفاتيح سرية في الواجهة
         // ============================================================================
-        // غيّر هذا الرابط إلى رابط الـ Worker الخاص بك بعد النشر على Cloudflare
-        const DEFAULT_WORKER_URL = "https://your-worker.your-subdomain.workers.dev";
+        const DEFAULT_WORKER_URL = "https://smart-translator-api.abdelrahmanwael5101.workers.dev";
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
@@ -1006,10 +963,10 @@
             box1: { selectedLang: "ar", detectedLang: null, manualOverride: false },
             box2: { selectedLang: "en-US", detectedLang: null, manualOverride: false },
             currentDictLang: "en-US",
-            workerUrl: localStorage.getItem("smart_trans_worker_url") || DEFAULT_WORKER_URL,
-            geminiKey: localStorage.getItem("smart_trans_gemini_key") || "",
-            groqKey: localStorage.getItem("smart_trans_groq_key") || "",
-            knowledgeEndpoint: localStorage.getItem("smart_trans_knowledge_endpoint") || ""
+            workerUrl: DEFAULT_WORKER_URL,
+            geminiKey: "",
+            groqKey: "",
+            knowledgeEndpoint: ""
         };
 
         // ============================================================================
@@ -1713,17 +1670,23 @@ USER INPUT TEXT:
         // ============================================================================
         // 6. الاتصال بـ Cloudflare Worker عبر مساري /api/groq و /api/gemini مع بث SSE
         // ============================================================================
+        function normalizeWorkerUrl(url) {
+            const trimmed = String(url || "").trim().replace(/\/+$/, "");
+            if (!trimmed || trimmed.includes("your-worker.your-subdomain.workers.dev")) return "";
+            if (/^https?:\/\//i.test(trimmed)) return trimmed;
+            return `https://${trimmed}`;
+        }
+
         function getWorkerBaseUrl() {
-            const raw = (state.workerUrl || DEFAULT_WORKER_URL || "").trim().replace(/\/+$/, "");
-            if (!raw || raw.includes("your-worker.your-subdomain.workers.dev")) {
-                throw new Error("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL أو من إعدادات الربط.");
+            const raw = normalizeWorkerUrl(state.workerUrl || DEFAULT_WORKER_URL);
+            if (!raw) {
+                throw new Error("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL.");
             }
             return raw;
         }
 
         function isConfiguredWorkerUrl(url) {
-            const clean = String(url || "").trim().replace(/\/+$/, "");
-            return /^https?:\/\//i.test(clean) && !clean.includes("your-worker.your-subdomain.workers.dev");
+            return Boolean(normalizeWorkerUrl(url));
         }
 
         function updateStreamPreview(rawText, targetBoxNum) {
@@ -1979,7 +1942,7 @@ USER INPUT TEXT:
             if (!hasWorker && !hasLocalKeys) {
                 activeRequestSignature = "";
                 setLoading(false);
-                showAlert("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL أو من إعدادات الربط.");
+                showAlert("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL.");
                 return;
             }
 
@@ -2073,7 +2036,7 @@ USER INPUT TEXT:
                 diagBox.classList.add("hidden");
                 return;
             }
-            const workerState = isConfiguredWorkerUrl(state.workerUrl) ? state.workerUrl : "غير مضبوط";
+            const workerState = normalizeWorkerUrl(state.workerUrl) || "غير مضبوط";
             diagMsg.textContent = lastGeminiError
                 ? `Worker: ${workerState} | آخر خطأ: (${lastGeminiError})`
                 : `Worker: ${workerState} | حالة الاتصال: جاهز`;
@@ -2456,7 +2419,7 @@ USER INPUT TEXT:
         }
 
         // ============================================================================
-        // 9. أدوات مساعدة وإدارة نافذة الإعدادات
+        // 9. أدوات مساعدة
         // ============================================================================
         function updateEngineBadge(engineName, isFallback) {
             const badge = document.getElementById("engine-badge");
@@ -2554,62 +2517,6 @@ USER INPUT TEXT:
             document.body.classList.toggle("focus-mode", enabled);
             localStorage.setItem("smart_trans_focus_mode", enabled ? "on" : "off");
             updateFocusButton(enabled);
-        }
-
-        function openSettingsModal() {
-            document.getElementById("worker-url-input").value = state.workerUrl || "";
-            document.getElementById("gemini-key-input").value = state.geminiKey || "";
-            document.getElementById("groq-key-input").value = state.groqKey || "";
-            document.getElementById("knowledge-endpoint-input").value = state.knowledgeEndpoint || "";
-            document.getElementById("settings-modal").classList.remove("hidden");
-        }
-
-        function closeSettingsModal() {
-            document.getElementById("settings-modal").classList.add("hidden");
-        }
-
-        function saveApiKeys() {
-            const wUrl = document.getElementById("worker-url-input").value.trim().replace(/\/+$/, "");
-            const gKey = document.getElementById("gemini-key-input").value.trim();
-            const grKey = document.getElementById("groq-key-input").value.trim();
-
-            state.workerUrl = wUrl;
-            localStorage.setItem("smart_trans_worker_url", wUrl);
-
-            state.geminiKey = gKey;
-            if (gKey) localStorage.setItem("smart_trans_gemini_key", gKey);
-            else localStorage.removeItem("smart_trans_gemini_key");
-
-            state.groqKey = grKey;
-            if (grKey) localStorage.setItem("smart_trans_groq_key", grKey);
-            else localStorage.removeItem("smart_trans_groq_key");
-
-            const knowledgeEndpoint = document.getElementById("knowledge-endpoint-input").value.trim().replace(/\/+$/, "");
-            const endpointChanged = knowledgeEndpoint !== (state.knowledgeEndpoint || "");
-            state.knowledgeEndpoint = knowledgeEndpoint;
-            localStorage.setItem("smart_trans_knowledge_endpoint", knowledgeEndpoint);
-            if (endpointChanged) {
-                knowledgeCache.clear();
-                translationCache.clear();
-                localStorage.removeItem("smart_trans_knowledge_cache");
-                localStorage.removeItem("smart_trans_cache");
-            }
-            closeSettingsModal();
-        }
-
-        function resetDefaultKeys() {
-            state.geminiKey = "";
-            state.groqKey = "";
-            localStorage.removeItem("smart_trans_gemini_key");
-            localStorage.removeItem("smart_trans_groq_key");
-            document.getElementById("gemini-key-input").value = "";
-            document.getElementById("groq-key-input").value = "";
-            state.workerUrl = DEFAULT_WORKER_URL;
-            localStorage.removeItem("smart_trans_worker_url");
-            document.getElementById("worker-url-input").value = DEFAULT_WORKER_URL;
-            state.knowledgeEndpoint = "";
-            localStorage.removeItem("smart_trans_knowledge_endpoint");
-            document.getElementById("knowledge-endpoint-input").value = "";
         }
     </script>
 </body>
