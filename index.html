@@ -71,8 +71,44 @@
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes staggeredReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(18px) scale(0.985);
+                filter: blur(4px);
+            }
+            65% {
+                opacity: 1;
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+        @keyframes textPopIn {
+            0% {
+                opacity: 0.25;
+                transform: translateY(6px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         .animate-fade-in {
             animation: fadeIn 0.3s ease-out forwards;
+        }
+        .stagger-hidden {
+            opacity: 0;
+            transform: translateY(18px) scale(0.985);
+        }
+        .stagger-visible {
+            animation: staggeredReveal 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .translation-pop {
+            animation: textPopIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         .accordion-arrow {
             transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -159,7 +195,10 @@
         body.dark .smart-chip { background:#18253b; border-color:#34445f; color:#dbeafe; }
         body.dark .smart-muted { color:#a9b7cc; }
 
-        @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+        @media (prefers-reduced-motion:reduce) {
+            *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; }
+            .stagger-hidden { opacity:1 !important; transform:none !important; }
+        }
 
         /* v7 Premium Redesign: calm navy + teal accent, editorial hierarchy */
         :root { --premium-ink:#17263d; --premium-accent:#0f8f91; --premium-accent-2:#2563a6; --premium-line:#dce5ed; }
@@ -255,7 +294,7 @@
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>SMART TRANSLATION EXPERIENCE</span>
             </div>
             <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">ترجمة ذكية تفهم المصري والإنجليزي حتى لو مش مثالي</h2>
-            <p class="mt-2 text-xs sm:text-sm text-slate-500">بديل سريع للترجمة الحرفية ولفتح شات الذكاء الاصطناعي في كل مرة</p>
+            <p class="mt-2 text-xs sm:text-sm text-slate-500">ترجمة تلقائية بمجرد التوقف عن الكتابة وعرض متدرج للنتائج خطوة بخطوة</p>
         </section>
 
         <!-- حاوية صناديق الترجمة المتجاوبة -->
@@ -277,7 +316,7 @@
                 </div>
 
                 <div class="relative flex-1 flex flex-col p-3.5 sm:p-4 pb-16 min-h-[190px] sm:min-h-[240px]">
-                    <textarea id="box1-text" oninput="onBoxInput(1)" onfocus="setActiveBox(1)" placeholder="اكتب النص أو الكلمة هنا..." class="w-full flex-1 resize-none border-0 focus:ring-0 focus:outline-none text-base sm:text-xl text-slate-800 placeholder-slate-400 leading-relaxed bg-transparent"></textarea>
+                    <textarea id="box1-text" oninput="onBoxInput(1)" onfocus="setActiveBox(1)" placeholder="اكتب النص أو الكلمة هنا وسيتم ترجمتها تلقائياً..." class="w-full flex-1 resize-none border-0 focus:ring-0 focus:outline-none text-base sm:text-xl text-slate-800 placeholder-slate-400 leading-relaxed bg-transparent"></textarea>
                     <div id="box1-phonetics-row" class="hidden ltr-text flex flex-wrap items-center gap-2 mt-1">
                         <span id="box1-transcription" class="text-xs text-slate-400 font-medium"></span>
                         <span id="box1-ipa-inline" class="text-xs font-mono font-semibold text-blue-600 bg-blue-50/80 border border-blue-100 px-2 py-0.5 rounded-md"></span>
@@ -330,7 +369,7 @@
                         <span id="loading-status" class="text-xs font-semibold text-blue-700">جاري تجهيز الترجمة...</span>
                     </div>
 
-                    <textarea id="box2-text" oninput="onBoxInput(2)" onfocus="setActiveBox(2)" placeholder="الترجمة تظهر هنا (أو اكتب هنا للترجمة للصندوق الآخر)..." class="w-full flex-1 resize-none border-0 focus:ring-0 focus:outline-none text-base sm:text-xl text-slate-800 placeholder-slate-400 leading-relaxed bg-transparent"></textarea>
+                    <textarea id="box2-text" oninput="onBoxInput(2)" onfocus="setActiveBox(2)" placeholder="الترجمة تظهر تلقائياً هنا..." class="w-full flex-1 resize-none border-0 focus:ring-0 focus:outline-none text-base sm:text-xl text-slate-800 placeholder-slate-400 leading-relaxed bg-transparent"></textarea>
                     <div id="box2-phonetics-row" class="hidden ltr-text flex flex-wrap items-center gap-2 mt-1">
                         <span id="box2-transcription" class="text-xs text-slate-400 font-medium"></span>
                         <span id="box2-ipa-inline" class="text-xs font-mono font-semibold text-blue-600 bg-blue-50/80 border border-blue-100 px-2 py-0.5 rounded-md"></span>
@@ -356,11 +395,12 @@
 
         <!-- زر Submit الرئيسي -->
         <div class="mt-5 sm:mt-6 flex flex-col items-center justify-center">
-            <button id="submit-btn" type="button" onclick="executeTranslation()" class="w-full sm:w-auto sm:min-w-[260px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg shadow-blue-200/80 hover:shadow-blue-300 transition-all duration-200 flex items-center justify-center gap-2.5 active:scale-[0.98]">
+            <button id="submit-btn" type="button" onclick="executeTranslation({ manualTrigger: true })" class="w-full sm:w-auto sm:min-w-[260px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg shadow-blue-200/80 hover:shadow-blue-300 transition-all duration-200 flex items-center justify-center gap-2.5 active:scale-[0.98]">
                 <i data-lucide="sparkles" class="w-5 h-5"></i>
                 <span>Submit / ترجم وحلل</span>
             </button>
-            <span class="hidden sm:inline-block text-[11px] text-slate-400 mt-2">اختصارات: <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Enter</kbd> للترجمة · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Esc</kbd> للإلغاء · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Shift + H</kbd> للسجل</span>
+            <span id="auto-translate-hint" class="text-[11px] text-teal-700 font-semibold mt-2">الترجمة التلقائية مفعّلة عند التوقف عن الكتابة · اضغط الزر لعرض التحليل المتدرج</span>
+            <span class="hidden sm:inline-block text-[11px] text-slate-400 mt-1">اختصارات: <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Enter</kbd> للترجمة · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Esc</kbd> للإلغاء · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Shift + H</kbd> للسجل</span>
         </div>
 
         <!-- أدوات النطق وسجل الترجمات -->
@@ -408,9 +448,9 @@
         </div>
 
         <!-- قسم التحليل اللغوي والقاموس المفصل -->
-        <section id="dictionary-section" class="hidden mt-6 sm:mt-8 animate-fade-in">
+        <section id="dictionary-section" class="hidden mt-6 sm:mt-8">
             <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-                <div class="bg-gradient-to-l from-blue-50 via-white to-slate-50 border-b border-slate-200 p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div data-stagger-item class="bg-gradient-to-l from-blue-50 via-white to-slate-50 border-b border-slate-200 p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex flex-col gap-1">
                         <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
                             <h2 id="dict-word" class="text-xl sm:text-3xl font-extrabold text-blue-700 break-words"></h2>
@@ -497,7 +537,7 @@
                 </div>
 
                 <div class="p-4 sm:p-6 space-y-5 sm:space-y-6">
-                    <section id="smart-insights" class="hidden space-y-3">
+                    <section id="smart-insights" data-stagger-item class="hidden space-y-3">
                         <div class="flex items-center justify-between gap-2"><h3 class="text-xs font-bold text-slate-500">تفاصيل إضافية لفهم السياق والبدائل</h3><span id="naturalness-badge" class="hidden text-[10px] font-bold rounded-full px-2.5 py-1 border"></span></div>
                         <div id="alternatives-card" class="smart-insight-card hidden">
                             <div class="smart-insight-title"><span>بدائل طبيعية للترجمة</span></div>
@@ -517,7 +557,7 @@
                         </div>
                     </section>
 
-                    <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/80">
+                    <div id="dict-def-card" data-stagger-item class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/80">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-700">
                                 <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
@@ -530,7 +570,7 @@
                         <p id="dict-definition" class="text-sm sm:text-lg text-slate-800 font-medium leading-relaxed"></p>
                     </div>
 
-                    <div>
+                    <div id="dict-examples-block" data-stagger-item>
                         <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-700 mb-3">
                             <i data-lucide="quote" class="w-4 h-4 shrink-0"></i>
                             <span id="dict-ex-header">أمثلة توضيحية في سياقات مختلفة (Contextual Examples)</span>
@@ -539,7 +579,7 @@
                         </div>
                     </div>
 
-                    <div id="idiom-section" class="hidden bg-indigo-50/50 rounded-2xl p-4 sm:p-5 border border-indigo-200/80 space-y-4">
+                    <div id="idiom-section" data-stagger-item class="hidden bg-indigo-50/50 rounded-2xl p-4 sm:p-5 border border-indigo-200/80 space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-100 pb-3">
                             <div class="flex items-center gap-2">
                                 <span class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white text-[11px] sm:text-xs font-bold flex items-center gap-1.5">
@@ -565,7 +605,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 pt-2 border-t border-slate-100">
+                    <div id="dict-syn-ant-block" data-stagger-item class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 pt-2 border-t border-slate-100">
                         <div class="bg-blue-50/40 rounded-2xl p-4 sm:p-5 border border-blue-100">
                             <div class="flex items-center justify-between mb-3">
                                 <span class="ltr-text text-xs sm:text-sm font-bold text-blue-800 flex items-center gap-1.5">
@@ -589,7 +629,7 @@
                         </div>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-200/80">
+                    <div id="dict-advanced-block" data-stagger-item class="pt-4 border-t border-slate-200/80">
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700">
                                 <i data-lucide="book-open-check" class="w-4 h-4 text-blue-600"></i>
@@ -709,7 +749,7 @@
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const KEY_VERSION = "v15_worker_sse_groq_gemini";
+        const KEY_VERSION = "v16_auto_translate_stagger_reveal";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -717,10 +757,10 @@
         }
 
         const GROQ_MODELS = [
+            "llama-3.1-8b-instant",
             "llama-3.3-70b-versatile",
-            "openai/gpt-oss-120b",
             "openai/gpt-oss-20b",
-            "llama-3.1-8b-instant"
+            "openai/gpt-oss-120b"
         ];
 
         let GEMINI_MODELS = [
@@ -732,10 +772,10 @@
         let activeControllers = [];
         const translationCache = new Map();
         const translationCacheTimes = new Map();
-        const CACHE_LIMIT = 100;
+        const CACHE_LIMIT = 150;
         const knowledgeCache = new Map();
         const KNOWLEDGE_CACHE_LIMIT = 120;
-        const KNOWLEDGE_WAIT_MS = 650;
+        const KNOWLEDGE_WAIT_MS = 350;
         const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
         const KNOWLEDGE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
         const IDB_NAME = "smart-translator-db";
@@ -747,13 +787,26 @@
         let lastPerformance = { total: 0, knowledge: 0, ai: 0, source: "—", route: "—" };
         let activeStreamOwner = null;
         const languageDetectionTimers = { 1: null, 2: null };
+        let autoTranslateTimer = null;
+        let lastPreparedPayload = null;
+        let lastRenderedSignature = "";
+        let staggerTimers = [];
+        let isRevealingStagger = false;
+
+        function clearStaggerTimers() {
+            staggerTimers.forEach(id => clearTimeout(id));
+            staggerTimers = [];
+        }
 
         function cancelActiveTranslation(showMessage = false) {
+            clearTimeout(autoTranslateTimer);
+            clearStaggerTimers();
             activeTranslationId++;
             activeControllers.forEach(c => { try { c.abort(); } catch (_) {} });
             activeControllers = [];
             activeRequestSignature = "";
             activeStreamOwner = null;
+            isRevealingStagger = false;
             setLoading(false);
             if (showMessage) showAlert("تم إلغاء عملية الترجمة.");
         }
@@ -943,7 +996,7 @@
                 const body = document.createElement("button"); body.type="button"; body.className="min-w-0 flex-1 text-right";
                 const a=document.createElement("span"); a.className="block text-xs font-bold text-slate-700 truncate"; a.textContent=item.input;
                 const b=document.createElement("span"); b.className="block text-xs text-slate-500 truncate mt-1"; b.textContent=item.translation;
-                body.append(a,b); body.onclick=()=>{ document.getElementById("box1-text").value=item.input; onBoxInput(1); document.getElementById("box2-text").value=item.translation; onBoxInput(2); state.activeInputBox=1; };
+                body.append(a,b); body.onclick=()=>{ document.getElementById("box1-text").value=item.input; onBoxInput(1, false); document.getElementById("box2-text").value=item.translation; state.activeInputBox=1; };
                 const copy=document.createElement("button"); copy.type="button"; copy.className="text-xs text-blue-600 px-2"; copy.textContent="نسخ"; copy.onclick=()=>navigator.clipboard?.writeText(item.translation);
                 row.append(body,copy); list.appendChild(row);
             });
@@ -1082,7 +1135,7 @@
                     if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
                         e.preventDefault();
                         state.activeInputBox = boxNum;
-                        executeTranslation();
+                        executeTranslation({ manualTrigger: true });
                     }
                 });
             });
@@ -1283,7 +1336,7 @@
         }
 
         // ============================================================================
-        // 4. خانة التحديد التلقائي
+        // 4. خانة التحديد التلقائي والترجمة التلقائية عند التوقف عن الكتابة
         // ============================================================================
         function setActiveBox(boxNum) {
             state.activeInputBox = boxNum;
@@ -1331,6 +1384,18 @@
             textarea.dir = langInfo.dir;
         }
 
+        function scheduleAutoTranslate(boxNum) {
+            clearTimeout(autoTranslateTimer);
+            const textarea = document.getElementById(`box${boxNum}-text`);
+            const trimmed = (textarea?.value || "").trim();
+            if (!trimmed) return;
+            const delay = trimmed.length <= 18 ? 480 : 650;
+            autoTranslateTimer = setTimeout(() => {
+                state.activeInputBox = boxNum;
+                executeTranslation({ manualTrigger: false, autoTriggered: true });
+            }, delay);
+        }
+
         function onManualLangSelect(boxNum) {
             if (activeRequestSignature || activeControllers.length) cancelActiveTranslation(false);
             const select = document.getElementById(`box${boxNum}-lang-select`);
@@ -1343,6 +1408,7 @@
             if (trimmed.length > 0) {
                 const detected = detectLanguageFromText(trimmed);
                 updateDetectedDisplay(boxNum, detected);
+                scheduleAutoTranslate(boxNum);
             } else {
                 resetDetectedDisplay(boxNum);
                 textarea.dir = getLangObj(boxState.selectedLang).dir;
@@ -1399,8 +1465,9 @@
             return null;
         }
 
-        function onBoxInput(boxNum) {
+        function onBoxInput(boxNum, shouldAutoTranslate = true) {
             if (activeRequestSignature || activeControllers.length) cancelActiveTranslation(false);
+            clearTimeout(autoTranslateTimer);
             state.activeInputBox = boxNum;
             const textarea = document.getElementById(`box${boxNum}-text`);
             const clearBtn = document.getElementById(`box${boxNum}-clear-btn`);
@@ -1425,11 +1492,17 @@
                 else languageDetectionTimers[boxNum] = setTimeout(() => {
                     const latest = document.getElementById(`box${boxNum}-text`).value.trim();
                     updateDetectedDisplay(boxNum, detectLanguageFromText(latest));
-                }, 110);
+                }, 90);
+                if (shouldAutoTranslate) scheduleAutoTranslate(boxNum);
             } else {
                 clearTimeout(languageDetectionTimers[boxNum]);
                 clearBtn.classList.add("hidden");
                 resetDetectedDisplay(boxNum);
+                lastPreparedPayload = null;
+                lastRenderedSignature = "";
+                document.getElementById("dictionary-section").classList.add("hidden");
+                document.getElementById("idiom-section").classList.add("hidden");
+                hideAlert();
             }
         }
 
@@ -1438,7 +1511,7 @@
             stopAllAudio();
             const textarea = document.getElementById(`box${boxNum}-text`);
             textarea.value = "";
-            onBoxInput(boxNum);
+            onBoxInput(boxNum, false);
             if (boxNum === 1) {
                 document.getElementById("box2-text").value = "";
                 document.getElementById("box2-clear-btn").classList.add("hidden");
@@ -1488,6 +1561,7 @@
             document.getElementById("box2-char-count") && (document.getElementById("box2-char-count").textContent = `${t2.value.length} / 2000`);
             document.getElementById("box1-clear-btn").classList.toggle("hidden", t1.value.trim().length === 0);
             document.getElementById("box2-clear-btn").classList.toggle("hidden", t2.value.trim().length === 0);
+            if (t1.value.trim()) scheduleAutoTranslate(1);
         }
 
         function copyBoxText(elementId, btnElement) {
@@ -1695,7 +1769,12 @@ USER INPUT TEXT:
             try {
                 const partial = JSON.parse('"' + match[1] + '"');
                 const boxEl = document.getElementById(`box${targetBoxNum}-text`);
-                if (boxEl) boxEl.value = partial;
+                if (boxEl && boxEl.value !== partial) {
+                    boxEl.value = partial;
+                    boxEl.classList.remove("translation-pop");
+                    void boxEl.offsetWidth;
+                    boxEl.classList.add("translation-pop");
+                }
             } catch (_) {}
         }
 
@@ -1866,8 +1945,8 @@ USER INPUT TEXT:
             const clean = String(text || "").trim();
             const hasArabic = /[\u0600-\u06FF]/.test(clean);
             const complex = clean.length > 90 || /[؟?!;:]/.test(clean) || /\b(although|unless|whereas|provided that|in spite of)\b/i.test(clean) || (hasArabic && /\s/.test(clean)) || /\b(figure out|break down|give up|look forward|piece of cake|under the weather)\b/i.test(clean);
-            if (complex) return { mode: "quality_parallel", label: "Complex · Worker Groq → Gemini", parallel: true };
-            return { mode: "fast_primary", label: "Short · Worker Groq → Gemini", parallel: false };
+            if (complex) return { mode: "quality_parallel", label: "Fast Stream · Worker Groq → Gemini", parallel: true };
+            return { mode: "fast_primary", label: "Instant · Worker Groq → Gemini", parallel: false };
         }
 
         function setLoadingStage(message) {
@@ -1888,9 +1967,12 @@ USER INPUT TEXT:
         function togglePerformance() { document.getElementById("performance-panel")?.classList.toggle("hidden"); }
 
         // ============================================================================
-        // 7. تنفيذ الترجمة عبر Cloudflare Worker (/api/groq ثم /api/gemini)
+        // 7. تنفيذ الترجمة التلقائية واليدوية عبر Cloudflare Worker
         // ============================================================================
-        async function executeTranslation() {
+        async function executeTranslation(options = {}) {
+            const manualTrigger = options.manualTrigger !== false;
+            const autoTriggered = Boolean(options.autoTriggered);
+
             let srcNum = state.activeInputBox, tgtNum = srcNum === 1 ? 2 : 1;
             let srcTextarea = document.getElementById(`box${srcNum}-text`), inputText = srcTextarea.value.trim();
             if (!inputText) {
@@ -1901,13 +1983,9 @@ USER INPUT TEXT:
                     srcTextarea = other;
                     inputText = srcTextarea.value.trim();
                 } else {
-                    showAlert("يرجى كتابة كلمة أو جملة في أحد المستطيلين أولاً.");
+                    if (manualTrigger) showAlert("يرجى كتابة كلمة أو جملة في أحد المستطيلين أولاً.");
                     return;
                 }
-            }
-
-            if (activeControllers.length || activeRequestSignature) {
-                cancelActiveTranslation(false);
             }
 
             const detectedNow = detectLanguageFromText(inputText);
@@ -1916,12 +1994,33 @@ USER INPUT TEXT:
             const tgtState = tgtNum === 1 ? state.box1 : state.box2;
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
-
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
+            const cacheId = signature + "::smart-v3";
+
+            if (activeRequestSignature === signature && activeControllers.length) {
+                if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
+                return;
+            }
+
+            if (lastPreparedPayload && lastPreparedPayload.signature === signature) {
+                const tgtBox = document.getElementById(`box${tgtNum}-text`);
+                if (tgtBox && !tgtBox.value.trim() && lastPreparedPayload.data.translation) {
+                    tgtBox.value = lastPreparedPayload.data.translation;
+                }
+                if (manualTrigger || lastRenderedSignature !== signature) {
+                    renderResults(lastPreparedPayload.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum, { animateStagger: true });
+                    lastRenderedSignature = signature;
+                }
+                return;
+            }
+
+            if (activeControllers.length || activeRequestSignature) {
+                cancelActiveTranslation(false);
+            }
+
             activeRequestSignature = signature;
             const requestId = activeTranslationId;
             const totalStart = performance.now();
-            const cacheId = signature + "::smart-v3";
 
             hideAlert();
             document.getElementById("diagnostic-box").classList.add("hidden");
@@ -1933,7 +2032,10 @@ USER INPUT TEXT:
                 updatePerformance({ total: performance.now() - totalStart, knowledge: 0, ai: 0, source: cached.source, route: "Cache hit" });
                 activeRequestSignature = "";
                 setLoading(false);
-                renderResults(cached.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum);
+                lastPreparedPayload = { signature, data: cached.data };
+                const shouldRevealSection = manualTrigger || autoTriggered || lastRenderedSignature === signature;
+                renderResults(cached.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum, { animateStagger: shouldRevealSection });
+                if (shouldRevealSection) lastRenderedSignature = signature;
                 return;
             }
 
@@ -1942,19 +2044,18 @@ USER INPUT TEXT:
             if (!hasWorker && !hasLocalKeys) {
                 activeRequestSignature = "";
                 setLoading(false);
-                showAlert("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL.");
+                if (manualTrigger) showAlert("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL.");
                 return;
             }
 
             setLoading(true);
-            setLoadingStage("البحث عن المعاني والتعبيرات المرتبطة...");
+            setLoadingStage(autoTriggered ? "ترجمة تلقائية فورية..." : "تحليل السياق وتجهيز الترجمة الطبيعية...");
             const knowledgeStart = performance.now();
             const lexicalHints = buildLexicalHints(inputText, effectiveSrcLang, effectiveTgtLang);
             const knowledgeContext = await retrieveKnowledgeContext(inputText, effectiveSrcLang, effectiveTgtLang, requestId);
             const knowledgeMs = performance.now() - knowledgeStart;
             if (requestId !== activeTranslationId) return;
 
-            setLoadingStage("تحليل السياق وتجهيز الترجمة الطبيعية...");
             const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, knowledgeContext, lexicalHints);
             const controller = new AbortController();
             activeControllers = [controller];
@@ -2004,6 +2105,7 @@ USER INPUT TEXT:
                 saveCache(cacheId, winner.data);
                 addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang });
                 latestTranslationText = winner.data.translation || "";
+                lastPreparedPayload = { signature, data: winner.data };
 
                 const aiMs = performance.now() - aiStart;
                 updatePerformance({ total: performance.now() - totalStart, knowledge: knowledgeMs, ai: aiMs, source: knowledgeContext ? (knowledgeContext.source || "Knowledge + Worker") : (hasWorker ? `Worker (${winner.provider})` : "Local AI"), route: route.label });
@@ -2012,7 +2114,9 @@ USER INPUT TEXT:
                 activeRequestSignature = "";
                 activeStreamOwner = null;
                 setLoading(false);
-                renderResults(winner.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum);
+                const shouldRevealSection = manualTrigger || autoTriggered || lastRenderedSignature === signature;
+                renderResults(winner.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum, { animateStagger: shouldRevealSection });
+                if (shouldRevealSection) lastRenderedSignature = signature;
             } catch (err) {
                 if (requestId !== activeTranslationId) return;
                 activeControllers = [];
@@ -2021,7 +2125,7 @@ USER INPUT TEXT:
                 setLoading(false);
                 if (err.name === "AbortError") return;
                 lastGeminiError = err.message;
-                showAlert(`تعذر إتمام الترجمة حالياً: ${err.message}`);
+                if (manualTrigger) showAlert(`تعذر إتمام الترجمة حالياً: ${err.message}`);
             } finally {
                 if (requestId === activeTranslationId && !activeControllers.length) {
                     setLoading(false);
@@ -2045,7 +2149,7 @@ USER INPUT TEXT:
         }
 
         // ============================================================================
-        // 8. عرض النتائج
+        // 8. عرض النتائج مع الإظهار المتدرج بأنيميشن مبهر للعين
         // ============================================================================
         function createExampleCard(ex, idx, targetDir, effectiveTgtLang, isEnToEn, badgeColorClass = "bg-blue-600") {
             const card = document.createElement("div");
@@ -2105,8 +2209,8 @@ USER INPUT TEXT:
                         state.activeInputBox = 1;
                         const box1Area = document.getElementById("box1-text");
                         box1Area.value = cleanItem;
-                        onBoxInput(1);
-                        executeTranslation();
+                        onBoxInput(1, false);
+                        executeTranslation({ manualTrigger: true });
                         window.scrollTo({ top: 0, behavior: "smooth" });
                     };
                     wrap.appendChild(btn);
@@ -2121,7 +2225,32 @@ USER INPUT TEXT:
             container.appendChild(wrap);
         }
 
-        function renderResults(data, originalInput, effectiveSrcLang, effectiveTgtLang, tgtNum) {
+        function animateDictionaryStagger(dictSection) {
+            clearStaggerTimers();
+            const items = [...dictSection.querySelectorAll("[data-stagger-item]")].filter(el => !el.classList.contains("hidden"));
+            if (!items.length) return;
+            isRevealingStagger = true;
+            items.forEach(el => {
+                el.classList.remove("stagger-visible");
+                el.classList.add("stagger-hidden");
+            });
+
+            let accumulatedDelay = 40;
+            items.forEach((el, idx) => {
+                const timer = setTimeout(() => {
+                    el.classList.remove("stagger-hidden");
+                    el.classList.add("stagger-visible");
+                    if (idx === items.length - 1) {
+                        isRevealingStagger = false;
+                    }
+                }, accumulatedDelay);
+                staggerTimers.push(timer);
+                accumulatedDelay += idx === 0 ? 140 : 125;
+            });
+        }
+
+        function renderResults(data, originalInput, effectiveSrcLang, effectiveTgtLang, tgtNum, options = {}) {
+            const animateStagger = options.animateStagger !== false;
             const tgtTextarea = document.getElementById(`box${tgtNum}-text`);
             const tgtClearBtn = document.getElementById(`box${tgtNum}-clear-btn`);
             const tgtTransRow = document.getElementById(`box${tgtNum}-phonetics-row`);
@@ -2139,6 +2268,10 @@ USER INPUT TEXT:
             const ipaText = (data.ipa || "").trim();
 
             tgtTextarea.value = finalTranslation;
+            tgtTextarea.classList.remove("translation-pop");
+            void tgtTextarea.offsetWidth;
+            tgtTextarea.classList.add("translation-pop");
+
             if (finalTranslation.trim().length > 0) {
                 tgtClearBtn.classList.remove("hidden");
                 resetDetectedDisplay(tgtNum);
@@ -2262,8 +2395,12 @@ USER INPUT TEXT:
             const etymEl = document.getElementById("content-etymology");
             etymEl.innerHTML = `<p dir="auto" class="text-slate-700 leading-relaxed">${escapeHTML(data.etymology || "لا تتوفر معلومات تأثيلية مسجلة.")}</p>`;
 
-            dictSection.classList.remove("hidden");
             scheduleSmartInsights(data, effectiveSrcLang, effectiveTgtLang);
+
+            if (animateStagger) {
+                dictSection.classList.remove("hidden");
+                animateDictionaryStagger(dictSection);
+            }
             lucide.createIcons();
         }
 
@@ -2410,8 +2547,8 @@ USER INPUT TEXT:
                     state.activeInputBox = 1;
                     const box1Area = document.getElementById("box1-text");
                     box1Area.value = word;
-                    onBoxInput(1);
-                    executeTranslation();
+                    onBoxInput(1, false);
+                    executeTranslation({ manualTrigger: true });
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 };
                 container.appendChild(chip);
@@ -2439,14 +2576,12 @@ USER INPUT TEXT:
             if (isLoading) {
                 overlay?.classList.remove("hidden");
                 if (submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.classList.add("opacity-75", "cursor-not-allowed");
+                    submitBtn.classList.add("ring-2", "ring-teal-300");
                 }
             } else {
                 overlay?.classList.add("hidden");
                 if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove("opacity-75", "cursor-not-allowed");
+                    submitBtn.classList.remove("ring-2", "ring-teal-300");
                 }
             }
         }
