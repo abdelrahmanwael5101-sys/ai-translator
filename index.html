@@ -86,9 +86,9 @@
         body.dark main { color:#e7ecf5; }
         body.dark header, body.dark footer, body.dark #settings-modal > div,
         body.dark #dictionary-section > div { background:#111a2d !important; border-color:#26344d !important; color:#e7ecf5 !important; }
-        body.dark .bg-white, body.dark [class~="bg-white/85"] { background-color:#141f34 !important; }
+        body.dark .bg-white, body.dark [class~="bg-white/85"], body.dark [class~="bg-white/90"] { background-color:#141f34 !important; }
         body.dark .bg-slate-50, body.dark .bg-slate-100,
-        body.dark [class~="bg-slate-50/90"], body.dark [class~="bg-slate-100/90"] { background-color:#18253b !important; }
+        body.dark [class~="bg-slate-50/80"], body.dark [class~="bg-slate-50/90"], body.dark [class~="bg-slate-100/90"] { background-color:#18253b !important; }
         body.dark .bg-blue-50, body.dark [class*="bg-blue-50"] { background-color:#172a46 !important; }
         body.dark [class*="bg-indigo-50"] { background-color:#211f42 !important; }
         body.dark [class*="bg-emerald-50"] { background-color:#12332f !important; }
@@ -100,6 +100,8 @@
         body.dark .text-indigo-900, body.dark .text-indigo-800, body.dark .text-indigo-700,
         body.dark .text-blue-900, body.dark .text-blue-800, body.dark .text-blue-700 { color:#c7d2fe !important; }
         body.dark .text-emerald-800, body.dark .text-emerald-700 { color:#9ee6d2 !important; }
+        body.dark .text-amber-900, body.dark .text-amber-700 { color:#fde68a !important; }
+        body.dark .text-red-700, body.dark .text-red-600 { color:#fecdd3 !important; }
         body.dark .border-slate-100, body.dark .border-slate-200, body.dark .border-slate-300,
         body.dark [class*="border-indigo-"], body.dark [class*="border-blue-"], body.dark [class*="border-emerald-"] { border-color:#34445f !important; }
         body.dark textarea, body.dark input, body.dark select { background-color:#101a2c !important; color:#f1f5f9 !important; border-color:#3a4a65 !important; }
@@ -108,9 +110,12 @@
         body.dark button:hover { filter:brightness(1.12); }
         body.dark #idiom-section { border-color:#51458a !important; box-shadow:0 8px 28px rgba(0,0,0,.14); }
         body.dark #dict-source-badge { background:#172a46 !important; color:#c7d2fe !important; border-color:#34445f !important; }
-        body.dark #idiom-section .bg-white { background:#17223a !important; }
+        body.dark #idiom-section .bg-white, body.dark #ipa-reference-panel .bg-white { background:#17223a !important; }
+        body.dark #ipa-reference-panel { background:#121c30 !important; border-color:#34445f !important; }
+        body.dark #performance-panel, body.dark #history-panel { background:#111a2d !important; border-color:#2a3a56 !important; color:#e7ecf5 !important; }
+        body.dark #smart-insights p, body.dark #context-content, body.dark #quality-content p, body.dark #breakdown-list p, body.dark #regional-content p { color:#dce5f4 !important; }
+        body.dark kbd { background:#1e2d47 !important; color:#e2e8f0 !important; }
         body.dark ::selection { background:#334b7b; color:#fff; }
-
 
         /* Premium translator interface */
         :root { color-scheme: light; --premium-accent:#2563eb; }
@@ -155,7 +160,6 @@
         body.dark .smart-muted { color:#a9b7cc; }
 
         @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } }
-    
 
         /* v7 Premium Redesign: calm navy + teal accent, editorial hierarchy */
         :root { --premium-ink:#17263d; --premium-accent:#0f8f91; --premium-accent-2:#2563a6; --premium-line:#dce5ed; }
@@ -210,7 +214,6 @@
           #theme-toggle,#focus-toggle { width:34px; height:34px; }
           #box1-text,#box2-text { font-size:15px; }
         }
-
     </style>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
@@ -237,7 +240,7 @@
                 <button id="focus-toggle" type="button" onclick="toggleFocusMode()" class="w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 text-slate-600 flex items-center justify-center transition-colors" title="تفعيل وضع التركيز" aria-label="وضع التركيز" aria-pressed="false">
                     <i id="focus-toggle-icon" data-lucide="scan-eye" class="w-4 h-4"></i>
                 </button>
-                <div id="engine-badge" onclick="toggleDiagnosticBanner()" class="cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all" title="اضغط لعرض أو إخفاء تفاصيل اتصال Gemini">
+                <div id="engine-badge" onclick="toggleDiagnosticBanner()" class="cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all" title="اضغط لعرض أو إخفاء تفاصيل الاتصال">
                     <span id="engine-dot" class="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
                     <span id="engine-status-text" class="ltr-text truncate max-w-[160px] sm:max-w-none">Groq Fast + Gemini</span>
                 </div>
@@ -402,13 +405,13 @@
             <span id="alert-message" class="leading-relaxed"></span>
         </div>
 
-        <!-- شريط تشخيصي يوضح رد سيرفر جوجل بالتفصيل -->
+        <!-- شريط تشخيصي يوضح رد السيرفر بالتفصيل -->
         <div id="diagnostic-box" class="hidden mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] sm:text-xs flex items-start justify-between gap-2">
             <div class="flex items-start gap-2">
                 <i data-lucide="terminal" class="w-4 h-4 shrink-0 text-amber-600 mt-0.5"></i>
                 <span id="diagnostic-message" class="ltr-text break-all"></span>
             </div>
-            <button onclick="document.getElementById('diagnostic-box').classList.add('hidden')" class="text-amber-600 hover:text-amber-900">
+            <button type="button" onclick="document.getElementById('diagnostic-box').classList.add('hidden')" class="text-amber-600 hover:text-amber-900">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
@@ -515,7 +518,7 @@
                     <section id="smart-insights" class="hidden space-y-3">
                         <div class="flex items-center justify-between gap-2"><h3 class="text-xs font-bold text-slate-500">تفاصيل إضافية لفهم السياق والبدائل</h3><span id="naturalness-badge" class="hidden text-[10px] font-bold rounded-full px-2.5 py-1 border"></span></div>
                         <div id="alternatives-card" class="smart-insight-card hidden">
-                            <div class="smart-insight-title"> <span>بدائل طبيعية للترجمة</span></div>
+                            <div class="smart-insight-title"><span>بدائل طبيعية للترجمة</span></div>
                             <div id="alternatives-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -727,7 +730,7 @@
     <!-- التذييل (Footer) -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
-            <p>مدعوم بمحركي الذكاء الاصطناعي <strong class="text-blue-600">Google Gemini</strong> و <strong class="text-slate-700">Groq</strong> مع تبديل تلقائي فوري</p>
+            <p>مدعوم بمحركي الذكاء الاصطناعي <strong class="text-blue-600">Groq</strong> و <strong class="text-slate-700">Google Gemini</strong> مع تبديل تلقائي فوري</p>
             <p>المترجم الذكي والقاموس التفاعلي · v7</p>
         </div>
     </footer>
@@ -771,20 +774,16 @@
         // ============================================================================
         // 1. الإعدادات والمفاتيح الافتراضية
         // ============================================================================
-        // Convenience defaults requested by the site owner. These are client-side keys.
-        // Anyone receiving this HTML can inspect them; rotate and move to a backend before public launch.
         const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6LLveWHfGaKQ48JVE-sQzSat94BG1t2mBiME2a9hgjp7g";
         const DEFAULT_GROQ_KEY = "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";
 
         const KEY_VERSION = "v13_owner_defaults_enabled";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
-            // Seed the existing keys for first launch, but preserve any custom keys already saved.
             if (!localStorage.getItem("smart_trans_gemini_key")) localStorage.setItem("smart_trans_gemini_key", DEFAULT_GEMINI_KEY);
             if (!localStorage.getItem("smart_trans_groq_key")) localStorage.setItem("smart_trans_groq_key", DEFAULT_GROQ_KEY);
             localStorage.setItem("smart_trans_key_ver", KEY_VERSION);
         }
 
-        // النماذج الأساسية فائقة السرعة للفهم العميق للعامية المصرية والإنجليزية غير القياسية
         const GROQ_MODELS = [
             "llama-3.3-70b-versatile",
             "openai/gpt-oss-120b",
@@ -792,7 +791,6 @@
             "llama-3.1-8b-instant"
         ];
 
-        // النماذج الاحتياطية التلقائية عند الحاجة
         let GEMINI_MODELS = [
             "gemini-2.5-flash",
             "gemini-2.5-pro",
@@ -820,7 +818,6 @@
         let lastPerformance = { total: 0, knowledge: 0, ai: 0, source: "—", route: "—" };
         let activeStreamOwner = null;
         const languageDetectionTimers = { 1: null, 2: null };
-        let smartInsightsObserver = null;
 
         function cancelActiveTranslation(showMessage = false) {
             activeTranslationId++;
@@ -828,8 +825,7 @@
             activeControllers = [];
             activeRequestSignature = "";
             activeStreamOwner = null;
-            const overlay = document.getElementById("loading-overlay");
-            if (overlay) setLoading(false);
+            setLoading(false);
             if (showMessage) showAlert("تم إلغاء عملية الترجمة.");
         }
 
@@ -1013,7 +1009,7 @@
             count.textContent = translationHistory.length;
             list.innerHTML = "";
             if (!translationHistory.length) { list.innerHTML = '<p class="text-xs text-slate-400 py-2">لا توجد ترجمات محفوظة حتى الآن.</p>'; return; }
-            translationHistory.forEach((item, i) => {
+            translationHistory.forEach((item) => {
                 const row = document.createElement("div"); row.className = "history-item flex items-center gap-2 p-2.5 rounded-xl border border-slate-100 bg-slate-50";
                 const body = document.createElement("button"); body.type="button"; body.className="min-w-0 flex-1 text-right";
                 const a=document.createElement("span"); a.className="block text-xs font-bold text-slate-700 truncate"; a.textContent=item.input;
@@ -1133,7 +1129,7 @@
             rateInput.addEventListener("input",()=>{ document.getElementById("speech-rate-value").textContent=Number(rateInput.value).toFixed(2)+"x"; localStorage.setItem("smart_trans_rate",rateInput.value); });
             document.getElementById("speech-voice").addEventListener("change",e=>localStorage.setItem("smart_trans_voice",e.target.value));
             document.addEventListener("keydown",e=>{
-                if(e.key==="Escape" && activeControllers.length) cancelActiveTranslation(true);
+                if(e.key==="Escape" && (activeControllers.length || activeRequestSignature)) cancelActiveTranslation(true);
                 if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="h"){e.preventDefault();toggleHistory();}
                 if((e.ctrlKey||e.metaKey)&&e.altKey&&e.key.toLowerCase()==="c"){e.preventDefault();const out=document.getElementById("box2-text").value;if(out)navigator.clipboard?.writeText(out);}
             });
@@ -1311,12 +1307,9 @@
                 return vLang === finalLang.toLowerCase() || vLang.startsWith(baseLang + "-") || vLang === baseLang;
             });
 
-            // لا تنتظر تحميل قائمة الأصوات ولا تحوّل إلى خدمة خارجية لمجرد
-            // أن القائمة لم تجهز بعد؛ المتصفح يستطيع اختيار الصوت حسب اللغة.
             const utterance = new SpeechSynthesisUtterance(cleanText);
             utterance.lang = finalLang;
             utterance.rate = Number(localStorage.getItem("smart_trans_rate") || document.getElementById("speech-rate")?.value || 1.08);
-
             utterance.pitch = 1.0;
 
             const preferredVoice =
@@ -1409,6 +1402,7 @@
         }
 
         function onManualLangSelect(boxNum) {
+            if (activeRequestSignature || activeControllers.length) cancelActiveTranslation(false);
             const select = document.getElementById(`box${boxNum}-lang-select`);
             const boxState = boxNum === 1 ? state.box1 : state.box2;
             boxState.selectedLang = select.value;
@@ -1510,7 +1504,7 @@
         }
 
         function clearBox(boxNum) {
-            if(activeControllers.length) cancelActiveTranslation(false);
+            if (activeControllers.length || activeRequestSignature) cancelActiveTranslation(false);
             stopAllAudio();
             const textarea = document.getElementById(`box${boxNum}-text`);
             textarea.value = "";
@@ -1529,6 +1523,7 @@
         }
 
         function swapBoxes() {
+            if (activeControllers.length || activeRequestSignature) cancelActiveTranslation(false);
             stopAllAudio();
             const s1 = document.getElementById("box1-lang-select");
             const s2 = document.getElementById("box2-lang-select");
@@ -1556,10 +1551,11 @@
             t1.dir = getLangObj(state.box1.selectedLang).dir;
             t2.dir = getLangObj(state.box2.selectedLang).dir;
 
-            document.getElementById("box1-transcription").classList.add("hidden");
+            document.getElementById("box1-phonetics-row").classList.add("hidden");
             document.getElementById("box2-phonetics-row").classList.add("hidden");
 
             document.getElementById("box1-char-count").textContent = `${t1.value.length} / 2000`;
+            document.getElementById("box2-char-count") && (document.getElementById("box2-char-count").textContent = `${t2.value.length} / 2000`);
             document.getElementById("box1-clear-btn").classList.toggle("hidden", t1.value.trim().length === 0);
             document.getElementById("box2-clear-btn").classList.toggle("hidden", t2.value.trim().length === 0);
         }
@@ -1760,77 +1756,92 @@ USER INPUT TEXT:
         }
 
         // ============================================================================
-        // 6. الاتصال المباشر بنماذج Gemini مع الاكتشاف التلقائي للنماذج المتاحة
+        // 6. الاتصال المباشر بنماذج Gemini و Groq مع دعم البث والـ Fallback المضمون
         // ============================================================================
-        async function discoverAvailableGeminiModels(apiKey) {
-            for (const version of ["v1beta", "v1"]) {
-                try {
-                    const res = await fetch(`https://generativelanguage.googleapis.com/${version}/models?key=${encodeURIComponent(apiKey)}`);
-                    if (!res.ok) continue;
-                    const data = await res.json();
-                    if (Array.isArray(data.models)) {
-                        const validModels = data.models
-                            .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes("generateContent"))
-                            .map(m => m.name.replace("models/", ""))
-                            .filter(name => name.includes("gemini") && !name.includes("vision") && !name.includes("embedding"));
-
-                        validModels.sort((a, b) => {
-                            const score = (n) => (n.includes("2.5-flash") ? 1 : n.includes("flash") ? 2 : n.includes("pro") ? 3 : 4);
-                            return score(a) - score(b);
-                        });
-
-                        if (validModels.length > 0) {
-                            GEMINI_MODELS = validModels;
-                            modelsDiscovered = true;
-                            return validModels;
-                        }
-                    }
-                } catch (e) {}
-            }
-            return null;
-        }
-
         function updateStreamPreview(rawText, targetBoxNum) {
             const match = rawText.match(/"translation"\s*:\s*"((?:\\.|[^"\\])*)/s);
             if (!match) return;
-            try { const partial=JSON.parse('"'+match[1]+'"'); document.getElementById(`box${targetBoxNum}-text`).value=partial; } catch (_) {}
+            try {
+                const partial = JSON.parse('"' + match[1] + '"');
+                const boxEl = document.getElementById(`box${targetBoxNum}-text`);
+                if (boxEl) boxEl.value = partial;
+            } catch (_) {}
         }
+
         async function readSSE(response, onText, provider, signal) {
-            if (!response.body || !response.body.getReader) throw new Error("Streaming is not supported by this browser");
-            const reader=response.body.getReader(); const decoder=new TextDecoder(); let buffer="", raw="";
-            while(true) {
-                if(signal?.aborted) throw new DOMException("Aborted","AbortError");
-                const {value,done}=await reader.read(); if(done) break;
-                buffer+=decoder.decode(value,{stream:true});
-                const events=buffer.split(/\r?\n\r?\n/); buffer=events.pop() || "";
-                for(const event of events) {
-                    const line=event.split(/\r?\n/).find(x=>x.startsWith("data:")); if(!line) continue;
-                    const payload=line.slice(5).trim(); if(!payload || payload==="[DONE]") continue;
+            if (!response.body || !response.body.getReader) {
+                const fallbackData = await response.json();
+                const piece = provider === "gemini"
+                    ? (fallbackData?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
+                    : (fallbackData?.choices?.[0]?.message?.content || "");
+                onText?.(piece);
+                return parseSafeJSON(piece);
+            }
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "", raw = "";
+            while (true) {
+                if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
+                const { value, done } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const events = buffer.split(/\r?\n\r?\n/);
+                buffer = events.pop() || "";
+                for (const event of events) {
+                    const line = event.split(/\r?\n/).find(x => x.startsWith("data:"));
+                    if (!line) continue;
+                    const payload = line.slice(5).trim();
+                    if (!payload || payload === "[DONE]") continue;
                     try {
-                        const obj=JSON.parse(payload);
-                        const piece=provider==="gemini" ? (obj?.candidates?.[0]?.content?.parts||[]).map(p=>p.text||"").join("") : (obj?.choices?.[0]?.delta?.content||"");
-                        if(piece) { raw+=piece; onText?.(raw); }
+                        const obj = JSON.parse(payload);
+                        const piece = provider === "gemini"
+                            ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
+                            : (obj?.choices?.[0]?.delta?.content || "");
+                        if (piece) { raw += piece; onText?.(raw); }
                     } catch (_) {}
                 }
             }
             if (buffer.trim()) {
-                const line=buffer.split(/\r?\n/).find(x=>x.startsWith("data:"));
-                if(line){ const payload=line.slice(5).trim(); if(payload && payload!=="[DONE]"){ try{ const obj=JSON.parse(payload); const piece=provider==="gemini"?(obj?.candidates?.[0]?.content?.parts||[]).map(p=>p.text||"").join(""):(obj?.choices?.[0]?.delta?.content||""); if(piece){raw+=piece;onText?.(raw);} }catch(_){} } }
+                const line = buffer.split(/\r?\n/).find(x => x.startsWith("data:"));
+                if (line) {
+                    const payload = line.slice(5).trim();
+                    if (payload && payload !== "[DONE]") {
+                        try {
+                            const obj = JSON.parse(payload);
+                            const piece = provider === "gemini"
+                                ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
+                                : (obj?.choices?.[0]?.delta?.content || "");
+                            if (piece) { raw += piece; onText?.(raw); }
+                        } catch (_) {}
+                    }
+                }
             }
+            if (!raw.trim()) throw new Error("Empty stream response");
             return parseSafeJSON(raw);
         }
 
         async function sendGeminiModelRequest(modelName, apiKey, payload, signal, onText) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
-            const response = await fetch(url, { method:"POST", signal, headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
-            if (!response.ok) throw new Error(`HTTP ${response.status} (${modelName}): ${(await response.text()).slice(0,220)}`);
-            return readSSE(response,onText,"gemini",signal);
+            const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+            try {
+                const response = await fetch(streamUrl, { method: "POST", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`HTTP ${response.status} (${modelName}): ${(await response.text()).slice(0, 220)}`);
+                return await readSSE(response, onText, "gemini", signal);
+            } catch (streamErr) {
+                if (streamErr.name === "AbortError") throw streamErr;
+                const syncUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
+                const response = await fetch(syncUrl, { method: "POST", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`HTTP ${response.status} (${modelName}): ${(await response.text()).slice(0, 220)}`);
+                const json = await response.json();
+                const text = (json?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("");
+                if (text) onText?.(text);
+                return parseSafeJSON(text);
+            }
         }
 
         async function callGeminiAPI(prompt, signal, onText) {
             const apiKey = state.geminiKey.trim();
             if (!apiKey) throw new Error("Missing Gemini API Key");
-            const payload = { contents:[{parts:[{text:prompt}]}], generationConfig:{temperature:0.1,responseMimeType:"application/json"} };
+            const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.1, responseMimeType: "application/json" } };
             let lastErr = null;
             for (const modelName of GEMINI_MODELS) {
                 if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
@@ -1848,134 +1859,240 @@ USER INPUT TEXT:
         }
 
         async function callGroqWithModel(prompt, modelName, apiKey, signal, onText) {
-            const url="https://api.groq.com/openai/v1/chat/completions";
-            const response=await fetch(url,{method:"POST",signal,headers:{"Content-Type":"application/json","Authorization":`Bearer ${apiKey}`},body:JSON.stringify({model:modelName,temperature:0.1,stream:true,response_format:{type:"json_object"},messages:[{role:"system",content:"You are a precise bilingual lexicographer and translation API. Output strictly valid JSON matching the exact schema and rules. Never mention dictionary or source names in your output."},{role:"user",content:prompt}]})});
-            if(!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0,300)}`);
-            return readSSE(response,onText,"groq",signal);
+            const url = "https://api.groq.com/openai/v1/chat/completions";
+            const systemMsg = { role: "system", content: "You are a precise bilingual lexicographer and translation API. Output strictly valid JSON matching the exact schema and rules. Never mention dictionary or source names in your output." };
+            const userMsg = { role: "user", content: prompt };
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    signal,
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+                    body: JSON.stringify({ model: modelName, temperature: 0.1, stream: true, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
+                });
+                if (!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
+                return await readSSE(response, onText, "groq", signal);
+            } catch (streamErr) {
+                if (streamErr.name === "AbortError") throw streamErr;
+                const response = await fetch(url, {
+                    method: "POST",
+                    signal,
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+                    body: JSON.stringify({ model: modelName, temperature: 0.1, stream: false, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
+                });
+                if (!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
+                const json = await response.json();
+                const text = json?.choices?.[0]?.message?.content || "";
+                if (text) onText?.(text);
+                return parseSafeJSON(text);
+            }
         }
+
         async function callGroqAPI(prompt, signal, onText) {
-            const apiKey=state.groqKey.trim(); if(!apiKey) throw new Error("Missing Groq API Key");
-            let lastError=null;
-            for(const modelName of GROQ_MODELS) {
-                if(signal?.aborted) throw new DOMException("Aborted","AbortError");
-                try { const result=await callGroqWithModel(prompt,modelName,apiKey,signal,onText); return {data:result,modelUsed:modelName}; }
-                catch(err) { lastError=err; if(err.name==="AbortError" || err.message.includes("HTTP 401")) throw err; }
+            const apiKey = state.groqKey.trim();
+            if (!apiKey) throw new Error("Missing Groq API Key");
+            let lastError = null;
+            for (const modelName of GROQ_MODELS) {
+                if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
+                try {
+                    const result = await callGroqWithModel(prompt, modelName, apiKey, signal, onText);
+                    return { data: result, modelUsed: modelName };
+                } catch (err) {
+                    lastError = err;
+                    if (err.name === "AbortError" || err.message.includes("HTTP 401")) throw err;
+                }
             }
             throw lastError || new Error("All Groq models failed");
         }
 
         function parseSafeJSON(raw) {
-            const cleaned = raw.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+            const cleaned = String(raw || "").replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
             const firstBrace = cleaned.indexOf("{");
             const lastBrace = cleaned.lastIndexOf("}");
-            const jsonOnly = (firstBrace !== -1 && lastBrace !== -1)
+            const jsonOnly = (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace)
                 ? cleaned.slice(firstBrace, lastBrace + 1)
                 : cleaned;
             return JSON.parse(jsonOnly);
         }
 
         function chooseModelRoute(text, src, tgt) {
-            const clean=String(text||"").trim();
-            const hasArabic=/[\u0600-\u06FF]/.test(clean);
-            const complex=clean.length>90 || /[؟?!;:]/.test(clean) || /\b(although|unless|whereas|provided that|in spite of)\b/i.test(clean) || (hasArabic && /\s/.test(clean)) || /\b(figure out|break down|give up|look forward|piece of cake|under the weather)\b/i.test(clean);
-            if (complex) return { mode:"quality_parallel", label:"Complex · parallel quality route", parallel:true };
-            return { mode:"fast_primary", label:"Short · fast model route", parallel:false };
+            const clean = String(text || "").trim();
+            const hasArabic = /[\u0600-\u06FF]/.test(clean);
+            const complex = clean.length > 90 || /[؟?!;:]/.test(clean) || /\b(although|unless|whereas|provided that|in spite of)\b/i.test(clean) || (hasArabic && /\s/.test(clean)) || /\b(figure out|break down|give up|look forward|piece of cake|under the weather)\b/i.test(clean);
+            if (complex) return { mode: "quality_parallel", label: "Complex · parallel quality route", parallel: true };
+            return { mode: "fast_primary", label: "Short · fast model route", parallel: false };
         }
+
         function setLoadingStage(message) {
-            const el=document.getElementById("loading-status"); if(el) el.textContent=message;
+            const el = document.getElementById("loading-status");
+            if (el) el.textContent = message;
         }
+
         function updatePerformance(metrics) {
-            lastPerformance={...lastPerformance,...metrics};
-            const put=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
-            put("perf-total",lastPerformance.total?`${Math.round(lastPerformance.total)} ms`:"—");
-            put("perf-knowledge",lastPerformance.knowledge!=null?`${Math.round(lastPerformance.knowledge)} ms`:"—");
-            put("perf-ai",lastPerformance.ai!=null?`${Math.round(lastPerformance.ai)} ms`:"—");
-            put("perf-cache",lastPerformance.source||"—");
-            put("perf-route",lastPerformance.route||"—");
+            lastPerformance = { ...lastPerformance, ...metrics };
+            const put = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            put("perf-total", lastPerformance.total ? `${Math.round(lastPerformance.total)} ms` : "—");
+            put("perf-knowledge", lastPerformance.knowledge != null ? `${Math.round(lastPerformance.knowledge)} ms` : "—");
+            put("perf-ai", lastPerformance.ai != null ? `${Math.round(lastPerformance.ai)} ms` : "—");
+            put("perf-cache", lastPerformance.source || "—");
+            put("perf-route", lastPerformance.route || "—");
         }
+
         function togglePerformance() { document.getElementById("performance-panel")?.classList.toggle("hidden"); }
 
         // ============================================================================
         // 7. تنفيذ الترجمة ثنائية الاتجاه وإدارة التبديل التلقائي
         // ============================================================================
         async function executeTranslation() {
-            let srcNum=state.activeInputBox, tgtNum=srcNum===1?2:1;
-            let srcTextarea=document.getElementById(`box${srcNum}-text`), inputText=srcTextarea.value.trim();
-            if(!inputText) { const other=document.getElementById(`box${tgtNum}-text`); if(other.value.trim()){srcNum=tgtNum;tgtNum=srcNum===1?2:1;srcTextarea=other;inputText=srcTextarea.value.trim();} else {showAlert("يرجى كتابة كلمة أو جملة في أحد المستطيلين أولاً.");return;} }
-            const detectedNow=detectLanguageFromText(inputText); updateDetectedDisplay(srcNum,detectedNow);
-            const srcState=srcNum===1?state.box1:state.box2, tgtState=tgtNum===1?state.box1:state.box2;
-            const effectiveSrcLang=(srcState.manualOverride?srcState.selectedLang:(srcState.detectedLang||srcState.selectedLang)), effectiveTgtLang=tgtState.selectedLang;
-            const signature=cacheKey(inputText,effectiveSrcLang,effectiveTgtLang);
-            if(signature===activeRequestSignature && activeControllers.length) return;
-            if(activeControllers.length) cancelActiveTranslation(false);
-            activeRequestSignature=signature;
-            const requestId=activeTranslationId;
-            const totalStart=performance.now();
-            const cacheId=signature + "::smart-v3";
-            hideAlert(); document.getElementById("diagnostic-box").classList.add("hidden");
-            const cached=await getCachedTranslation(cacheId);
-            if(requestId!==activeTranslationId) return;
-            if(cached) {
-                updateEngineBadge("Cache (instant)",false);
-                updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:0,source:cached.source,route:"Cache hit"});
-                renderResults(cached.data,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum); activeRequestSignature=""; return;
+            let srcNum = state.activeInputBox, tgtNum = srcNum === 1 ? 2 : 1;
+            let srcTextarea = document.getElementById(`box${srcNum}-text`), inputText = srcTextarea.value.trim();
+            if (!inputText) {
+                const other = document.getElementById(`box${tgtNum}-text`);
+                if (other.value.trim()) {
+                    srcNum = tgtNum;
+                    tgtNum = srcNum === 1 ? 2 : 1;
+                    srcTextarea = other;
+                    inputText = srcTextarea.value.trim();
+                } else {
+                    showAlert("يرجى كتابة كلمة أو جملة في أحد المستطيلين أولاً.");
+                    return;
+                }
             }
-            setLoading(true); setLoadingStage("البحث عن المعاني والتعبيرات المرتبطة...");
-            const knowledgeStart=performance.now();
-            const lexicalHints=buildLexicalHints(inputText,effectiveSrcLang,effectiveTgtLang);
-            const knowledgeContext=await retrieveKnowledgeContext(inputText,effectiveSrcLang,effectiveTgtLang,requestId);
-            const knowledgeMs=performance.now()-knowledgeStart;
-            if(requestId!==activeTranslationId) return;
+
+            // إلغاء أي طلب سابق لتفادي التضارب وضمان استجابة فورية ونظيفة عند الضغط المتكرر على الزر
+            if (activeControllers.length || activeRequestSignature) {
+                cancelActiveTranslation(false);
+            }
+
+            const detectedNow = detectLanguageFromText(inputText);
+            updateDetectedDisplay(srcNum, detectedNow);
+            const srcState = srcNum === 1 ? state.box1 : state.box2;
+            const tgtState = tgtNum === 1 ? state.box1 : state.box2;
+            const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
+            const effectiveTgtLang = tgtState.selectedLang;
+
+            const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
+            activeRequestSignature = signature;
+            const requestId = activeTranslationId;
+            const totalStart = performance.now();
+            const cacheId = signature + "::smart-v3";
+
+            hideAlert();
+            document.getElementById("diagnostic-box").classList.add("hidden");
+
+            const cached = await getCachedTranslation(cacheId);
+            if (requestId !== activeTranslationId) return;
+            if (cached) {
+                updateEngineBadge("Cache (instant)", false);
+                updatePerformance({ total: performance.now() - totalStart, knowledge: 0, ai: 0, source: cached.source, route: "Cache hit" });
+                activeRequestSignature = "";
+                setLoading(false);
+                renderResults(cached.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum);
+                return;
+            }
+
+            if (!state.geminiKey.trim() && !state.groqKey.trim()) {
+                activeRequestSignature = "";
+                setLoading(false);
+                showAlert("يرجى إدخال مفتاح API صالح لـ Gemini أو Groq من الإعدادات.");
+                return;
+            }
+
+            setLoading(true);
+            setLoadingStage("البحث عن المعاني والتعبيرات المرتبطة...");
+            const knowledgeStart = performance.now();
+            const lexicalHints = buildLexicalHints(inputText, effectiveSrcLang, effectiveTgtLang);
+            const knowledgeContext = await retrieveKnowledgeContext(inputText, effectiveSrcLang, effectiveTgtLang, requestId);
+            const knowledgeMs = performance.now() - knowledgeStart;
+            if (requestId !== activeTranslationId) return;
+
             setLoadingStage("تحليل السياق وتجهيز الترجمة الطبيعية...");
-            const prompt=buildUnifiedPrompt(inputText,effectiveSrcLang,effectiveTgtLang,knowledgeContext,lexicalHints);
-            const geminiController=new AbortController(), groqController=new AbortController();
-            activeControllers=[...activeControllers,geminiController,groqController];
-            const route=chooseModelRoute(inputText,effectiveSrcLang,effectiveTgtLang);
-            activeStreamOwner=null;
-            const streamFor=(provider)=>raw=>{
-                if(requestId!==activeTranslationId) return;
-                if(activeStreamOwner===null) activeStreamOwner=provider;
-                if(activeStreamOwner!==provider) return;
-                updateStreamPreview(raw,tgtNum);
+            const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, knowledgeContext, lexicalHints);
+            const geminiController = new AbortController();
+            const groqController = new AbortController();
+            activeControllers = [geminiController, groqController];
+            const route = chooseModelRoute(inputText, effectiveSrcLang, effectiveTgtLang);
+            activeStreamOwner = null;
+
+            const streamFor = (provider) => (raw) => {
+                if (requestId !== activeTranslationId) return;
+                if (activeStreamOwner === null) activeStreamOwner = provider;
+                if (activeStreamOwner !== provider) return;
+                updateStreamPreview(raw, tgtNum);
                 setLoadingStage("ظهرت الترجمة الأولية — جارٍ استكمال التحليل...");
             };
-            const aiStart=performance.now();
+
+            const aiStart = performance.now();
             try {
-                let winner=null;
-                const geminiAttempt=()=>callGeminiAPI(prompt,geminiController.signal,streamFor("gemini")).then(r=>({provider:"gemini",...r}));
-                const groqAttempt=()=>callGroqAPI(prompt,groqController.signal,streamFor("groq")).then(r=>({provider:"groq",...r}));
-                if(route.parallel) {
-                    const attempts=[];
-                    if(state.groqKey.trim()) attempts.push(groqAttempt());
-                    if(state.geminiKey.trim()) attempts.push(geminiAttempt());
-                    if(!attempts.length) throw new Error("No API keys configured");
-                    try { winner=await Promise.any(attempts); }
-                    catch(aggregate) { throw new Error((aggregate.errors||[]).map(e=>e.message).join(" | ")||"All providers failed"); }
+                let winner = null;
+                const geminiAttempt = () => callGeminiAPI(prompt, geminiController.signal, streamFor("gemini")).then(r => ({ provider: "gemini", ...r }));
+                const groqAttempt = () => callGroqAPI(prompt, groqController.signal, streamFor("groq")).then(r => ({ provider: "groq", ...r }));
+
+                if (route.parallel) {
+                    const attempts = [];
+                    if (state.groqKey.trim()) attempts.push(groqAttempt());
+                    if (state.geminiKey.trim()) attempts.push(geminiAttempt());
+                    try {
+                        winner = await Promise.any(attempts);
+                    } catch (aggregate) {
+                        throw new Error((aggregate.errors || []).map(e => e.message).join(" | ") || "All providers failed");
+                    }
                 } else {
-                    // Fast primary on Groq for instant Egyptian/slang/broken-English comprehension, automatic fallback to Gemini.
-                    try { if(state.groqKey.trim()) winner=await groqAttempt(); } catch(e) { if(e.name==="AbortError") throw e; }
-                    if(!winner && state.geminiKey.trim()) winner=await geminiAttempt();
-                    if(!winner) throw new Error((!state.geminiKey.trim() && !state.groqKey.trim()) ? "No API keys configured" : "All configured translation providers failed");
+                    try {
+                        if (state.groqKey.trim()) winner = await groqAttempt();
+                    } catch (e) {
+                        if (e.name === "AbortError") throw e;
+                    }
+                    if (!winner && state.geminiKey.trim()) {
+                        winner = await geminiAttempt();
+                    }
+                    if (!winner) {
+                        throw new Error("All configured translation providers failed");
+                    }
                 }
-                if(requestId!==activeTranslationId) return;
-                if(winner.provider==="gemini") { groqController.abort(); updateEngineBadge(`Gemini (${winner.modelUsed})`,false); }
-                else { geminiController.abort(); updateEngineBadge(`Groq (${winner.modelUsed})`,true); }
-                if(knowledgeContext) {
-                    winner.data._knowledgeSource=knowledgeContext.verifiedOxford?"Oxford":knowledgeContext.source;
-                    winner.data._knowledgeVerified=!!knowledgeContext.verifiedOxford;
-                } else { winner.data._knowledgeSource="AI"; winner.data._knowledgeVerified=false; }
-                winner.data._route=route.label;
-                saveCache(cacheId,winner.data);
-                addHistory({input:inputText,translation:winner.data.translation||"",source:effectiveSrcLang,target:effectiveTgtLang});
-                latestTranslationText=winner.data.translation||"";
-                const aiMs=performance.now()-aiStart;
-                updatePerformance({total:performance.now()-totalStart,knowledge:knowledgeMs,ai:aiMs,source:knowledgeContext?(knowledgeContext.source||"Knowledge + AI"):"AI (no external dictionary)",route:route.label});
-                setLoading(false); activeControllers=[]; activeRequestSignature="";
-                renderResults(winner.data,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum);
-            } catch(err) {
-                if(requestId!==activeTranslationId || err.name==="AbortError") return;
-                setLoading(false); activeControllers=[]; activeRequestSignature="";
+
+                if (requestId !== activeTranslationId) return;
+
+                if (winner.provider === "gemini") {
+                    try { groqController.abort(); } catch (_) {}
+                    updateEngineBadge(`Gemini (${winner.modelUsed})`, false);
+                } else {
+                    try { geminiController.abort(); } catch (_) {}
+                    updateEngineBadge(`Groq (${winner.modelUsed})`, true);
+                }
+
+                if (knowledgeContext) {
+                    winner.data._knowledgeSource = knowledgeContext.verifiedOxford ? "Oxford" : knowledgeContext.source;
+                    winner.data._knowledgeVerified = !!knowledgeContext.verifiedOxford;
+                } else {
+                    winner.data._knowledgeSource = "AI";
+                    winner.data._knowledgeVerified = false;
+                }
+                winner.data._route = route.label;
+
+                saveCache(cacheId, winner.data);
+                addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang });
+                latestTranslationText = winner.data.translation || "";
+
+                const aiMs = performance.now() - aiStart;
+                updatePerformance({ total: performance.now() - totalStart, knowledge: knowledgeMs, ai: aiMs, source: knowledgeContext ? (knowledgeContext.source || "Knowledge + AI") : "AI (no external dictionary)", route: route.label });
+
+                activeControllers = [];
+                activeRequestSignature = "";
+                activeStreamOwner = null;
+                setLoading(false);
+                renderResults(winner.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum);
+            } catch (err) {
+                if (requestId !== activeTranslationId) return;
+                activeControllers = [];
+                activeRequestSignature = "";
+                activeStreamOwner = null;
+                setLoading(false);
+                if (err.name === "AbortError") return;
                 showAlert(`تعذر إتمام الترجمة حالياً. يرجى التحقق من الاتصال أو مفاتيح API. (${err.message})`);
+            } finally {
+                if (requestId === activeTranslationId && !activeControllers.length) {
+                    setLoading(false);
+                }
             }
         }
 
@@ -1987,9 +2104,9 @@ USER INPUT TEXT:
                 return;
             }
             if (!lastGeminiError) {
-                diagMsg.textContent = "حالة الاتصال: Gemini يعمل بنجاح كمحرك أساسي بدون أخطاء.";
+                diagMsg.textContent = "حالة الاتصال: المحركات تعمل بنجاح بدون أخطاء مسجلة.";
             } else {
-                diagMsg.textContent = `سبب التحويل إلى Groq: رد سيرفر جوجل بـ (${lastGeminiError})`;
+                diagMsg.textContent = `تفاصيل الاتصال بـ Gemini: (${lastGeminiError})`;
             }
             diagBox.classList.remove("hidden");
             lucide.createIcons();
@@ -2095,7 +2212,6 @@ USER INPUT TEXT:
                 resetDetectedDisplay(tgtNum);
             }
 
-            // عرض الـ transcription وبجانبه الرموز الصوتية IPA في مستطيل نتيجة البحث
             if (transcriptionText || ipaText) {
                 tgtTransEl.textContent = transcriptionText;
                 tgtTransEl.classList.toggle("hidden", !transcriptionText);
@@ -2106,11 +2222,9 @@ USER INPUT TEXT:
                 tgtTransRow.classList.add("hidden");
             }
 
-            // تحديث رأس بطاقة القاموس
             document.getElementById("dict-word").textContent = finalTranslation;
             document.getElementById("dict-pos").textContent = data.part_of_speech || "Term";
 
-            // شارة CEFR Level البيضاوية الصغيرة بجانب نوع الكلمة
             const cefrEl = document.getElementById("dict-cefr");
             const cefrVal = (data.cefr_level || "").trim().toUpperCase();
             if (cefrVal) {
@@ -2120,7 +2234,6 @@ USER INPUT TEXT:
                 cefrEl.classList.add("hidden");
             }
 
-            // الـ transcription وبجانبه الرموز الصوتية IPA تحت الكلمة في بطاقة القاموس
             const dictPhoneticsRow = document.getElementById("dict-phonetics-row");
             const dictTransEl = document.getElementById("dict-transcription");
             const dictIpaInline = document.getElementById("dict-ipa-inline");
@@ -2140,6 +2253,7 @@ USER INPUT TEXT:
                 ? "English → English"
                 : `اللغة: ${getLangObj(effectiveSrcLang).name}`;
             detectedLabel.classList.remove("hidden");
+
             const sourceBadge = document.getElementById("dict-source-badge");
             if (sourceBadge) {
                 const sourceName = data._knowledgeSource || "AI";
@@ -2159,7 +2273,6 @@ USER INPUT TEXT:
             defEl.dir = targetObj.dir;
             defEl.textContent = data.definition || "";
 
-            // الأمثلة الأساسية
             const examplesContainer = document.getElementById("dict-examples");
             examplesContainer.innerHTML = "";
             const examplesList = Array.isArray(data.examples) ? data.examples.slice(0, 2) : [];
@@ -2167,7 +2280,6 @@ USER INPUT TEXT:
                 examplesContainer.appendChild(createExampleCard(ex, idx, targetObj.dir, effectiveTgtLang, isEnToEn, "bg-blue-600"));
             });
 
-            // عرض قسم المصطلح (Idiom)
             const idiomSection = document.getElementById("idiom-section");
             const idiomData = data.idiom;
             if (idiomData && idiomData.phrase && String(idiomData.phrase).trim() && (idiomData.has_idiom !== false || idiomData.phrase.trim().length > 0)) {
@@ -2194,7 +2306,6 @@ USER INPUT TEXT:
             renderWordChips("dict-synonyms", data.synonyms, "bg-white text-blue-700 border-blue-200 hover:bg-blue-600 hover:text-white", targetObj.dir);
             renderWordChips("dict-antonyms", data.antonyms, "bg-white text-slate-700 border-slate-300 hover:bg-slate-800 hover:text-white", targetObj.dir);
 
-            // تعبئة محتوى الخانات المقفولة (Accordions) وإغلاقها افتراضياً
             closeAllAccordions();
 
             const ipaEl = document.getElementById("content-ipa");
@@ -2247,30 +2358,103 @@ USER INPUT TEXT:
         }
 
         function renderSmartInsights(data, sourceLang, targetLang) {
-            const show=(id,yes)=>document.getElementById(id)?.classList.toggle("hidden",!yes);
-            const alternatives=Array.isArray(data.translation_alternatives)?data.translation_alternatives.slice(0,3):[];
-            const altList=document.getElementById("alternatives-list"); altList.innerHTML="";
-            alternatives.forEach((item,i)=>{ const card=document.createElement("div"); card.className="rounded-xl border border-slate-200 bg-slate-50 p-3"; const label=document.createElement("div"); label.className="text-[10px] font-bold text-blue-700 mb-1"; label.textContent=item.label||`Alternative ${i+1}`; const text=document.createElement("p"); text.className="text-sm font-semibold leading-relaxed"; text.dir=getLangObj(targetLang).dir; text.textContent=item.text||""; const note=document.createElement("p"); note.className="smart-muted mt-1"; note.textContent=item.note||""; card.append(label,text,note); altList.appendChild(card); });
-            show("alternatives-card",alternatives.length>0);
+            const show = (id, yes) => document.getElementById(id)?.classList.toggle("hidden", !yes);
+            const alternatives = Array.isArray(data.translation_alternatives) ? data.translation_alternatives.slice(0, 3) : [];
+            const altList = document.getElementById("alternatives-list");
+            altList.innerHTML = "";
+            alternatives.forEach((item, i) => {
+                const card = document.createElement("div");
+                card.className = "rounded-xl border border-slate-200 bg-slate-50 p-3";
+                const label = document.createElement("div");
+                label.className = "text-[10px] font-bold text-blue-700 mb-1";
+                label.textContent = item.label || `Alternative ${i + 1}`;
+                const text = document.createElement("p");
+                text.className = "text-sm font-semibold leading-relaxed";
+                text.dir = getLangObj(targetLang).dir;
+                text.textContent = item.text || "";
+                const note = document.createElement("p");
+                note.className = "smart-muted mt-1";
+                note.textContent = item.note || "";
+                card.append(label, text, note);
+                altList.appendChild(card);
+            });
+            show("alternatives-card", alternatives.length > 0);
 
-            const breakdown=Array.isArray(data.sentence_breakdown)?data.sentence_breakdown.slice(0,14):[];
-            const breakdownList=document.getElementById("breakdown-list"); breakdownList.innerHTML="";
-            breakdown.forEach(item=>{ const row=document.createElement("div"); row.className="rounded-lg bg-slate-50 border border-slate-100 p-2"; const top=document.createElement("div"); top.className="flex flex-wrap items-center justify-between gap-2"; const source=document.createElement("strong"); source.className="text-xs"; source.dir=getLangObj(sourceLang).dir; source.textContent=item.source||""; const role=document.createElement("span"); role.className="text-[10px] text-blue-700"; role.textContent=item.role||""; top.append(source,role); const meaning=document.createElement("p"); meaning.className="text-xs text-slate-600 mt-1"; meaning.textContent=item.meaning||item.translated||""; row.append(top,meaning); breakdownList.appendChild(row); });
-            show("breakdown-card",breakdown.length>0);
+            const breakdown = Array.isArray(data.sentence_breakdown) ? data.sentence_breakdown.slice(0, 14) : [];
+            const breakdownList = document.getElementById("breakdown-list");
+            breakdownList.innerHTML = "";
+            breakdown.forEach(item => {
+                const row = document.createElement("div");
+                row.className = "rounded-lg bg-slate-50 border border-slate-100 p-2";
+                const top = document.createElement("div");
+                top.className = "flex flex-wrap items-center justify-between gap-2";
+                const source = document.createElement("strong");
+                source.className = "text-xs";
+                source.dir = getLangObj(sourceLang).dir;
+                source.textContent = item.source || "";
+                const role = document.createElement("span");
+                role.className = "text-[10px] text-blue-700";
+                role.textContent = item.role || "";
+                top.append(source, role);
+                const meaning = document.createElement("p");
+                meaning.className = "text-xs text-slate-600 mt-1";
+                meaning.textContent = item.meaning || item.translated || "";
+                row.append(top, meaning);
+                breakdownList.appendChild(row);
+            });
+            show("breakdown-card", breakdown.length > 0);
 
-            const quality=data.quality_check||{}; const qualityContent=document.getElementById("quality-content"); qualityContent.innerHTML="";
-            if(quality.status){ const status=document.createElement("span"); status.className="inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"; status.textContent=quality.status; qualityContent.appendChild(status); }
-            (Array.isArray(quality.issues)?quality.issues:[]).slice(0,4).forEach(issue=>{const p=document.createElement("p");p.className="text-xs text-slate-600";p.textContent="• "+issue;qualityContent.appendChild(p);});
-            if(quality.improvement){const p=document.createElement("p");p.className="text-xs text-slate-700 font-medium";p.textContent=quality.improvement;qualityContent.appendChild(p);}
-            show("quality-card",!!(quality.status||quality.improvement||(quality.issues||[]).length));
+            const quality = data.quality_check || {};
+            const qualityContent = document.getElementById("quality-content");
+            qualityContent.innerHTML = "";
+            if (quality.status) {
+                const status = document.createElement("span");
+                status.className = "inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200";
+                status.textContent = quality.status;
+                qualityContent.appendChild(status);
+            }
+            (Array.isArray(quality.issues) ? quality.issues : []).slice(0, 4).forEach(issue => {
+                const p = document.createElement("p");
+                p.className = "text-xs text-slate-600";
+                p.textContent = "• " + issue;
+                qualityContent.appendChild(p);
+            });
+            if (quality.improvement) {
+                const p = document.createElement("p");
+                p.className = "text-xs text-slate-700 font-medium";
+                p.textContent = quality.improvement;
+                qualityContent.appendChild(p);
+            }
+            show("quality-card", !!(quality.status || quality.improvement || (quality.issues || []).length));
 
-            const context=data.context_note||""; document.getElementById("context-content").textContent=context; show("context-card",!!context);
-            const regional=data.regional_differences||{}; const regionalContent=document.getElementById("regional-content"); regionalContent.innerHTML="";
-            [["British",regional.british],["American",regional.american],["Note",regional.note]].forEach(([label,value])=>{if(value){const p=document.createElement("p");p.className="text-xs leading-relaxed";const b=document.createElement("strong");b.textContent=label+": ";p.append(b,document.createTextNode(value));regionalContent.appendChild(p);}});
-            show("regional-card",regionalContent.childNodes.length>0);
+            const context = data.context_note || "";
+            document.getElementById("context-content").textContent = context;
+            show("context-card", !!context);
 
-            const natural=data.naturalness||{}; const badge=document.getElementById("naturalness-badge");
-            if(natural.label){badge.textContent="Naturalness: "+natural.label+(natural.reason?" · "+natural.reason:"");badge.className="text-[10px] font-bold rounded-full px-2.5 py-1 border bg-emerald-50 text-emerald-700 border-emerald-200";badge.classList.remove("hidden");}else badge.classList.add("hidden");
+            const regional = data.regional_differences || {};
+            const regionalContent = document.getElementById("regional-content");
+            regionalContent.innerHTML = "";
+            [["British", regional.british], ["American", regional.american], ["Note", regional.note]].forEach(([label, value]) => {
+                if (value) {
+                    const p = document.createElement("p");
+                    p.className = "text-xs leading-relaxed";
+                    const b = document.createElement("strong");
+                    b.textContent = label + ": ";
+                    p.append(b, document.createTextNode(value));
+                    regionalContent.appendChild(p);
+                }
+            });
+            show("regional-card", regionalContent.childNodes.length > 0);
+
+            const natural = data.naturalness || {};
+            const badge = document.getElementById("naturalness-badge");
+            if (natural.label) {
+                badge.textContent = "Naturalness: " + natural.label + (natural.reason ? " · " + natural.reason : "");
+                badge.className = "text-[10px] font-bold rounded-full px-2.5 py-1 border bg-emerald-50 text-emerald-700 border-emerald-200";
+                badge.classList.remove("hidden");
+            } else {
+                badge.classList.add("hidden");
+            }
         }
 
         function renderWordChips(containerId, wordsArray, colorClasses, dir) {
@@ -2321,13 +2505,17 @@ USER INPUT TEXT:
             const overlay = document.getElementById("loading-overlay");
             const submitBtn = document.getElementById("submit-btn");
             if (isLoading) {
-                overlay.classList.remove("hidden");
-                submitBtn.disabled = true;
-                submitBtn.classList.add("opacity-75", "cursor-not-allowed");
+                overlay?.classList.remove("hidden");
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add("opacity-75", "cursor-not-allowed");
+                }
             } else {
-                overlay.classList.add("hidden");
-                submitBtn.disabled = false;
-                submitBtn.classList.remove("opacity-75", "cursor-not-allowed");
+                overlay?.classList.add("hidden");
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove("opacity-75", "cursor-not-allowed");
+                }
             }
         }
 
@@ -2335,6 +2523,7 @@ USER INPUT TEXT:
             const box = document.getElementById("alert-box");
             document.getElementById("alert-message").textContent = msg;
             box.classList.remove("hidden");
+            lucide.createIcons();
         }
 
         function hideAlert() {
