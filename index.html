@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Premium Smart Translator v7 | AI Translator & Dictionary</title>
-    <!-- استدعاء مكتبة Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- استدعاء خطوط Google Fonts (Cairo للعربية و Inter للإنجليزية) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- استدعاء مكتبة أيقونات Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
@@ -117,7 +114,6 @@
             transform: rotate(180deg);
         }
 
-        /* Dark mode — cohesive, readable navy/indigo palette */
         body.dark { background:#0b1020 !important; color:#e7ecf5 !important; color-scheme:dark; }
         body.dark main { color:#e7ecf5; }
         body.dark header, body.dark footer, body.dark #settings-modal > div,
@@ -153,7 +149,6 @@
         body.dark kbd { background:#1e2d47 !important; color:#e2e8f0 !important; }
         body.dark ::selection { background:#334b7b; color:#fff; }
 
-        /* Premium translator interface */
         :root { color-scheme: light; --premium-accent:#2563eb; }
         body { background:radial-gradient(ellipse at 8% 0%,rgba(219,234,254,.58),transparent 34%),#f5f7fb; }
         header { background:rgba(255,255,255,.88) !important; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
@@ -184,7 +179,6 @@
           .premium-toolbar select { min-width:0; width:100%; }
         }
 
-        /* Smart intelligence panels */
         .smart-insight-card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:14px; }
         .smart-insight-title { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:800; color:#334155; margin-bottom:10px; }
         .smart-chip { display:inline-flex; align-items:center; gap:5px; padding:6px 9px; border-radius:10px; background:#f1f5f9; border:1px solid #e2e8f0; font-size:12px; }
@@ -200,7 +194,6 @@
             .stagger-hidden { opacity:1 !important; transform:none !important; }
         }
 
-        /* v7 Premium Redesign: calm navy + teal accent, editorial hierarchy */
         :root { --premium-ink:#17263d; --premium-accent:#0f8f91; --premium-accent-2:#2563a6; --premium-line:#dce5ed; }
         body { background:radial-gradient(ellipse at 7% 0%,rgba(191,230,229,.42),transparent 34%),linear-gradient(180deg,#f7fafb 0%,#f3f6fa 100%); color:var(--premium-ink); }
         header { border-color:#dce5ed !important; box-shadow:0 5px 24px rgba(24,46,68,.045) !important; }
@@ -244,7 +237,6 @@
           #dictionary-section > div > div { padding:15px !important; }
           .premium-toolbar { gap:8px; }
           .premium-toolbar button { min-height:40px; }
-          #settings-modal > div { max-height:92dvh; overflow-y:auto; }
         }
         @media (max-width:380px) {
           header .max-w-6xl { gap:5px; }
@@ -256,10 +248,8 @@
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
 
-    <!-- الشريط العلوي المتجاوب (Responsive Header) -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
         <div class="max-w-6xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
-            <!-- الشعار والعنوان -->
             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
                 <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white shadow-sm shrink-0">
                     <i data-lucide="languages" class="w-5 h-5 sm:w-6 sm:h-6"></i>
@@ -270,7 +260,6 @@
                 </div>
             </div>
 
-            <!-- مؤشر المحرك النشط وزر المظهر -->
             <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
                 <button id="theme-toggle" type="button" onclick="toggleTheme()" class="w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 text-slate-600 flex items-center justify-center transition-colors" title="تبديل الوضع الفاتح والداكن" aria-label="تبديل الوضع">
                     <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4"></i>
@@ -286,18 +275,33 @@
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي -->
     <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-8">
 
         <section class="mb-5 sm:mb-7 text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[11px] sm:text-xs font-bold mb-3">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>SMART TRANSLATION EXPERIENCE</span>
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>SMART TRANSLATION EXPERIENCE · V2</span>
             </div>
             <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">ترجمة ذكية تفهم المصري والإنجليزي حتى لو مش مثالي</h2>
-            <p class="mt-2 text-xs sm:text-sm text-slate-500">ترجمة تلقائية بمجرد التوقف عن الكتابة وعرض متدرج للنتائج خطوة بخطوة</p>
+            <p class="mt-2 text-xs sm:text-sm text-slate-500">ترجمة تلقائية بمجرد التوقف عن الكتابة مع أوضاع ترجمة متخصصة وتحليل سياقي ولغوي متدرج</p>
         </section>
 
-        <!-- حاوية صناديق الترجمة المتجاوبة -->
+        <!-- شريط اختيار نمط الترجمة -->
+        <div class="premium-toolbar mb-4 px-3 py-2.5 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2 text-xs font-bold text-slate-700">
+                <i data-lucide="sliders-horizontal" class="w-4 h-4 text-teal-600 shrink-0"></i>
+                <span>نمط الترجمة:</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5" id="translation-mode-pills" role="group" aria-label="أنماط الترجمة">
+                <button type="button" data-mode="Natural" onclick="setTranslationMode('Natural')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">طبيعية (Natural)</button>
+                <button type="button" data-mode="Literal" onclick="setTranslationMode('Literal')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">حرفية (Literal)</button>
+                <button type="button" data-mode="Formal" onclick="setTranslationMode('Formal')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">رسمية (Formal)</button>
+                <button type="button" data-mode="Casual" onclick="setTranslationMode('Casual')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">عامية (Casual)</button>
+                <button type="button" data-mode="Business" onclick="setTranslationMode('Business')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">أعمال (Business)</button>
+                <button type="button" data-mode="Academic" onclick="setTranslationMode('Academic')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">أكاديمية (Academic)</button>
+                <button type="button" data-mode="Technical" onclick="setTranslationMode('Technical')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">تقنية (Technical)</button>
+            </div>
+        </div>
+
         <div class="relative flex flex-col lg:grid lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-8 items-stretch">
 
             <!-- الصندوق الأول (Box 1) -->
@@ -341,7 +345,6 @@
                 </div>
             </div>
 
-            <!-- زر التبديل الدائري في المنتصف بين الصندوقين -->
             <div class="flex justify-center items-center lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 z-20 -my-1.5 lg:my-0">
                 <button type="button" onclick="swapBoxes()" class="w-11 h-11 rounded-full bg-white hover:bg-blue-600 text-blue-600 hover:text-white border-2 border-blue-100 hover:border-blue-600 shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-200 active:scale-90 group" title="تبديل اللغتين والنصوص">
                     <i data-lucide="arrow-left-right" class="w-5 h-5 rotate-90 lg:rotate-0 transition-transform duration-300 group-hover:scale-110"></i>
@@ -393,7 +396,6 @@
             </div>
         </div>
 
-        <!-- زر Submit الرئيسي -->
         <div class="mt-5 sm:mt-6 flex flex-col items-center justify-center">
             <button id="submit-btn" type="button" onclick="executeTranslation({ manualTrigger: true })" class="w-full sm:w-auto sm:min-w-[260px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg shadow-blue-200/80 hover:shadow-blue-300 transition-all duration-200 flex items-center justify-center gap-2.5 active:scale-[0.98]">
                 <i data-lucide="sparkles" class="w-5 h-5"></i>
@@ -403,7 +405,6 @@
             <span class="hidden sm:inline-block text-[11px] text-slate-400 mt-1">اختصارات: <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Enter</kbd> للترجمة · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Esc</kbd> للإلغاء · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Shift + H</kbd> للسجل</span>
         </div>
 
-        <!-- أدوات النطق وسجل الترجمات -->
         <div class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs">
             <label class="flex items-center gap-2 text-slate-500">الصوت
                 <select id="speech-voice" class="max-w-[190px] rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-slate-700" aria-label="اختيار صوت النطق"><option value="">تلقائي حسب اللغة</option></select>
@@ -415,6 +416,7 @@
             <button type="button" onclick="toggleHistory()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سجل الترجمات <span id="history-count" class="font-en">0</span></button>
             <button type="button" onclick="togglePerformance()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سرعة الموقع</button>
         </div>
+
         <section id="performance-panel" class="hidden mt-3 bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 animate-fade-in">
             <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm">مراقبة الأداء</h3><span id="perf-route" class="text-[11px] text-slate-500">لم تبدأ عملية بعد</span></div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -425,18 +427,17 @@
             </div>
             <p class="smart-muted mt-2">الأوقات تقاس على جهازك واتصالك الحالي، وقد تختلف من طلب لآخر.</p>
         </section>
+
         <section id="history-panel" class="hidden mt-4 bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 animate-fade-in">
             <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm">آخر الترجمات</h3><button type="button" onclick="clearHistory()" class="text-xs text-red-500 hover:text-red-700">مسح السجل</button></div>
             <div id="history-list" class="space-y-2"></div>
         </section>
 
-        <!-- رسالة تنبيه / خطأ داخل الصفحة -->
         <div id="alert-box" class="hidden mt-4 p-3.5 sm:p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm flex items-start sm:items-center gap-3">
             <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 text-red-600 mt-0.5 sm:mt-0"></i>
             <span id="alert-message" class="leading-relaxed"></span>
         </div>
 
-        <!-- شريط تشخيصي يوضح رد السيرفر بالتفصيل -->
         <div id="diagnostic-box" class="hidden mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] sm:text-xs flex items-start justify-between gap-2">
             <div class="flex items-start gap-2">
                 <i data-lucide="terminal" class="w-4 h-4 shrink-0 text-amber-600 mt-0.5"></i>
@@ -447,7 +448,6 @@
             </button>
         </div>
 
-        <!-- قسم التحليل اللغوي والقاموس المفصل -->
         <section id="dictionary-section" class="hidden mt-6 sm:mt-8">
             <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
                 <div data-stagger-item class="bg-gradient-to-l from-blue-50 via-white to-slate-50 border-b border-slate-200 p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -733,23 +733,57 @@
 
     </main>
 
-    <!-- التذييل (Footer) -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
             <p>مدعوم بـ <strong class="text-blue-600">Cloudflare Worker</strong> مع <strong class="text-slate-700">Groq</strong> و <strong class="text-slate-700">Google Gemini</strong></p>
-            <p>المترجم الذكي والقاموس التفاعلي · v7</p>
+            <p>المترجم الذكي والقاموس التفاعلي · v7 (Engine V2)</p>
         </div>
     </footer>
 
     <script>
-        // ============================================================================
-        // 1. إعدادات Cloudflare Worker بدون أي مفاتيح سرية في الواجهة
-        // ============================================================================
         const DEFAULT_WORKER_URL = "https://smart-translator-api.abdelrahmanwael5101.workers.dev";
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const KEY_VERSION = "v17_full_auto_translate_stagger_reveal";
+        const TRANSLATION_MODES = {
+            Natural: {
+                label: "Natural",
+                arLabel: "طبيعية",
+                instruction: "Produce fluent, idiomatic, native-sounding language that fits natural everyday or editorial usage without literal calques."
+            },
+            Literal: {
+                label: "Literal",
+                arLabel: "حرفية",
+                instruction: "Stay closely faithful to the source wording and clause order where grammatical in the target language, while still remaining intelligible and avoiding obvious gibberish."
+            },
+            Formal: {
+                label: "Formal",
+                arLabel: "رسمية",
+                instruction: "Use polished, respectful, formal phrasing suitable for official correspondence, polite communication, or formal prose; avoid slang and colloquialisms."
+            },
+            Casual: {
+                label: "Casual",
+                arLabel: "عامية",
+                instruction: "Use relaxed, natural spoken phrasing appropriate for friendly everyday conversation (including natural Egyptian colloquial Arabic or natural conversational English where fitting)."
+            },
+            Business: {
+                label: "Business",
+                arLabel: "أعمال",
+                instruction: "Use clear, concise, credible workplace and business communication phrasing appropriate for emails, stakeholders, product discussions, and negotiations."
+            },
+            Academic: {
+                label: "Academic",
+                arLabel: "أكاديمية",
+                instruction: "Use objective, precise, scholarly register suitable for academic papers, research summaries, and educational explanations."
+            },
+            Technical: {
+                label: "Technical",
+                arLabel: "تقنية",
+                instruction: "Prioritize accurate domain, engineering, software, scientific, or specialized terminology while keeping explanations and sentences clear and unambiguous."
+            }
+        };
+
+        const KEY_VERSION = "v2_modes_pipeline_cache";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -757,10 +791,10 @@
         }
 
         const GROQ_MODELS = [
-            "llama-3.1-8b-instant",
             "llama-3.3-70b-versatile",
-            "openai/gpt-oss-20b",
-            "openai/gpt-oss-120b"
+            "openai/gpt-oss-120b",
+            "llama-3.1-8b-instant",
+            "openai/gpt-oss-20b"
         ];
 
         let GEMINI_MODELS = [
@@ -811,7 +845,10 @@
             if (showMessage) showAlert("تم إلغاء عملية الترجمة.");
         }
 
-        function cacheKey(text, src, tgt) { return [src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::"); }
+        function cacheKey(text, src, tgt, mode = "Natural") {
+            return [mode, src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::");
+        }
+
         function openTranslatorDB() {
             if (!('indexedDB' in window)) return Promise.resolve(null);
             if (idbPromise) return idbPromise;
@@ -981,7 +1018,7 @@
             translationHistory.unshift(entry);
             translationHistory = translationHistory.slice(0, 50);
             try { localStorage.setItem("smart_trans_history", JSON.stringify(translationHistory)); } catch (_) {}
-            idbPut("history", { id: `${entry.time}::${entry.source}::${entry.target}`, item: entry });
+            idbPut("history", { id: `${entry.time}::${entry.source}::${entry.target}::${entry.mode || "Natural"}`, item: entry });
             renderHistory();
         }
         function renderHistory() {
@@ -995,9 +1032,9 @@
                 const row = document.createElement("div"); row.className = "history-item flex items-center gap-2 p-2.5 rounded-xl border border-slate-100 bg-slate-50";
                 const body = document.createElement("button"); body.type="button"; body.className="min-w-0 flex-1 text-right";
                 const a=document.createElement("span"); a.className="block text-xs font-bold text-slate-700 truncate"; a.textContent=item.input;
-                const b=document.createElement("span"); b.className="block text-xs text-slate-500 truncate mt-1"; b.textContent=item.translation;
-                body.append(a,b); body.onclick=()=>{ document.getElementById("box1-text").value=item.input; onBoxInput(1, false); document.getElementById("box2-text").value=item.translation; onBoxInput(2, false); state.activeInputBox=1; };
-                const copy=document.createElement("button"); copy.type="button"; copy.className="text-xs text-blue-600 px-2"; copy.textContent="نسخ"; copy.onclick=()=>navigator.clipboard?.writeText(item.translation);
+                const b=document.createElement("span"); b.className="block text-xs text-slate-500 truncate mt-1"; b.textContent=`[${item.mode || "Natural"}] ${item.translation}`;
+                body.append(a,b); body.onclick=()=>{ if (item.mode) setTranslationMode(item.mode, false); document.getElementById("box1-text").value=item.input; onBoxInput(1, false); document.getElementById("box2-text").value=item.translation; onBoxInput(2, false); state.activeInputBox=1; };
+                const copy=document.createElement("button"); copy.type="button"; copy.className="text-xs text-blue-600 px-2"; copy.textContent="نسخ"; copy.onclick=()=>copyPlainString(item.translation);
                 row.append(body,copy); list.appendChild(row);
             });
         }
@@ -1013,6 +1050,7 @@
 
         let state = {
             activeInputBox: 1,
+            mode: "Natural",
             box1: { selectedLang: "ar", detectedLang: null, manualOverride: false },
             box2: { selectedLang: "en-US", detectedLang: null, manualOverride: false },
             currentDictLang: "en-US",
@@ -1022,9 +1060,30 @@
             knowledgeEndpoint: ""
         };
 
-        // ============================================================================
-        // 2. قائمة اللغات
-        // ============================================================================
+        function renderModePills() {
+            document.querySelectorAll("#translation-mode-pills .mode-pill").forEach(btn => {
+                const modeKey = btn.getAttribute("data-mode");
+                const active = modeKey === state.mode;
+                btn.className = active
+                    ? "mode-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-2xs transition-all cursor-pointer"
+                    : "mode-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-700 border border-slate-200/80 transition-all cursor-pointer";
+            });
+        }
+
+        function setTranslationMode(modeName, shouldRecompute = true) {
+            if (!TRANSLATION_MODES[modeName]) return;
+            state.mode = modeName;
+            try { localStorage.setItem("smart_trans_mode", modeName); } catch (_) {}
+            renderModePills();
+            lastPreparedPayload = null;
+            lastRenderedSignature = "";
+            if (!shouldRecompute) return;
+            const activeText = (document.getElementById(`box${state.activeInputBox}-text`)?.value || "").trim();
+            if (activeText) {
+                executeTranslation({ manualTrigger: false, autoTriggered: true });
+            }
+        }
+
         const TOP_10_LANGUAGES = [
             { code: "ar", name: "العربية (Arabic)", shortName: "العربية", dir: "rtl" },
             { code: "en-US", name: "الإنجليزية الأمريكية — English (US)", shortName: "English (US)", dir: "ltr" },
@@ -1094,14 +1153,13 @@
 
         const ALL_LANGUAGES = [...TOP_10_LANGUAGES, ...OTHER_WORLD_LANGUAGES];
 
-        // ============================================================================
-        // 3. تهيئة القوائم والواجهة عند التحميل
-        // ============================================================================
         document.addEventListener("DOMContentLoaded", () => {
             lucide.createIcons();
             applySavedTheme();
             applySavedFocusMode();
-            localStorage.removeItem("smart_trans_style");
+            const savedMode = localStorage.getItem("smart_trans_mode");
+            if (savedMode && TRANSLATION_MODES[savedMode]) state.mode = savedMode;
+            renderModePills();
             loadCache();
             try { translationHistory = JSON.parse(localStorage.getItem("smart_trans_history") || "[]"); } catch (_) { translationHistory=[]; }
             renderHistory();
@@ -1114,7 +1172,7 @@
             document.addEventListener("keydown",e=>{
                 if(e.key==="Escape" && (activeControllers.length || activeRequestSignature)) cancelActiveTranslation(true);
                 if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="h"){e.preventDefault();toggleHistory();}
-                if((e.ctrlKey||e.metaKey)&&e.altKey&&e.key.toLowerCase()==="c"){e.preventDefault();const out=document.getElementById("box2-text").value;if(out)navigator.clipboard?.writeText(out);}
+                if((e.ctrlKey||e.metaKey)&&e.altKey&&e.key.toLowerCase()==="c"){e.preventDefault();const out=document.getElementById("box2-text").value;if(out)copyPlainString(out);}
             });
             populateLanguageSelect("box1-lang-select", state.box1.selectedLang);
             populateLanguageSelect("box2-lang-select", state.box2.selectedLang);
@@ -1206,9 +1264,6 @@
             }
         }
 
-        // ============================================================================
-        // 3.5 محرك النطق الصوتي الفوري
-        // ============================================================================
         let currentAudio = null;
         let cachedVoices = [];
 
@@ -1339,9 +1394,6 @@
             speakText(phrase, state.currentDictLang, btnElement);
         }
 
-        // ============================================================================
-        // 4. خانة التحديد التلقائي والترجمة التلقائية عند التوقف عن الكتابة
-        // ============================================================================
         function setActiveBox(boxNum) {
             state.activeInputBox = boxNum;
             const b1 = document.getElementById("box-1-container");
@@ -1408,6 +1460,8 @@
             const boxState = boxNum === 1 ? state.box1 : state.box2;
             boxState.selectedLang = select.value;
             boxState.manualOverride = true;
+            lastPreparedPayload = null;
+            lastRenderedSignature = "";
 
             const textarea = document.getElementById(`box${boxNum}-text`);
             const trimmed = textarea.value.trim();
@@ -1564,116 +1618,100 @@
             document.getElementById("box2-phonetics-row").classList.add("hidden");
 
             document.getElementById("box1-char-count").textContent = `${t1.value.length} / 2000`;
-            document.getElementById("box2-char-count") && (document.getElementById("box2-char-count").textContent = `${t2.value.length} / 2000`);
             document.getElementById("box1-clear-btn").classList.toggle("hidden", t1.value.trim().length === 0);
             document.getElementById("box2-clear-btn").classList.toggle("hidden", t2.value.trim().length === 0);
+            lastPreparedPayload = null;
+            lastRenderedSignature = "";
             if (t1.value.trim()) scheduleAutoTranslate(1);
         }
 
-        function copyBoxText(elementId, btnElement) {
-            const el = document.getElementById(elementId);
-            const textToCopy = el.value;
-            if (!textToCopy || textToCopy.trim() === "") return;
-
+        async function copyPlainString(text) {
+            if (!text) return false;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (_) {}
+            }
             const tempTextarea = document.createElement("textarea");
-            tempTextarea.value = textToCopy;
+            tempTextarea.value = text;
             document.body.appendChild(tempTextarea);
             tempTextarea.select();
             try {
-                document.execCommand("copy");
-                const originalHTML = btnElement.innerHTML;
-                btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">Copied!</span>`;
-                btnElement.classList.add("border-emerald-300", "bg-emerald-50");
-                lucide.createIcons();
-
-                setTimeout(() => {
-                    btnElement.innerHTML = originalHTML;
-                    btnElement.classList.remove("border-emerald-300", "bg-emerald-50");
-                    lucide.createIcons();
-                }, 1500);
-            } catch (err) {
-                console.error("Copy failed", err);
+                return document.execCommand("copy");
+            } catch (_) {
+                return false;
             } finally {
                 document.body.removeChild(tempTextarea);
             }
         }
 
-        // ============================================================================
-        // 5. بناء التعليمات الموحدة الصارمة
-        // ============================================================================
-        function buildUnifiedPrompt(text, effectiveSrcLang, effectiveTgtLang, knowledgeContext = null, lexicalHints = null) {
+        async function copyBoxText(elementId, btnElement) {
+            const el = document.getElementById(elementId);
+            const textToCopy = el?.value || "";
+            if (!textToCopy.trim()) return;
+            const ok = await copyPlainString(textToCopy);
+            if (!ok || !btnElement) return;
+            const originalHTML = btnElement.innerHTML;
+            btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">Copied!</span>`;
+            btnElement.classList.add("border-emerald-300", "bg-emerald-50");
+            lucide.createIcons();
+            setTimeout(() => {
+                btnElement.innerHTML = originalHTML;
+                btnElement.classList.remove("border-emerald-300", "bg-emerald-50");
+                lucide.createIcons();
+            }, 1500);
+        }
+
+        function buildUnifiedPrompt(text, effectiveSrcLang, effectiveTgtLang, modeName = "Natural", knowledgeContext = null, lexicalHints = null) {
             const isEnToEn = effectiveSrcLang.startsWith("en") && effectiveTgtLang.startsWith("en");
+            const modeConfig = TRANSLATION_MODES[modeName] || TRANSLATION_MODES.Natural;
 
             const verbatimRule = isEnToEn
                 ? `ENGLISH-TO-ENGLISH DICTIONARY MODE:
-- Treat the input as a dictionary lookup, not a translation into another language.
+- Treat the input as a dictionary lookup or style reformulation, not a translation into another language.
 - Keep the headword or phrase as the main result. Explain its meaning in clear, concise, original English.
 - Include part of speech, useful pronunciation, common usage, and natural example sentences.
-- Do NOT claim that definitions or examples are copied from Oxford unless verified Oxford API data is actually supplied to you. Never invent a source citation. When official Oxford data is unavailable, write original explanations and examples instead of pretending they came from Oxford.
-- Prefer standard British English by default, while noting common US differences when relevant.
-- If verified Oxford dictionary data is included in the retrieved context, prioritize its sense structure, pronunciation, labels, and lexical facts. Clearly distinguish retrieved Oxford facts from your own explanation. Do not invent Oxford content if no verified Oxford data is present.`
-                : `CONTEXT-AWARE TRANSLATION MODE:
-- Translate the intended meaning, not the individual words or source-language sentence structure.
-- Understand context, tone, dialect, slang, Egyptian Arabic, idioms, implied meaning, and cultural references.
-- Produce fluent, natural language that a native speaker would actually use. Avoid Google-Translate-style literal wording.
-- Preserve names, numbers, facts, intent, politeness, and emotional tone. Do not add information.
-- If the input is ambiguous, choose the most likely meaning and briefly mention the ambiguity only when it materially changes the translation.
-- Recognize multi-word expressions and phrasal verbs BEFORE translating individual words. Prefer the longest meaningful phrase that fits the context.
-- Treat lemma and phrase candidates as search hints only; verify every candidate against grammar and the full sentence. Never let simplistic suffix rules override context.
-- Give a concise, original definition and exactly 2 natural example sentences with translations.
-- Return 2–3 useful alternative translations with labels (e.g. Natural, Conversational, Professional), sentence breakdown only when the input is a sentence or multi-word phrase, a transparent quality review, context explanation, naturalness label, and British/American differences when relevant.
-- Do not invent numeric confidence scores, frequency rankings, regional differences, or dictionary citations. Show British/American differences only when English is involved and a meaningful difference exists; otherwise leave those fields empty.
-- The quality review is an AI self-check, not independent proof or human certification. State only concrete issues you can identify; do not manufacture a quality score.
-- Use retrieved bilingual definitions, collocations, idioms, and real usage examples as evidence to disambiguate meaning; do not copy a literal translation when context indicates a natural equivalent.`;
+- Do NOT claim that definitions or examples are copied from Oxford unless verified Oxford API data is actually supplied to you. Never invent a source citation.
+- Prefer standard British English by default when British is selected, or standard US English when US is selected, noting differences when relevant.`
+                : `CONTEXT-AWARE TRANSLATION MODE (STAGED PIPELINE):
+- Stage A (Input Analysis): Detect source intent, Egyptian colloquial Arabic vs. MSA vs. English register, idioms, phrasal verbs, sarcasm, humor, named entities, numbers, and imperfect/typo-ridden grammar.
+- Stage B (Context Understanding): Resolve intended meaning from the full sentence/paragraph before translating individual words. Never invent facts not present in the source.
+- Stage C (Style-Applied Translation): Apply the selected translation mode ("${modeConfig.label}"): ${modeConfig.instruction}
+  * For Egyptian Arabic ↔ English: convey natural Egyptian pragmatic tone (e.g. "أنا مش طايق نفسي", "إنت موتني من الضحك", "خليك في حالك", "He is pulling my leg", "I'm feeling under the weather", "That's a bit rich coming from you") naturally without forced or awkward idioms when plain natural phrasing is clearer.
+- Stage D (Quality Review & Controlled Repair): Check semantic fidelity, omissions, hallucinations, grammar, tone, and mode alignment; if flawed, produce the corrected version directly in "translation".
+- Preserve names, numbers, dates, technical terms, and paragraph structure.
+- Return 2–3 useful alternative translations with labels, sentence breakdown only when the input is multi-word or a sentence, a concise quality_check summary, context_note, naturalness label, and British/American differences only when English is involved and a real difference exists.`;
 
-            return `You are an elite bilingual lexicographer and dictionary engine.
+            return `You are an elite bilingual lexicographer, translation specialist, and quality reviewer.
 
-TASK:
-You are a smart translator built to replace opening a raw AI chat window while avoiding literal word-for-word machine translation.
-Understand what the user ACTUALLY means even when the input uses:
-- Egyptian Arabic dialect / slang / idioms (e.g., "مكبر دماغي", "الدنيا واقفة", "على الله", "هنجيب آخرنا", "فكك منه", "مش مستاهلة").
-- Imperfect, casual, abbreviated, or non-native / slightly broken English (e.g., "i no understand why he do like that", "gonna lay low for a bit", typos, missing articles or grammar).
-- Implicit intent or cultural nuance.
-
-Infer the intended meaning first, translate it naturally into the target language, and provide concise alternatives, context notes, and idiomatic equivalents when helpful.
+SELECTED TRANSLATION MODE: ${modeConfig.label} (${modeConfig.arLabel})
+MODE RULE: ${modeConfig.instruction}
 - Source Language: ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang})
 - Target Language: ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang})
-- Translation approach: meaning-first, context-aware, natural and accurate.
-- Keep the core meaning accurate; never translate mechanically word by word.
 
 ${verbatimRule}
 
-IDIOM / EXPRESSION RULE (MANDATORY SEMANTIC EQUIVALENCE CHECK — NEVER SKIP):
-- Do NOT only search for idioms literally present in the source text. First understand the intended meaning, including colloquial speech, slang, dialect, misspellings, and Egyptian Arabic expressions, then search for a natural, commonly used idiom/expression in the TARGET language that communicates the SAME meaning.
-- The source phrase does NOT need to be an idiom itself. A plain phrase such as "سهل جدا", "سهل للغاية", "سهل أوي", "سهل خالص", or "الموضوع سهل" expresses VERY EASY; when the target language is English, a natural idiomatic equivalent is "a piece of cake" (also consider "as easy as ABC" where context fits). Return this equivalent even though the Arabic source wording is ordinary, not an idiom.
-- Recognize Egyptian colloquial Arabic and other dialect forms by meaning, not spelling. Match the intended sense and context; never force an unrelated idiom.
-- Check common idioms, phrasal expressions, proverbs, metaphors, and natural equivalent expressions. Examples include "a piece of cake", "break the ice", "under the weather", "spill the beans", "once in a blue moon", "hit the nail on the head", and "call it a day"; this list is illustrative, not exhaustive.
-- If translating Arabic (including Egyptian Arabic) into English, prioritize a natural English idiom when one is commonly used for the intended meaning. Do not give only a literal translation when a widely understood idiomatic equivalent exists.
-- In "meaning", explain in the SOURCE language that this is the natural equivalent of the user's intended meaning, and explain how/when it is used. Do not falsely claim the original wording itself is an idiom.
-- If a genuine idiom OR a strong, widely-used idiomatic equivalent exists, it MUST be returned with has_idiom=true and a non-empty phrase. Only return false when no natural idiomatic equivalent exists; never invent one just to fill the section.
-- For source meaning "سهل جدا" and target English, use phrase exactly "a piece of cake" (NOTE: piece, not peace).
-- If YES: Populate the "idiom" object with:
-  * "has_idiom": true
-  * "phrase": The exact idiom/expression in ${getLangObj(effectiveTgtLang).name}
-  * "meaning": Explain in ${getLangObj(effectiveSrcLang).name} that this is the natural equivalent of the user's intended meaning, and explain how/when it is used.
-  * "examples": EXACTLY 2 natural example sentences using this idiom in ${getLangObj(effectiveTgtLang).name}, each with its translation in ${isEnToEn ? "English" : getLangObj(effectiveSrcLang).name}.
-- If NO idiom applies (e.g., a plain single word or literal sentence with no idiomatic expression): Set "idiom": { "has_idiom": false, "phrase": "", "meaning": "", "examples": [] }.
+IDIOM / EXPRESSION RULE:
+- Understand the intended meaning first (including Egyptian Arabic expressions, slang, typos, and English idioms/phrasal verbs).
+- Only set "idiom.has_idiom": true when a genuine idiom or a natural, widely-used idiomatic equivalent in ${getLangObj(effectiveTgtLang).name} genuinely fits the meaning and selected mode (avoiding idioms in strictly Literal/Academic/Technical modes unless genuinely idiomatic and relevant). Never invent an idiom just to fill the field.
+- If "idiom.has_idiom" is true, provide "phrase", "meaning" (in ${getLangObj(effectiveSrcLang).name}), and 2 examples; otherwise set "has_idiom": false, "phrase": "", "meaning": "", "examples": [].
 
-ADVANCED LEXICAL FIELDS (REQUIRED FOR THE TRANSLATED WORD/PHRASE):
-1. "transcription": Phonetic respelling or Latin transliteration guide of the translated word (e.g., "ak-suh-ler-ayt" or "mar-ha-ban").
-2. "ipa": Standard International Phonetic Alphabet transcription between slashes (provide both US and UK if English, e.g., "US: /.../ | UK: /.../", or standard IPA for the target language).
-2b. "ipa_symbols": Array of objects breaking down the key IPA phonetic symbols present in the word with their classic reference example word (e.g., [{"symbol": "/ɪ/", "example": "kit"}]).
-3. "cefr_level": Standard CEFR proficiency level tag ("A1", "A2", "B1", "B2", "C1", or "C2").
-4. "collocations": Array of 3 to 4 common natural collocations/word combinations using the translated word.
-5. "word_family": Array of 2 to 4 morphological forms of the word with their part of speech in parentheses (e.g., "decide (v)", "decision (n)", "decisive (adj)", "decisively (adv)").
-6. "grammar_patterns": Array of 2 to 4 common grammatical structures/patterns for this word (e.g., "verb + to infinitive", "adjective + preposition 'of'", "transitive / intransitive").
-7. "frequency": Concise description of how common/frequent the word is in daily speech and writing (e.g., "High frequency — Top 1,000 most common words").
-8. "register": Style and formality level (e.g., "Neutral / Standard", "Formal / Academic", "Informal / Colloquial", "Literary").
-9. "related_words": Array of 3 to 4 thematically or semantically related words in ${getLangObj(effectiveTgtLang).name}.
-10. "etymology": Concise, accurate historical origin and root of the word (1-2 clear sentences).
+ADVANCED LEXICAL FIELDS:
+1. "transcription": Phonetic respelling or Latin transliteration guide of the translated text/word.
+2. "ipa": Standard IPA transcription between slashes (provide US and UK when helpful for English).
+2b. "ipa_symbols": Array of objects [{"symbol": "/.../", "example": "..."}].
+3. "cefr_level": "A1", "A2", "B1", "B2", "C1", or "C2".
+4. "collocations": Array of 3 to 4 natural collocations/combinations.
+5. "word_family": Array of 2 to 4 morphologically accurate forms with part of speech in parentheses (do not use simplistic suffix stripping).
+6. "grammar_patterns": Array of 2 to 4 grammatical structures/patterns.
+7. "frequency": Concise usage frequency description.
+8. "register": Style/formality/register description matching the requested mode ("${modeConfig.label}").
+9. "related_words": Array of 3 to 4 related words/expressions in ${getLangObj(effectiveTgtLang).name}.
+10. "etymology": Concise origin/etymology note.
 
 STRICT SCHEMA RULES:
-- "part_of_speech": MUST ALWAYS be written in English (e.g., "Noun", "Verb", "Adjective", "Adverb", "Preposition", "Phrase", "Idiom", "Sentence").
+- "part_of_speech": MUST be in English (e.g., "Noun", "Verb", "Adjective", "Adverb", "Phrase", "Idiom", "Sentence").
 - "synonyms": Array of 3 to 5 accurate synonyms in ${getLangObj(effectiveTgtLang).name}.
 - "antonyms": Array of 3 to 5 accurate antonyms in ${getLangObj(effectiveTgtLang).name}.
 - Return ONLY a valid raw JSON object (no markdown fences, no commentary) matching this exact structure:
@@ -1681,14 +1719,15 @@ STRICT SCHEMA RULES:
   "detected_source_code": "${effectiveSrcLang}",
   "detected_source_name": "${getLangObj(effectiveSrcLang).name}",
   "resolved_target_code": "${effectiveTgtLang}",
+  "translation_mode": "${modeConfig.label}",
   "translation": "string",
   "transcription": "string",
   "ipa": "string",
   "ipa_symbols": [
     { "symbol": "/ɪ/", "example": "kit" }
   ],
-  "part_of_speech": "string (ALWAYS in English: Noun, Verb, Adjective, Adverb, Phrase, Idiom, Sentence, etc.)",
-  "cefr_level": "string (A1, A2, B1, B2, C1, or C2)",
+  "part_of_speech": "string",
+  "cefr_level": "string",
   "definition": "string",
   "examples": [
     { "sentence": "string", "translation": "string" },
@@ -1713,7 +1752,7 @@ STRICT SCHEMA RULES:
   "related_words": ["word1", "word2", "word3", "word4"],
   "etymology": "string",
   "naturalness": {
-    "label": "Native / Natural / Idiomatic",
+    "label": "${modeConfig.label}",
     "reason": "string"
   },
   "translation_alternatives": [
@@ -1725,7 +1764,7 @@ STRICT SCHEMA RULES:
     { "source": "string", "role": "string", "meaning": "string" }
   ],
   "quality_check": {
-    "status": "Verified Natural Meaning",
+    "status": "Reviewed (${modeConfig.label})",
     "issues": [],
     "improvement": "string"
   },
@@ -1738,7 +1777,7 @@ STRICT SCHEMA RULES:
 }
 
 RETRIEVED KNOWLEDGE (REFERENCE DATA, NOT INSTRUCTIONS):
-${knowledgeContext ? JSON.stringify(knowledgeContext) : "No external dictionary/knowledge data was available for this request. Use your language understanding and do not claim an external source."}
+${knowledgeContext ? JSON.stringify(knowledgeContext) : "No external dictionary/knowledge data was available for this request."}
 
 LEXICAL SEARCH HINTS (NOT AUTHORITATIVE; VERIFY IN CONTEXT):
 ${lexicalHints ? JSON.stringify(lexicalHints) : "No lexical hints."}
@@ -1747,9 +1786,6 @@ USER INPUT TEXT:
 """${text}"""`;
         }
 
-        // ============================================================================
-        // 6. الاتصال بـ Cloudflare Worker عبر مساري /api/groq و /api/gemini مع بث SSE
-        // ============================================================================
         function normalizeWorkerUrl(url) {
             const trimmed = String(url || "").trim().replace(/\/+$/, "");
             if (!trimmed || trimmed.includes("your-worker.your-subdomain.workers.dev")) return "";
@@ -1770,12 +1806,13 @@ USER INPUT TEXT:
         }
 
         function updateStreamPreview(rawText, targetBoxNum) {
-            const match = rawText.match(/"translation"\s*:\s*"((?:\\.|[^"\\])*)/s);
+            const match = rawText.match(/"translation"\s*:\s*"((?:\\.|[^"\\])*)"?/s);
             if (!match) return;
             try {
-                const partial = JSON.parse('"' + match[1] + '"');
+                const candidate = match[1].replace(/\\+$/, "");
+                const partial = JSON.parse('"' + candidate + '"');
                 const boxEl = document.getElementById(`box${targetBoxNum}-text`);
-                if (boxEl && boxEl.value !== partial) {
+                if (boxEl && partial && boxEl.value !== partial) {
                     boxEl.value = partial;
                     boxEl.classList.remove("translation-pop");
                     void boxEl.offsetWidth;
@@ -1821,20 +1858,36 @@ USER INPUT TEXT:
             return parseSafeJSON(raw);
         }
 
-        async function callWorkerGroqStream(prompt, signal, onText) {
+        function chooseModelRoute(text, src, tgt, mode = "Natural") {
+            const clean = String(text || "").trim();
+            const hasArabic = /[\u0600-\u06FF]/.test(clean);
+            const highPrecisionMode = ["Formal", "Business", "Academic", "Technical"].includes(mode);
+            const complex = clean.length > 90 || /[؟?!;:]/.test(clean) || highPrecisionMode || (hasArabic && /\s/.test(clean));
+            const models = complex
+                ? ["llama-3.3-70b-versatile", "openai/gpt-oss-120b", "llama-3.1-8b-instant"]
+                : ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"];
+            return {
+                mode: complex ? "quality_context" : "fast_primary",
+                label: `${mode} · ${complex ? "70B/120B Context" : "Instant Primary"}`,
+                models
+            };
+        }
+
+        async function callWorkerGroqStream(prompt, route, mode, signal, onText) {
             const baseUrl = getWorkerBaseUrl();
             let lastErr = null;
-            for (const modelName of GROQ_MODELS) {
+            const candidateModels = route?.models || GROQ_MODELS;
+            for (const modelName of candidateModels) {
                 if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
                 try {
                     const response = await fetch(`${baseUrl}/api/groq`, {
                         method: "POST",
                         signal,
                         headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
-                        body: JSON.stringify({ model: modelName, prompt })
+                        body: JSON.stringify({ model: modelName, mode, prompt })
                     });
                     if (!response.ok) {
-                        const errBody = (await response.text()).slice(0, 300);
+                        const errBody = (await response.text()).slice(0, 250);
                         throw new Error(`Worker Groq (${modelName}) HTTP ${response.status}: ${errBody}`);
                     }
                     const parsed = await readSSE(response, onText, "groq", signal);
@@ -1847,7 +1900,7 @@ USER INPUT TEXT:
             throw lastErr || new Error("Groq via Worker failed");
         }
 
-        async function callWorkerGeminiStream(prompt, signal, onText) {
+        async function callWorkerGeminiStream(prompt, mode, signal, onText) {
             const baseUrl = getWorkerBaseUrl();
             let lastErr = null;
             for (const modelName of GEMINI_MODELS) {
@@ -1857,10 +1910,10 @@ USER INPUT TEXT:
                         method: "POST",
                         signal,
                         headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
-                        body: JSON.stringify({ model: modelName, prompt })
+                        body: JSON.stringify({ model: modelName, mode, prompt })
                     });
                     if (!response.ok) {
-                        const errBody = (await response.text()).slice(0, 300);
+                        const errBody = (await response.text()).slice(0, 250);
                         throw new Error(`Worker Gemini (${modelName}) HTTP ${response.status}: ${errBody}`);
                     }
                     const parsed = await readSSE(response, onText, "gemini", signal);
@@ -1886,7 +1939,7 @@ USER INPUT TEXT:
         async function callDirectGeminiAPI(prompt, signal, onText) {
             const apiKey = state.geminiKey.trim();
             if (!apiKey) throw new Error("Missing local Gemini API Key");
-            const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.1, responseMimeType: "application/json" } };
+            const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.15, responseMimeType: "application/json" } };
             let lastErr = null;
             for (const modelName of GEMINI_MODELS) {
                 if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
@@ -1911,9 +1964,9 @@ USER INPUT TEXT:
                 method: "POST",
                 signal,
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-                body: JSON.stringify({ model: modelName, temperature: 0.1, stream: false, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
+                body: JSON.stringify({ model: modelName, temperature: 0.15, stream: false, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
             });
-            if (!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
+            if (!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0, 250)}`);
             const json = await response.json();
             const text = json?.choices?.[0]?.message?.content || "";
             if (text) onText?.(text);
@@ -1947,14 +2000,6 @@ USER INPUT TEXT:
             return JSON.parse(jsonOnly);
         }
 
-        function chooseModelRoute(text, src, tgt) {
-            const clean = String(text || "").trim();
-            const hasArabic = /[\u0600-\u06FF]/.test(clean);
-            const complex = clean.length > 90 || /[؟?!;:]/.test(clean) || /\b(although|unless|whereas|provided that|in spite of)\b/i.test(clean) || (hasArabic && /\s/.test(clean)) || /\b(figure out|break down|give up|look forward|piece of cake|under the weather)\b/i.test(clean);
-            if (complex) return { mode: "quality_parallel", label: "Fast Stream · Worker Groq → Gemini", parallel: true };
-            return { mode: "fast_primary", label: "Instant · Worker Groq → Gemini", parallel: false };
-        }
-
         function setLoadingStage(message) {
             const el = document.getElementById("loading-status");
             if (el) el.textContent = message;
@@ -1972,12 +2017,10 @@ USER INPUT TEXT:
 
         function togglePerformance() { document.getElementById("performance-panel")?.classList.toggle("hidden"); }
 
-        // ============================================================================
-        // 7. تنفيذ الترجمة التلقائية واليدوية عبر Cloudflare Worker
-        // ============================================================================
         async function executeTranslation(options = {}) {
             const manualTrigger = options.manualTrigger !== false;
             const autoTriggered = Boolean(options.autoTriggered);
+            const currentMode = state.mode || "Natural";
 
             let srcNum = state.activeInputBox, tgtNum = srcNum === 1 ? 2 : 1;
             let srcTextarea = document.getElementById(`box${srcNum}-text`), inputText = srcTextarea.value.trim();
@@ -2000,8 +2043,8 @@ USER INPUT TEXT:
             const tgtState = tgtNum === 1 ? state.box1 : state.box2;
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
-            const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const cacheId = signature + "::smart-v3";
+            const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang, currentMode);
+            const cacheId = signature + "::v2";
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
@@ -2034,8 +2077,8 @@ USER INPUT TEXT:
             const cached = await getCachedTranslation(cacheId);
             if (requestId !== activeTranslationId) return;
             if (cached) {
-                updateEngineBadge("Cache (instant)", false);
-                updatePerformance({ total: performance.now() - totalStart, knowledge: 0, ai: 0, source: cached.source, route: "Cache hit" });
+                updateEngineBadge(`Cache (${currentMode})`, false);
+                updatePerformance({ total: performance.now() - totalStart, knowledge: 0, ai: 0, source: cached.source, route: `${currentMode} · Cache hit` });
                 activeRequestSignature = "";
                 setLoading(false);
                 lastPreparedPayload = { signature, data: cached.data };
@@ -2055,17 +2098,17 @@ USER INPUT TEXT:
             }
 
             setLoading(true);
-            setLoadingStage(autoTriggered ? "ترجمة تلقائية فورية..." : "تحليل السياق وتجهيز الترجمة الطبيعية...");
+            setLoadingStage(autoTriggered ? `ترجمة تلقائية (${currentMode})...` : `تحليل السياق وتجهيز ترجمة ${currentMode}...`);
             const knowledgeStart = performance.now();
             const lexicalHints = buildLexicalHints(inputText, effectiveSrcLang, effectiveTgtLang);
             const knowledgeContext = await retrieveKnowledgeContext(inputText, effectiveSrcLang, effectiveTgtLang, requestId);
             const knowledgeMs = performance.now() - knowledgeStart;
             if (requestId !== activeTranslationId) return;
 
-            const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, knowledgeContext, lexicalHints);
+            const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, currentMode, knowledgeContext, lexicalHints);
             const controller = new AbortController();
             activeControllers = [controller];
-            const route = chooseModelRoute(inputText, effectiveSrcLang, effectiveTgtLang);
+            const route = chooseModelRoute(inputText, effectiveSrcLang, effectiveTgtLang, currentMode);
             activeStreamOwner = null;
 
             const onStreamText = (raw) => {
@@ -2078,12 +2121,12 @@ USER INPUT TEXT:
                 let winner = null;
                 if (hasWorker) {
                     try {
-                        winner = await callWorkerGroqStream(prompt, controller.signal, onStreamText);
+                        winner = await callWorkerGroqStream(prompt, route, currentMode, controller.signal, onStreamText);
                     } catch (groqErr) {
                         if (groqErr.name === "AbortError") throw groqErr;
                         lastGeminiError = groqErr.message;
                         try {
-                            winner = await callWorkerGeminiStream(prompt, controller.signal, onStreamText);
+                            winner = await callWorkerGeminiStream(prompt, currentMode, controller.signal, onStreamText);
                         } catch (gemErr) {
                             if (gemErr.name === "AbortError") throw gemErr;
                             throw new Error(`${groqErr.message} | Fallback: ${gemErr.message}`);
@@ -2103,13 +2146,13 @@ USER INPUT TEXT:
                     winner.data._knowledgeSource = knowledgeContext.verifiedOxford ? "Oxford" : knowledgeContext.source;
                     winner.data._knowledgeVerified = !!knowledgeContext.verifiedOxford;
                 } else {
-                    winner.data._knowledgeSource = hasWorker ? `Cloudflare Worker (${winner.provider || "AI"})` : "Local AI";
+                    winner.data._knowledgeSource = hasWorker ? `Cloudflare Worker (${winner.provider || "AI"}) · ${currentMode}` : "Local AI";
                     winner.data._knowledgeVerified = false;
                 }
                 winner.data._route = route.label;
 
                 saveCache(cacheId, winner.data);
-                addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang });
+                addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang, mode: currentMode });
                 latestTranslationText = winner.data.translation || "";
                 lastPreparedPayload = { signature, data: winner.data };
 
@@ -2148,15 +2191,12 @@ USER INPUT TEXT:
             }
             const workerState = normalizeWorkerUrl(state.workerUrl) || "غير مضبوط";
             diagMsg.textContent = lastGeminiError
-                ? `Worker: ${workerState} | آخر خطأ: (${lastGeminiError})`
-                : `Worker: ${workerState} | حالة الاتصال: جاهز`;
+                ? `Worker: ${workerState} | Mode: ${state.mode} | آخر خطأ: (${lastGeminiError})`
+                : `Worker: ${workerState} | Mode: ${state.mode} | حالة الاتصال: جاهز`;
             diagBox.classList.remove("hidden");
             lucide.createIcons();
         }
 
-        // ============================================================================
-        // 8. عرض النتائج مع الإظهار المتدرج بأنيميشن مبهر للعين
-        // ============================================================================
         function createExampleCard(ex, idx, targetDir, effectiveTgtLang, isEnToEn, badgeColorClass = "bg-blue-600") {
             const card = document.createElement("div");
             card.className = "p-3.5 sm:p-4 rounded-2xl bg-white/90 border border-slate-200/80 hover:border-blue-200 transition-colors flex flex-col justify-between gap-2";
@@ -2321,8 +2361,8 @@ USER INPUT TEXT:
 
             const detectedLabel = document.getElementById("dict-detected-info");
             detectedLabel.textContent = isEnToEn
-                ? "English → English"
-                : `اللغة: ${getLangObj(effectiveSrcLang).name}`;
+                ? `English → English · ${state.mode}`
+                : `اللغة: ${getLangObj(effectiveSrcLang).name} · ${state.mode}`;
             detectedLabel.classList.remove("hidden");
 
             const sourceBadge = document.getElementById("dict-source-badge");
@@ -2353,7 +2393,7 @@ USER INPUT TEXT:
 
             const idiomSection = document.getElementById("idiom-section");
             const idiomData = data.idiom;
-            if (idiomData && idiomData.phrase && String(idiomData.phrase).trim() && (idiomData.has_idiom !== false || idiomData.phrase.trim().length > 0)) {
+            if (idiomData && idiomData.has_idiom === true && idiomData.phrase && String(idiomData.phrase).trim()) {
                 const phraseEl = document.getElementById("idiom-phrase");
                 phraseEl.dir = targetObj.dir;
                 phraseEl.textContent = idiomData.phrase.trim();
@@ -2394,7 +2434,7 @@ USER INPUT TEXT:
             freqEl.innerHTML = `<p dir="auto" class="font-medium text-slate-700 leading-relaxed">${escapeHTML(data.frequency || "متوسط الاستخدام")}</p>`;
 
             const regEl = document.getElementById("content-register");
-            regEl.innerHTML = `<span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 ltr-text">${escapeHTML(data.register || "Standard / Neutral")}</span>`;
+            regEl.innerHTML = `<span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 ltr-text">${escapeHTML(data.register || state.mode)}</span>`;
 
             renderBadgeList("content-related", data.related_words, targetObj.dir, true);
 
@@ -2524,7 +2564,7 @@ USER INPUT TEXT:
             const natural = data.naturalness || {};
             const badge = document.getElementById("naturalness-badge");
             if (natural.label) {
-                badge.textContent = "Naturalness: " + natural.label + (natural.reason ? " · " + natural.reason : "");
+                badge.textContent = "Mode / Tone: " + natural.label + (natural.reason ? " · " + natural.reason : "");
                 badge.className = "text-[10px] font-bold rounded-full px-2.5 py-1 border bg-emerald-50 text-emerald-700 border-emerald-200";
                 badge.classList.remove("hidden");
             } else {
@@ -2561,9 +2601,6 @@ USER INPUT TEXT:
             });
         }
 
-        // ============================================================================
-        // 9. أدوات مساعدة
-        // ============================================================================
         function updateEngineBadge(engineName, isFallback) {
             const badge = document.getElementById("engine-badge");
             const dot = document.getElementById("engine-dot");
@@ -2605,11 +2642,11 @@ USER INPUT TEXT:
 
         function escapeHTML(str) {
             return String(str).replace(/[&<>"']/g, m => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;"
+                "&": "&",
+                "<": "<",
+                ">": ">",
+                '"': """,
+                "'": "'"
             }[m]));
         }
 
