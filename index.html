@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Premium Smart Translator v10 Secure | AI Translator & Dictionary</title>
+    <title>Premium Smart Translator v7 | AI Translator & Dictionary</title>
     <!-- استدعاء مكتبة Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- استدعاء خطوط Google Fonts (Cairo للعربية و Inter للإنجليزية) -->
@@ -237,7 +237,7 @@
                 </button>
                 <div id="engine-badge" onclick="toggleDiagnosticBanner()" class="cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all" title="اضغط لعرض أو إخفاء تفاصيل اتصال Gemini">
                     <span id="engine-dot" class="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
-                    <span id="engine-status-text" class="ltr-text truncate max-w-[160px] sm:max-w-none">Gemini Primary</span>
+                    <span id="engine-status-text" class="ltr-text truncate max-w-[160px] sm:max-w-none">Groq Primary</span>
                 </div>
             </div>
         </div>
@@ -721,33 +721,41 @@
     <!-- التذييل (Footer) -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
-            <p>مدعوم بمحركي <strong class="text-blue-600">Google Gemini</strong> و <strong class="text-slate-700">Groq</strong> عبر اتصال آمن</p>
-            <p>المترجم الذكي والقاموس التفاعلي · v10 Secure</p>
+            <p>مدعوم بمحركي الذكاء الاصطناعي <strong class="text-blue-600">Google Gemini</strong> و <strong class="text-slate-700">Groq</strong> مع تبديل تلقائي فوري</p>
+            <p>المترجم الذكي والقاموس التفاعلي · v7</p>
         </div>
     </footer>
 
-    <!-- إعدادات الاتصال الآمن -->
+    <!-- نافذة إعدادات المحركات ومصادر المعرفة -->
     <div id="settings-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden">
             <div class="px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                <div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-5 h-5 text-blue-600 shrink-0"></i><h3 class="text-sm sm:text-base font-bold text-slate-800">إعدادات الاتصال الآمن</h3></div>
-                <button type="button" onclick="closeSettingsModal()" class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="key-round" class="w-5 h-5 text-blue-600 shrink-0"></i>
+                    <h3 class="text-sm sm:text-base font-bold text-slate-800">إعدادات مفاتيح API</h3>
+                </div>
+                <button type="button" onclick="closeSettingsModal()" class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
             </div>
             <div class="p-4 sm:p-6 space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">رابط Cloudflare Worker</label>
-                    <input id="worker-url-input" type="url" dir="ltr" class="w-full text-left text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="https://smart-translator-api.YOUR-SUBDOMAIN.workers.dev">
-                    <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">ضع رابط الـ Worker بعد نشره. مفاتيح Gemini وGroq محفوظة على Cloudflare فقط ولا تُكتب هنا أو داخل GitHub.</p>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">1. مفتاح Google Gemini API (المحرك الاحتياطي التلقائي)</label>
+                    <input id="gemini-key-input" type="text" class="w-full ltr-text text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="أدخل مفتاح Gemini API (AIza...)...">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">2. مفتاح Groq API (المحرك الأساسي فائق السرعة)</label>
+                    <input id="groq-key-input" type="text" class="w-full ltr-text text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="أدخل مفتاح Groq API (gsk_...)...">
                 </div>
                 <div class="pt-3 border-t border-slate-200">
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">عنوان محرك المعرفة (اختياري)</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">3. عنوان محرك المعرفة (Knowledge Backend)</label>
                     <input id="knowledge-endpoint-input" type="url" dir="ltr" class="w-full text-left text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="https://your-domain.com/api/knowledge/search">
-                    <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">اتركه فارغًا إذا لم يكن لديك Knowledge Backend. سيظل الترجمة بالذكاء الاصطناعي تعمل.</p>
+                    <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">اتركه فارغًا لحين تجهيز الـBackend. هذا المحرك يسترجع بيانات القاموس والأمثلة والتعبيرات ويرسلها إلى AI كسياق مساعد. لا تضع مفاتيح Oxford هنا.</p>
+                    <p class="mt-2 text-[10px] leading-relaxed text-amber-700">ملاحظة: مفاتيح Gemini وGroq الحالية محفوظة داخل هذه النسخة لتسهيل التشغيل على جهازك. لا تنشر الملف كما هو؛ يمكن استخراج المفاتيح من أي ملف HTML.</p>
                 </div>
-                <div class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-[11px] leading-relaxed text-amber-800">لا تضع مفاتيح API في هذا الموقع. إذا سبق رفع مفاتيح قديمة إلى GitHub، ألغِها وأنشئ مفاتيح جديدة على مزودي الخدمة.</div>
             </div>
             <div class="px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2">
-                <button type="button" onclick="testWorkerConnection()" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-blue-700 hover:bg-blue-50 transition-colors">اختبار الاتصال</button>
+                <button type="button" onclick="resetDefaultKeys()" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-200 transition-colors">استعادة الافتراضي</button>
                 <button type="button" onclick="saveApiKeys()" class="px-5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-colors">حفظ الإعدادات</button>
             </div>
         </div>
@@ -755,37 +763,40 @@
 
     <script>
         // ============================================================================
-        // 1. إعدادات الاتصال الآمن — لا توجد مفاتيح API في المتصفح
+        // 1. الإعدادات والمفاتيح الافتراضية
         // ============================================================================
-        const WORKER_DEFAULT_URL = "https://smart-translator-api.abdelrahmanwael5101.workers.dev"; // يضبطه مالك الموقع بعد نشر Cloudflare Worker
-        const LEGACY_KEY_STORAGE = ["smart_trans_gemini_key", "smart_trans_groq_key", "smart_trans_key_ver"];
-        // إزالة أي مفاتيح قديمة مخزنة محليًا من الإصدارات السابقة لهذا الموقع.
-        LEGACY_KEY_STORAGE.forEach(k => { try { localStorage.removeItem(k); } catch (_) {} });
-        // أعلى وأدق النماذج المتاحة للترجمة الطبيعية وفهم اللهجة المصرية والسياق
-        const GEMINI_HIGH_ACCURACY_MODELS = [
-            "gemini-2.5-flash",
-            "gemini-2.5-pro"
-        ];
-        let GEMINI_MODELS = [...GEMINI_HIGH_ACCURACY_MODELS];
-        // ترتيب نماذج Groq من الأقوى والأسرع لفهم الصياغة واللهجة المصرية
-        const GROQ_HIGH_ACCURACY_MODELS = [
+        // Convenience defaults requested by the site owner. These are client-side keys.
+        // Anyone receiving this HTML can inspect them; rotate and move to a backend before public launch.
+        const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6LLveWHfGaKQ48JVE-sQzSat94BG1t2mBiME2a9hgjp7g";
+        const DEFAULT_GROQ_KEY = "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";
+
+        const KEY_VERSION = "v13_owner_defaults_enabled";
+        if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
+            // Seed the existing keys for first launch, but preserve any custom keys already saved.
+            if (!localStorage.getItem("smart_trans_gemini_key")) localStorage.setItem("smart_trans_gemini_key", DEFAULT_GEMINI_KEY);
+            if (!localStorage.getItem("smart_trans_groq_key")) localStorage.setItem("smart_trans_groq_key", DEFAULT_GROQ_KEY);
+            localStorage.setItem("smart_trans_key_ver", KEY_VERSION);
+        }
+
+        // ترتيب الأولوية لنماذج Groq (الأساسي فائق السرعة والدقة للصياغة والمصري)
+        const GROQ_MODELS = [
             "llama-3.3-70b-versatile",
             "openai/gpt-oss-120b",
             "qwen/qwen3-32b",
-            "openai/gpt-oss-20b"
+            "llama-3.1-8b-instant"
         ];
-        const GROQ_MODELS = [...GROQ_HIGH_ACCURACY_MODELS];
+
+        // ترتيب الأولوية لنماذج Gemini (الاحتياطي التلقائي: 2.5-flash ثم 2.5-pro)
+        let GEMINI_MODELS = [
+            "gemini-2.5-flash",
+            "gemini-2.5-pro",
+            "gemini-2.0-flash"
+        ];
+
         let lastGeminiError = "";
         let modelsDiscovered = false;
         let activeTranslationId = 0;
         let activeControllers = [];
-        let quickDebounceTimer = null;
-        let activeQuickController = null;
-        let lastQuickSignature = "";
-        // تثبيت الترجمة الأولية لكل signature بحيث لا تتغير أو يُعاد ترجمتها عند الضغط على Submit
-        const lockedQuickTranslations = new Map();
-        // حالة التحليل الشامل في الخلفية (Background Full Analysis)
-        let backgroundFullJob = { signature: "", promise: null, data: null, modelUsed: "", provider: "", controller: null };
         const translationCache = new Map();
         const translationCacheTimes = new Map();
         const CACHE_LIMIT = 100;
@@ -804,25 +815,6 @@
         let activeStreamOwner = null;
         const languageDetectionTimers = { 1: null, 2: null };
         let smartInsightsObserver = null;
-
-        function cancelBackgroundFullAnalysis() {
-            if (backgroundFullJob.controller) {
-                try { backgroundFullJob.controller.abort(); } catch (_) {}
-            }
-            backgroundFullJob = { signature: "", promise: null, data: null, modelUsed: "", provider: "", controller: null };
-        }
-
-        function cancelQuickTranslation(keepBackgroundIfSame = false) {
-            clearTimeout(quickDebounceTimer);
-            quickDebounceTimer = null;
-            if (activeQuickController) {
-                try { activeQuickController.abort(); } catch (_) {}
-                activeQuickController = null;
-            }
-            if (!keepBackgroundIfSame) {
-                cancelBackgroundFullAnalysis();
-            }
-        }
 
         function cancelActiveTranslation(showMessage = false) {
             activeTranslationId++;
@@ -1040,7 +1032,8 @@
             box1: { selectedLang: "ar", detectedLang: null, manualOverride: false },
             box2: { selectedLang: "en-US", detectedLang: null, manualOverride: false },
             currentDictLang: "en-US",
-            workerUrl: localStorage.getItem("smart_trans_worker_url") || WORKER_DEFAULT_URL,
+            geminiKey: localStorage.getItem("smart_trans_gemini_key") || DEFAULT_GEMINI_KEY,
+            groqKey: localStorage.getItem("smart_trans_groq_key") || DEFAULT_GROQ_KEY,
             knowledgeEndpoint: localStorage.getItem("smart_trans_knowledge_endpoint") || ""
         };
 
@@ -1134,7 +1127,7 @@
             rateInput.addEventListener("input",()=>{ document.getElementById("speech-rate-value").textContent=Number(rateInput.value).toFixed(2)+"x"; localStorage.setItem("smart_trans_rate",rateInput.value); });
             document.getElementById("speech-voice").addEventListener("change",e=>localStorage.setItem("smart_trans_voice",e.target.value));
             document.addEventListener("keydown",e=>{
-                if(e.key==="Escape" && (activeControllers.length || activeQuickController)) { cancelQuickTranslation(); cancelActiveTranslation(true); }
+                if(e.key==="Escape" && activeControllers.length) cancelActiveTranslation(true);
                 if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="h"){e.preventDefault();toggleHistory();}
                 if((e.ctrlKey||e.metaKey)&&e.altKey&&e.key.toLowerCase()==="c"){e.preventDefault();const out=document.getElementById("box2-text").value;if(out)navigator.clipboard?.writeText(out);}
             });
@@ -1414,14 +1407,12 @@
             const boxState = boxNum === 1 ? state.box1 : state.box2;
             boxState.selectedLang = select.value;
             boxState.manualOverride = true;
-            lastQuickSignature = "";
 
             const textarea = document.getElementById(`box${boxNum}-text`);
             const trimmed = textarea.value.trim();
             if (trimmed.length > 0) {
                 const detected = detectLanguageFromText(trimmed);
                 updateDetectedDisplay(boxNum, detected);
-                scheduleQuickTranslation(boxNum);
             } else {
                 resetDetectedDisplay(boxNum);
                 textarea.dir = getLangObj(boxState.selectedLang).dir;
@@ -1478,10 +1469,8 @@
             return null;
         }
 
-        function onBoxInput(boxNum, triggerAuto = true) {
+        function onBoxInput(boxNum) {
             if (activeRequestSignature || activeControllers.length) cancelActiveTranslation(false);
-            cancelQuickTranslation();
-
             state.activeInputBox = boxNum;
             const textarea = document.getElementById(`box${boxNum}-text`);
             const clearBtn = document.getElementById(`box${boxNum}-clear-btn`);
@@ -1507,223 +1496,19 @@
                     const latest = document.getElementById(`box${boxNum}-text`).value.trim();
                     updateDetectedDisplay(boxNum, detectLanguageFromText(latest));
                 }, 110);
-                if (triggerAuto) scheduleQuickTranslation(boxNum);
             } else {
                 clearTimeout(languageDetectionTimers[boxNum]);
                 clearBtn.classList.add("hidden");
                 resetDetectedDisplay(boxNum);
-                lastQuickSignature = "";
-                if (boxNum === 1) {
-                    document.getElementById("box2-text").value = "";
-                    document.getElementById("box2-clear-btn").classList.add("hidden");
-                    document.getElementById("box2-phonetics-row").classList.add("hidden");
-                    resetDetectedDisplay(2);
-                }
-            }
-        }
-
-        function buildQuickPrompt(text, effectiveSrcLang, effectiveTgtLang) {
-            return `You are a fast, sharp native-level translator who deeply understands Arabic dialects (especially Egyptian Arabic / العامية المصرية, phrasing, tone, sarcasm, idioms, and natural speech) and English.
-Translate the intended meaning naturally and accurately from ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang}) to ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang}).
-- Understand Egyptian colloquial phrasing and context first; never fall back to stiff word-for-word translation when natural phrasing fits better.
-- Keep the translation concise, accurate, and natural.
-Return ONLY valid raw JSON (no markdown):
-{"translation":"string","transcription":"string"}
-Text:
-"""${text}"""`;
-        }
-
-        function scheduleQuickTranslation(srcNum) {
-            clearTimeout(quickDebounceTimer);
-            const text = document.getElementById(`box${srcNum}-text`).value.trim();
-            if (!text) return;
-            quickDebounceTimer = setTimeout(() => executeQuickTranslation(srcNum), 350);
-        }
-
-        function startBackgroundFullAnalysis(inputText, effectiveSrcLang, effectiveTgtLang, lockedTranslationText = "") {
-            const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const cacheId = signature + "::smart-v3";
-
-            if (backgroundFullJob.signature === signature && (backgroundFullJob.promise || backgroundFullJob.data)) {
-                return backgroundFullJob.promise;
-            }
-
-            cancelBackgroundFullAnalysis();
-            const controller = new AbortController();
-            const job = { signature, promise: null, data: null, modelUsed: "", provider: "", controller };
-            backgroundFullJob = job;
-
-            job.promise = (async () => {
-                try {
-                    const cached = await getCachedTranslation(cacheId);
-                    if (controller.signal.aborted) return null;
-                    if (cached?.data) {
-                        const preserved = lockedTranslationText || lockedQuickTranslations.get(signature) || cached.data.translation || "";
-                        job.data = { ...cached.data, translation: preserved || cached.data.translation };
-                        job.provider = "cache";
-                        job.modelUsed = "Cache";
-                        updateEngineBadge("جاهز للتحليل الكامل ⚡", false);
-                        return job;
-                    }
-
-                    const lexicalHints = buildLexicalHints(inputText, effectiveSrcLang, effectiveTgtLang);
-                    const knowledgeContext = await retrieveKnowledgeContext(inputText, effectiveSrcLang, effectiveTgtLang, activeTranslationId);
-                    if (controller.signal.aborted) return null;
-
-                    const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, knowledgeContext, lexicalHints);
-                    let winner = null;
-                    try {
-                        const gRes = await callGeminiAPI(prompt, controller.signal, null);
-                        winner = { provider: "gemini", ...gRes };
-                    } catch (gemErr) {
-                        if (gemErr.name === "AbortError") return null;
-                        const qRes = await callGroqAPI(prompt, controller.signal, null);
-                        winner = { provider: "groq", ...qRes };
-                    }
-                    if (controller.signal.aborted || !winner) return null;
-
-                    const preserved = lockedTranslationText || lockedQuickTranslations.get(signature) || winner.data.translation || "";
-                    if (preserved) {
-                        winner.data.translation = preserved;
-                    }
-                    if (knowledgeContext) {
-                        winner.data._knowledgeSource = knowledgeContext.verifiedOxford ? "Oxford" : knowledgeContext.source;
-                        winner.data._knowledgeVerified = !!knowledgeContext.verifiedOxford;
-                    } else {
-                        winner.data._knowledgeSource = "AI";
-                        winner.data._knowledgeVerified = false;
-                    }
-                    saveCache(cacheId, winner.data);
-                    job.data = winner.data;
-                    job.provider = winner.provider;
-                    job.modelUsed = winner.modelUsed;
-                    if (backgroundFullJob.signature === signature) {
-                        updateEngineBadge(`جاهز بالكامل · ${winner.modelUsed}`, false);
-                    }
-                    return job;
-                } catch (err) {
-                    if (err.name !== "AbortError") console.warn("Background analysis skipped:", err.message);
-                    return null;
-                }
-            })();
-
-            return job.promise;
-        }
-
-        async function executeQuickTranslation(srcNum) {
-            const tgtNum = srcNum === 1 ? 2 : 1;
-            const inputText = document.getElementById(`box${srcNum}-text`).value.trim();
-            if (!inputText) return;
-
-            updateDetectedDisplay(srcNum, detectLanguageFromText(inputText));
-            const srcState = srcNum === 1 ? state.box1 : state.box2;
-            const tgtState = tgtNum === 1 ? state.box1 : state.box2;
-            const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
-            const effectiveTgtLang = tgtState.selectedLang;
-
-            const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const quickSig = "quick::" + signature;
-            if (quickSig === lastQuickSignature) return;
-
-            if (lockedQuickTranslations.has(signature)) {
-                const lockedText = lockedQuickTranslations.get(signature);
-                applyQuickResult({ translation: lockedText }, tgtNum, effectiveTgtLang);
-                lastQuickSignature = quickSig;
-                startBackgroundFullAnalysis(inputText, effectiveSrcLang, effectiveTgtLang, lockedText);
-                return;
-            }
-
-            const cachedFull = await getCachedTranslation(signature + "::smart-v3");
-            if (cachedFull?.data?.translation) {
-                const lockedText = cachedFull.data.translation.trim();
-                lockedQuickTranslations.set(signature, lockedText);
-                applyQuickResult(cachedFull.data, tgtNum, effectiveTgtLang);
-                lastQuickSignature = quickSig;
-                backgroundFullJob = { signature, promise: Promise.resolve({ data: cachedFull.data, provider: "cache", modelUsed: "Cache" }), data: cachedFull.data, modelUsed: "Cache", provider: "cache", controller: null };
-                updateEngineBadge("جاهز للتحليل الكامل ⚡", false);
-                return;
-            }
-
-            cancelQuickTranslation(false);
-
-            const controller = new AbortController();
-            activeQuickController = controller;
-            const start = performance.now();
-            const prompt = buildQuickPrompt(inputText, effectiveSrcLang, effectiveTgtLang);
-
-            try {
-                let data = null;
-                let modelUsed = GROQ_HIGH_ACCURACY_MODELS[0];
-                // استخدام أقوى وأسرع النماذج المتاحة لفهم الكلام والصياغة واللهجة المصرية
-                for (const m of GROQ_HIGH_ACCURACY_MODELS) {
-                    if (controller.signal.aborted) return;
-                    try {
-                        data = await callWorkerProvider("groq", prompt, m, controller.signal, raw => {
-                            if (!controller.signal.aborted) updateStreamPreview(raw, tgtNum);
-                        });
-                        modelUsed = m;
-                        break;
-                    } catch (err) {
-                        if (err.name === "AbortError") return;
-                    }
-                }
-                if (!data && !controller.signal.aborted) {
-                    const gRes = await callGeminiAPI(prompt, controller.signal, raw => {
-                        if (!controller.signal.aborted) updateStreamPreview(raw, tgtNum);
-                    });
-                    data = gRes.data;
-                    modelUsed = gRes.modelUsed;
-                }
-                if (controller.signal.aborted || !data) return;
-
-                const finalQuickText = (data.translation || "").trim();
-                if (finalQuickText) {
-                    lockedQuickTranslations.set(signature, finalQuickText);
-                }
-                lastQuickSignature = quickSig;
-                applyQuickResult(data, tgtNum, effectiveTgtLang);
-                // نبدأ التحليل في الخلفية ونمرر له الترجمة الثابتة حتى لا تتغير
-                startBackgroundFullAnalysis(inputText, effectiveSrcLang, effectiveTgtLang, finalQuickText);
-                updateEngineBadge(`ترجمة فورية ثابتة (${modelUsed})`, false);
-                updatePerformance({ total: performance.now() - start, knowledge: 0, ai: performance.now() - start, source: "Fast & accurate quick translation", route: "Locked quick + background analysis" });
-            } catch (err) {
-                if (err.name !== "AbortError") console.warn("Quick translate error:", err.message);
-            } finally {
-                if (activeQuickController === controller) activeQuickController = null;
-            }
-        }
-
-        function applyQuickResult(data, tgtNum, effectiveTgtLang) {
-            const tgtTextarea = document.getElementById(`box${tgtNum}-text`);
-            const tgtClearBtn = document.getElementById(`box${tgtNum}-clear-btn`);
-            const tgtTransRow = document.getElementById(`box${tgtNum}-phonetics-row`);
-            const tgtTransEl = document.getElementById(`box${tgtNum}-transcription`);
-            const tgtIpaInline = document.getElementById(`box${tgtNum}-ipa-inline`);
-
-            tgtTextarea.dir = getLangObj(effectiveTgtLang).dir;
-            const outText = (data.translation || "").trim();
-            if (outText) {
-                tgtTextarea.value = outText;
-                tgtClearBtn.classList.remove("hidden");
-                resetDetectedDisplay(tgtNum);
-                latestTranslationText = outText;
-            }
-            const tr = (data.transcription || "").trim();
-            if (tr && tgtTransRow && tgtTransEl && tgtIpaInline) {
-                tgtTransEl.textContent = tr;
-                tgtTransEl.classList.remove("hidden");
-                tgtIpaInline.classList.add("hidden");
-                tgtTransRow.classList.remove("hidden");
             }
         }
 
         function clearBox(boxNum) {
-            cancelQuickTranslation();
             if(activeControllers.length) cancelActiveTranslation(false);
             stopAllAudio();
             const textarea = document.getElementById(`box${boxNum}-text`);
             textarea.value = "";
-            onBoxInput(boxNum, false);
+            onBoxInput(boxNum);
             if (boxNum === 1) {
                 document.getElementById("box2-text").value = "";
                 document.getElementById("box2-clear-btn").classList.add("hidden");
@@ -1738,7 +1523,6 @@ Text:
         }
 
         function swapBoxes() {
-            cancelQuickTranslation();
             stopAllAudio();
             const s1 = document.getElementById("box1-lang-select");
             const s2 = document.getElementById("box2-lang-select");
@@ -1755,7 +1539,6 @@ Text:
 
             s1.value = state.box1.selectedLang;
             s2.value = state.box2.selectedLang;
-            lastQuickSignature = "";
 
             resetDetectedDisplay(1);
             resetDetectedDisplay(2);
@@ -1923,15 +1706,20 @@ STRICT SCHEMA RULES:
   "register": "string",
   "related_words": ["word1", "word2", "word3", "word4"],
   "etymology": "string",
+  "naturalness": {
+    "label": "Native / Natural / Idiomatic",
+    "reason": "string"
+  },
   "translation_alternatives": [
-    { "label": "Natural / Everyday", "text": "string", "note": "string" },
-    { "label": "Formal / Professional", "text": "string", "note": "string" }
+    { "label": "Natural", "text": "string", "note": "string" },
+    { "label": "Conversational", "text": "string", "note": "string" },
+    { "label": "Formal", "text": "string", "note": "string" }
   ],
   "sentence_breakdown": [
     { "source": "string", "role": "string", "meaning": "string" }
   ],
   "quality_check": {
-    "status": "Verified Context & Meaning",
+    "status": "Verified Natural Meaning",
     "issues": [],
     "improvement": "string"
   },
@@ -1940,10 +1728,6 @@ STRICT SCHEMA RULES:
     "british": "string",
     "american": "string",
     "note": "string"
-  },
-  "naturalness": {
-    "label": "Native-like",
-    "reason": "string"
   }
 }
 
@@ -1964,191 +1748,106 @@ USER INPUT TEXT:
         }
 
         // ============================================================================
-        // 6. اتصال آمن عبر Cloudflare Worker (مفاتيح المزود لا تغادر الخادم)
+        // 6. الاتصال المباشر بنماذج Gemini مع الاكتشاف التلقائي للنماذج المتاحة
         // ============================================================================
-        function getWorkerBase() {
-            const base = String(state.workerUrl || "").trim().replace(/\/$/, "");
-            if (!base) throw new Error("لم يتم ضبط رابط Cloudflare Worker. افتح الإعدادات وأضف رابط Worker أولاً.");
-            if (!/^https:\/\//i.test(base)) throw new Error("رابط Worker يجب أن يبدأ بـ https://");
-            return base;
-        }
-async function readSSE(response, onText, provider = "ai", signal = null) {
-            if (signal?.aborted) {
-                throw new DOMException("Aborted", "AbortError");
-            }
-
-            if (!response.body || typeof response.body.getReader !== "function") {
-                const rawText = await response.text();
-                if (typeof onText === "function" && rawText) {
-                    onText(rawText);
-                }
-                return parseSafeJSON(rawText);
-            }
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder("utf-8");
-            let buffer = "";
-            let accumulated = "";
-
-            const onAbort = () => {
-                try { reader.cancel(); } catch (_) {}
-            };
-            if (signal) {
-                signal.addEventListener("abort", onAbort, { once: true });
-            }
-
-            function extractChunkText(parsedEvent) {
-                if (!parsedEvent || typeof parsedEvent !== "object") return "";
-
-                if (typeof parsedEvent.delta === "string") return parsedEvent.delta;
-                if (typeof parsedEvent.text === "string") return parsedEvent.text;
-                if (typeof parsedEvent.content === "string") return parsedEvent.content;
-                if (typeof parsedEvent.translation === "string" && Object.keys(parsedEvent).length <= 3) {
-                    return parsedEvent.translation;
-                }
-
-                // صيغة Gemini SSE الشائعة
-                const geminiParts = parsedEvent?.candidates?.[0]?.content?.parts;
-                if (Array.isArray(geminiParts)) {
-                    return geminiParts.map(p => (typeof p?.text === "string" ? p.text : "")).join("");
-                }
-
-                // صيغة OpenAI / Groq SSE الشائعة
-                const firstChoice = parsedEvent?.choices?.[0];
-                const choiceDelta = firstChoice?.delta?.content;
-                if (typeof choiceDelta === "string" && choiceDelta.length > 0) return choiceDelta;
-
-                const choiceReasoning = firstChoice?.delta?.reasoning;
-                if (typeof choiceReasoning === "string") return choiceReasoning;
-
-                if (typeof parsedEvent.reasoning === "string") return parsedEvent.reasoning;
-
-                const choiceMessage = firstChoice?.message?.content;
-                if (typeof choiceMessage === "string") return choiceMessage;
-
-                return "";
-            }
-
-            function processLine(rawLine) {
-                const line = rawLine.trim();
-                if (!line || line.startsWith(":")) return false;
-                if (!line.startsWith("data:")) return false;
-
-                const payloadStr = line.slice(5).trim();
-                if (!payloadStr) return false;
-                if (payloadStr === "[DONE]") return true;
-
+        async function discoverAvailableGeminiModels(apiKey) {
+            for (const version of ["v1beta", "v1"]) {
                 try {
-                    const parsed = JSON.parse(payloadStr);
-                    const piece = extractChunkText(parsed);
-                    if (piece) {
-                        accumulated += piece;
-                        if (typeof onText === "function") {
-                            onText(accumulated);
+                    const res = await fetch(`https://generativelanguage.googleapis.com/${version}/models?key=${encodeURIComponent(apiKey)}`);
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    if (Array.isArray(data.models)) {
+                        const validModels = data.models
+                            .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes("generateContent"))
+                            .map(m => m.name.replace("models/", ""))
+                            .filter(name => name.includes("gemini") && !name.includes("vision") && !name.includes("embedding"));
+
+                        validModels.sort((a, b) => {
+                            const score = (n) => (n.includes("2.5-flash") ? 1 : n.includes("flash") ? 2 : n.includes("pro") ? 3 : 4);
+                            return score(a) - score(b);
+                        });
+
+                        if (validModels.length > 0) {
+                            GEMINI_MODELS = validModels;
+                            modelsDiscovered = true;
+                            return validModels;
                         }
                     }
-                } catch (_) {
-                    // لو الـ data: عبارة عن نص مباشر مش JSON
-                    accumulated += payloadStr;
-                    if (typeof onText === "function") {
-                        onText(accumulated);
-                    }
-                }
-                return false;
+                } catch (e) {}
             }
-
-            try {
-                while (true) {
-                    if (signal?.aborted) {
-                        throw new DOMException("Aborted", "AbortError");
-                    }
-
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    buffer += decoder.decode(value, { stream: true });
-                    const lines = buffer.split(/\r?\n/);
-                    buffer = lines.pop() ?? "";
-
-                    let shouldStop = false;
-                    for (const line of lines) {
-                        if (processLine(line)) {
-                            shouldStop = true;
-                            break;
-                        }
-                    }
-                    if (shouldStop) break;
-                }
-
-                buffer += decoder.decode();
-                if (buffer.trim()) {
-                    for (const line of buffer.split(/\r?\n/)) {
-                        if (processLine(line)) break;
-                    }
-                }
-            } catch (err) {
-                if (signal?.aborted || err?.name === "AbortError") {
-                    throw new DOMException("Aborted", "AbortError");
-                }
-                throw err;
-            } finally {
-                if (signal) {
-                    signal.removeEventListener("abort", onAbort);
-                }
-                try { reader.releaseLock(); } catch (_) {}
-            }
-
-            const finalRaw = accumulated.trim() || buffer.trim();
-            if (!finalRaw) {
-                throw new Error(`لم يتم استلام بيانات من ${provider} عبر البث (SSE).`);
-            }
-
-            return parseSafeJSON(finalRaw);
+            return null;
         }
-        async function callWorkerProvider(provider, prompt, modelName, signal, onText) {
-            const base = getWorkerBase();
-            const endpoint = provider === "gemini" ? "/api/gemini" : "/api/groq";
-            const response = await fetch(base + endpoint, {
-                method: "POST", signal,
-                headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
-                body: JSON.stringify({ prompt, model: modelName })
-            });
-            if (!response.ok) {
-                let detail = ""; try { detail = (await response.text()).slice(0, 260); } catch (_) {}
-                throw new Error(`${provider} عبر Worker HTTP ${response.status}: ${detail || response.statusText}`);
-            }
-            return readSSE(response, onText, provider, signal);
+
+        function updateStreamPreview(rawText, targetBoxNum) {
+            const match = rawText.match(/"translation"\s*:\s*"((?:\\.|[^"\\])*)/s);
+            if (!match) return;
+            try { const partial=JSON.parse('"'+match[1]+'"'); document.getElementById(`box${targetBoxNum}-text`).value=partial; } catch (_) {}
         }
+        async function readSSE(response, onText, provider, signal) {
+            if (!response.body || !response.body.getReader) throw new Error("Streaming is not supported by this browser");
+            const reader=response.body.getReader(); const decoder=new TextDecoder(); let buffer="", raw="";
+            while(true) {
+                if(signal?.aborted) throw new DOMException("Aborted","AbortError");
+                const {value,done}=await reader.read(); if(done) break;
+                buffer+=decoder.decode(value,{stream:true});
+                const events=buffer.split(/\r?\n\r?\n/); buffer=events.pop() || "";
+                for(const event of events) {
+                    const line=event.split(/\r?\n/).find(x=>x.startsWith("data:")); if(!line) continue;
+                    const payload=line.slice(5).trim(); if(!payload || payload==="[DONE]") continue;
+                    try {
+                        const obj=JSON.parse(payload);
+                        const piece=provider==="gemini" ? (obj?.candidates?.[0]?.content?.parts||[]).map(p=>p.text||"").join("") : (obj?.choices?.[0]?.delta?.content||"");
+                        if(piece) { raw+=piece; onText?.(raw); }
+                    } catch (_) {}
+                }
+            }
+            if (buffer.trim()) {
+                const line=buffer.split(/\r?\n/).find(x=>x.startsWith("data:"));
+                if(line){ const payload=line.slice(5).trim(); if(payload && payload!=="[DONE]"){ try{ const obj=JSON.parse(payload); const piece=provider==="gemini"?(obj?.candidates?.[0]?.content?.parts||[]).map(p=>p.text||"").join(""):(obj?.choices?.[0]?.delta?.content||""); if(piece){raw+=piece;onText?.(raw);} }catch(_){} } }
+            }
+            return parseSafeJSON(raw);
+        }
+
+        async function sendGeminiModelRequest(modelName, apiKey, payload, signal, onText) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+            const response = await fetch(url, { method:"POST", signal, headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
+            if (!response.ok) throw new Error(`HTTP ${response.status} (${modelName}): ${(await response.text()).slice(0,220)}`);
+            return readSSE(response,onText,"gemini",signal);
+        }
+
         async function callGeminiAPI(prompt, signal, onText) {
-            let lastError = null;
+            const apiKey = state.geminiKey.trim();
+            if (!apiKey) throw new Error("Missing Gemini API Key");
+            const payload = { contents:[{parts:[{text:prompt}]}], generationConfig:{temperature:0.1,responseMimeType:"application/json"} };
+            let lastErr = null;
             for (const modelName of GEMINI_MODELS) {
                 if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
                 try {
-                    const parsed = await callWorkerProvider("gemini", prompt, modelName, signal, onText);
+                    const parsed = await sendGeminiModelRequest(modelName, apiKey, payload, signal, onText);
                     lastGeminiError = "";
                     return { data: parsed, modelUsed: modelName };
                 } catch (err) {
-                    lastError = err;
+                    lastErr = err;
                     lastGeminiError = err.message;
-                    if (err.name === "AbortError" || /HTTP 401|HTTP 403/.test(err.message)) throw err;
+                    if (err.name === "AbortError" || err.message.includes("HTTP 400") || err.message.includes("HTTP 403")) throw err;
                 }
             }
-            throw lastError || new Error("All Gemini models failed");
+            throw lastErr || new Error("All Gemini models failed");
         }
-        async function callGroqWithModel(prompt, modelName, signal, onText) {
-            return callWorkerProvider("groq", prompt, modelName, signal, onText);
+
+        async function callGroqWithModel(prompt, modelName, apiKey, signal, onText) {
+            const url="https://api.groq.com/openai/v1/chat/completions";
+            const response=await fetch(url,{method:"POST",signal,headers:{"Content-Type":"application/json","Authorization":`Bearer ${apiKey}`},body:JSON.stringify({model:modelName,temperature:0.1,stream:true,response_format:{type:"json_object"},messages:[{role:"system",content:"You are a precise bilingual lexicographer and translation API. Output strictly valid JSON matching the exact schema and rules. Never mention dictionary or source names in your output."},{role:"user",content:prompt}]})});
+            if(!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0,300)}`);
+            return readSSE(response,onText,"groq",signal);
         }
         async function callGroqAPI(prompt, signal, onText) {
-            let lastError = null;
-            for (const modelName of GROQ_MODELS) {
-                if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
-                try {
-                    const result = await callGroqWithModel(prompt, modelName, signal, onText);
-                    return { data: result, modelUsed: modelName };
-                } catch (err) {
-                    lastError = err;
-                    if (err.name === "AbortError" || /HTTP 401|HTTP 403|429/.test(err.message)) throw err;
-                }
+            const apiKey=state.groqKey.trim(); if(!apiKey) throw new Error("Missing Groq API Key");
+            let lastError=null;
+            for(const modelName of GROQ_MODELS) {
+                if(signal?.aborted) throw new DOMException("Aborted","AbortError");
+                try { const result=await callGroqWithModel(prompt,modelName,apiKey,signal,onText); return {data:result,modelUsed:modelName}; }
+                catch(err) { lastError=err; if(err.name==="AbortError" || err.message.includes("HTTP 401")) throw err; }
             }
             throw lastError || new Error("All Groq models failed");
         }
@@ -2162,23 +1861,7 @@ async function readSSE(response, onText, provider = "ai", signal = null) {
                 : cleaned;
             return JSON.parse(jsonOnly);
         }
-function updateStreamPreview(rawText, tgtNum) {
-            if (!rawText || typeof rawText !== "string") return;
-            const tgtTextarea = document.getElementById(`box${tgtNum}-text`);
-            if (!tgtTextarea) return;
 
-            const match = rawText.match(/"translation"\s*:\s*"((?:\\.|[^"\\])*)"/);
-            if (!match || typeof match[1] !== "string") return;
-
-            try {
-                const decoded = JSON.parse(`"${match[1]}"`);
-                if (typeof decoded === "string" && decoded.trim()) {
-                    tgtTextarea.value = decoded;
-                    const clearBtn = document.getElementById(`box${tgtNum}-clear-btn`);
-                    if (clearBtn) clearBtn.classList.remove("hidden");
-                }
-            } catch (_) {}
-        }
         function chooseModelRoute(text, src, tgt) {
             const clean=String(text||"").trim();
             const hasArabic=/[\u0600-\u06FF]/.test(clean);
@@ -2204,7 +1887,6 @@ function updateStreamPreview(rawText, tgtNum) {
         // 7. تنفيذ الترجمة ثنائية الاتجاه وإدارة التبديل التلقائي
         // ============================================================================
         async function executeTranslation() {
-            cancelQuickTranslation(true);
             let srcNum=state.activeInputBox, tgtNum=srcNum===1?2:1;
             let srcTextarea=document.getElementById(`box${srcNum}-text`), inputText=srcTextarea.value.trim();
             if(!inputText) { const other=document.getElementById(`box${tgtNum}-text`); if(other.value.trim()){srcNum=tgtNum;tgtNum=srcNum===1?2:1;srcTextarea=other;inputText=srcTextarea.value.trim();} else {showAlert("يرجى كتابة كلمة أو جملة في أحد المستطيلين أولاً.");return;} }
@@ -2219,62 +1901,20 @@ function updateStreamPreview(rawText, tgtNum) {
             const totalStart=performance.now();
             const cacheId=signature + "::smart-v3";
             hideAlert(); document.getElementById("diagnostic-box").classList.add("hidden");
-
-            // تثبيت الترجمة الحالية الظاهرة على الشاشة بحيث لا تتغير عند الضغط على الزرار
-            const existingDisplayedTranslation = (document.getElementById(`box${tgtNum}-text`)?.value || "").trim() || lockedQuickTranslations.get(signature) || "";
-            if (existingDisplayedTranslation && !lockedQuickTranslations.has(signature)) {
-                lockedQuickTranslations.set(signature, existingDisplayedTranslation);
-            }
-
-            // 1) إذا انتهى التحليل في الخلفية بالفعل، اعرض التحليل الجديد فوراً مع الإبقاء على الترجمة الثابتة
-            if (backgroundFullJob.signature === signature && backgroundFullJob.data) {
-                const bgData = { ...backgroundFullJob.data, translation: existingDisplayedTranslation || backgroundFullJob.data.translation || "" };
-                updateEngineBadge(`فوري من الخلفية (${backgroundFullJob.modelUsed})`, false);
-                addHistory({input:inputText,translation:bgData.translation||"",source:effectiveSrcLang,target:effectiveTgtLang});
-                latestTranslationText = bgData.translation || "";
-                updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:0,source:"Background pre-computed (translation locked)",route:"Instant 0ms hit"});
-                renderResults(bgData,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum);
-                activeRequestSignature="";
-                return;
-            }
-
-            // 2) فحص الكاش الدائم
             const cached=await getCachedTranslation(cacheId);
             if(requestId!==activeTranslationId) return;
             if(cached) {
-                const lockedData = { ...cached.data, translation: existingDisplayedTranslation || cached.data.translation || "" };
                 updateEngineBadge("Cache (instant)",false);
-                updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:0,source:cached.source,route:"Cache hit (translation locked)"});
-                renderResults(lockedData,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum); activeRequestSignature=""; return;
+                updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:0,source:cached.source,route:"Cache hit"});
+                renderResults(cached.data,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum); activeRequestSignature=""; return;
             }
-
-            // 3) إذا كان التحليل شغالاً حالياً في الخلفية، انتظر إكماله بدون إعادة ترجمة النص
-            if (backgroundFullJob.signature === signature && backgroundFullJob.promise) {
-                setLoading(true);
-                setLoadingStage("جاري إظهار التحليل والقاموس بدون تغيير الترجمة...");
-                const completedJob = await backgroundFullJob.promise;
-                if (requestId !== activeTranslationId) return;
-                if (completedJob && completedJob.data) {
-                    const lockedData = { ...completedJob.data, translation: existingDisplayedTranslation || completedJob.data.translation || "" };
-                    setLoading(false);
-                    updateEngineBadge(`${completedJob.provider === "gemini" ? "Gemini" : "Groq"} (${completedJob.modelUsed})`, false);
-                    addHistory({input:inputText,translation:lockedData.translation||"",source:effectiveSrcLang,target:effectiveTgtLang});
-                    latestTranslationText = lockedData.translation || "";
-                    updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:performance.now()-totalStart,source:"Background completed (translation locked)",route:"Prefetch join"});
-                    renderResults(lockedData,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum);
-                    activeRequestSignature="";
-                    return;
-                }
-            }
-
-            cancelBackgroundFullAnalysis();
-            setLoading(true); setLoadingStage("جاري تجهيز التحليل والقاموس مع تثبيت الترجمة...");
+            setLoading(true); setLoadingStage("البحث عن المعاني والتعبيرات المرتبطة...");
             const knowledgeStart=performance.now();
             const lexicalHints=buildLexicalHints(inputText,effectiveSrcLang,effectiveTgtLang);
             const knowledgeContext=await retrieveKnowledgeContext(inputText,effectiveSrcLang,effectiveTgtLang,requestId);
             const knowledgeMs=performance.now()-knowledgeStart;
             if(requestId!==activeTranslationId) return;
-            setLoadingStage("تحليل المعنى والقاموس بأدق نموذج...");
+            setLoadingStage("تحليل السياق وتجهيز الترجمة الطبيعية...");
             const prompt=buildUnifiedPrompt(inputText,effectiveSrcLang,effectiveTgtLang,knowledgeContext,lexicalHints);
             const geminiController=new AbortController(), groqController=new AbortController();
             activeControllers=[...activeControllers,geminiController,groqController];
@@ -2284,32 +1924,30 @@ function updateStreamPreview(rawText, tgtNum) {
                 if(requestId!==activeTranslationId) return;
                 if(activeStreamOwner===null) activeStreamOwner=provider;
                 if(activeStreamOwner!==provider) return;
-                // إذا كانت الترجمة الأولية موجودة وثابتة، لا نبدلها أثناء البث
-                if (!existingDisplayedTranslation) {
-                    updateStreamPreview(raw,tgtNum);
-                }
-                setLoadingStage("جارٍ استكمال التحليل اللغوي والقاموس...");
+                updateStreamPreview(raw,tgtNum);
+                setLoadingStage("ظهرت الترجمة الأولية — جارٍ استكمال التحليل...");
             };
             const aiStart=performance.now();
             try {
                 let winner=null;
                 const geminiAttempt=()=>callGeminiAPI(prompt,geminiController.signal,streamFor("gemini")).then(r=>({provider:"gemini",...r}));
                 const groqAttempt=()=>callGroqAPI(prompt,groqController.signal,streamFor("groq")).then(r=>({provider:"groq",...r}));
-                try {
-                    winner = await geminiAttempt();
-                } catch (gemErr) {
-                    if (gemErr.name === "AbortError") throw gemErr;
-                    lastGeminiError = gemErr.message;
-                    winner = await groqAttempt();
+                if(route.parallel) {
+                    const attempts=[];
+                    if(state.geminiKey.trim()) attempts.push(geminiAttempt());
+                    if(state.groqKey.trim()) attempts.push(groqAttempt());
+                    if(!attempts.length) throw new Error("No API keys configured");
+                    try { winner=await Promise.any(attempts); }
+                    catch(aggregate) { throw new Error((aggregate.errors||[]).map(e=>e.message).join(" | ")||"All providers failed"); }
+                } else {
+                    // Short lookups use Groq primary (llama-3.3-70b-versatile) with automatic fallback to Gemini (2.5-flash -> 2.5-pro).
+                    try { if(state.groqKey.trim()) winner=await groqAttempt(); } catch(e) { if(e.name==="AbortError") throw e; }
+                    if(!winner && state.geminiKey.trim()) winner=await geminiAttempt();
+                    if(!winner) throw new Error((!state.geminiKey.trim() && !state.groqKey.trim()) ? "No API keys configured" : "All configured translation providers failed");
                 }
                 if(requestId!==activeTranslationId) return;
                 if(winner.provider==="gemini") { groqController.abort(); updateEngineBadge(`Gemini (${winner.modelUsed})`,false); }
                 else { geminiController.abort(); updateEngineBadge(`Groq (${winner.modelUsed})`,true); }
-                const finalLockedTranslation = existingDisplayedTranslation || winner.data.translation || "";
-                if (finalLockedTranslation) {
-                    winner.data.translation = finalLockedTranslation;
-                    lockedQuickTranslations.set(signature, finalLockedTranslation);
-                }
                 if(knowledgeContext) {
                     winner.data._knowledgeSource=knowledgeContext.verifiedOxford?"Oxford":knowledgeContext.source;
                     winner.data._knowledgeVerified=!!knowledgeContext.verifiedOxford;
@@ -2319,13 +1957,13 @@ function updateStreamPreview(rawText, tgtNum) {
                 addHistory({input:inputText,translation:winner.data.translation||"",source:effectiveSrcLang,target:effectiveTgtLang});
                 latestTranslationText=winner.data.translation||"";
                 const aiMs=performance.now()-aiStart;
-                updatePerformance({total:performance.now()-totalStart,knowledge:knowledgeMs,ai:aiMs,source:knowledgeContext?(knowledgeContext.source||"Knowledge + AI"):"AI (translation locked)",route:route.label});
+                updatePerformance({total:performance.now()-totalStart,knowledge:knowledgeMs,ai:aiMs,source:knowledgeContext?(knowledgeContext.source||"Knowledge + AI"):"AI (no external dictionary)",route:route.label});
                 setLoading(false); activeControllers=[]; activeRequestSignature="";
                 renderResults(winner.data,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum);
             } catch(err) {
                 if(requestId!==activeTranslationId || err.name==="AbortError") return;
                 setLoading(false); activeControllers=[]; activeRequestSignature="";
-                showAlert(`تعذر إتمام التحليل حالياً. يرجى التحقق من الاتصال أو مفاتيح API. (${err.message})`);
+                showAlert(`تعذر إتمام الترجمة حالياً. يرجى التحقق من الاتصال أو مفاتيح API. (${err.message})`);
             }
         }
 
@@ -2337,9 +1975,9 @@ function updateStreamPreview(rawText, tgtNum) {
                 return;
             }
             if (!lastGeminiError) {
-                diagMsg.textContent = "حالة الاتصال: Groq يعمل بنجاح كمحرك أساسي، و Gemini جاهز كمحرك احتياطي.";
+                diagMsg.textContent = "حالة الاتصال: Gemini يعمل بنجاح كمحرك أساسي بدون أخطاء.";
             } else {
-                diagMsg.textContent = `ملاحظة المحرك الاحتياطي (Gemini): (${lastGeminiError})`;
+                diagMsg.textContent = `سبب التحويل إلى Groq: رد سيرفر جوجل بـ (${lastGeminiError})`;
             }
             diagBox.classList.remove("hidden");
             lucide.createIcons();
@@ -2435,8 +2073,7 @@ function updateStreamPreview(rawText, tgtNum) {
             tgtTextarea.dir = targetObj.dir;
 
             const isEnToEn = effectiveSrcLang.startsWith("en") && effectiveTgtLang.startsWith("en");
-            const currentBoxValue = (tgtTextarea.value || "").trim();
-            const finalTranslation = currentBoxValue || data.translation || originalInput;
+            const finalTranslation = data.translation || originalInput;
             const transcriptionText = (data.transcription || "").trim();
             const ipaText = (data.ipa || "").trim();
 
@@ -2741,50 +2378,54 @@ function updateStreamPreview(rawText, tgtNum) {
             updateFocusButton(enabled);
         }
 
-       function openSettingsModal() {
-    state.workerUrl = state.workerUrl || WORKER_DEFAULT_URL;
+        function openSettingsModal() {
+            document.getElementById("gemini-key-input").value = state.geminiKey;
+            document.getElementById("groq-key-input").value = state.groqKey;
+            document.getElementById("knowledge-endpoint-input").value = state.knowledgeEndpoint || "";
+            document.getElementById("settings-modal").classList.remove("hidden");
+        }
 
-    document.getElementById("worker-url-input").value = state.workerUrl;
-    document.getElementById("knowledge-endpoint-input").value = state.knowledgeEndpoint || "";
-    document.getElementById("settings-modal").classList.remove("hidden");
-}
-        function closeSettingsModal() { document.getElementById("settings-modal").classList.add("hidden"); }
+        function closeSettingsModal() {
+            document.getElementById("settings-modal").classList.add("hidden");
+        }
+
         function saveApiKeys() {
-            const workerUrl = document.getElementById("worker-url-input").value.trim().replace(/\/$/, "");
-            if (workerUrl && !/^https:\/\//i.test(workerUrl)) { showAlert("رابط Cloudflare Worker غير صحيح. يجب أن يبدأ بـ https://"); return; }
+            const gKey = document.getElementById("gemini-key-input").value.trim();
+            const grKey = document.getElementById("groq-key-input").value.trim();
+            if (gKey) {
+                state.geminiKey = gKey;
+                modelsDiscovered = false;
+                localStorage.setItem("smart_trans_gemini_key", gKey);
+            }
+            if (grKey) {
+                state.groqKey = grKey;
+                localStorage.setItem("smart_trans_groq_key", grKey);
+            }
             const knowledgeEndpoint = document.getElementById("knowledge-endpoint-input").value.trim().replace(/\/$/, "");
             const endpointChanged = knowledgeEndpoint !== (state.knowledgeEndpoint || "");
-state.workerUrl = workerUrl || WORKER_DEFAULT_URL;         
-   state.knowledgeEndpoint = knowledgeEndpoint;
-localStorage.setItem("smart_trans_worker_url", state.workerUrl);
+            state.knowledgeEndpoint = knowledgeEndpoint;
             localStorage.setItem("smart_trans_knowledge_endpoint", knowledgeEndpoint);
             if (endpointChanged) {
-                knowledgeCache.clear(); translationCache.clear();
+                knowledgeCache.clear();
+                translationCache.clear();
                 localStorage.removeItem("smart_trans_knowledge_cache");
                 localStorage.removeItem("smart_trans_cache");
             }
             closeSettingsModal();
-            if (workerUrl) updateEngineBadge("Cloudflare Worker configured", false);
-        }
-        async function testWorkerConnection() {
-            const candidate = document.getElementById("worker-url-input").value.trim().replace(/\/$/, "");
-            if (!/^https:\/\//i.test(candidate)) { showAlert("أدخل رابط Worker صحيح يبدأ بـ https://"); return; }
-            try {
-                const res = await fetch(candidate + "/health", { method: "GET", headers: { "Accept": "application/json" } });
-                const data = await res.json();
-                if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
-                showAlert("اتصال Cloudflare Worker ناجح. احفظ الرابط لتبدأ الترجمة.");
-            } catch (e) { showAlert("تعذر الاتصال بالـ Worker: " + e.message); }
-        }
-        function resetDefaultKeys() {
-            document.getElementById("worker-url-input").value = WORKER_DEFAULT_URL;
-            document.getElementById("knowledge-endpoint-input").value = "";
-            state.workerUrl = WORKER_DEFAULT_URL;
-            state.knowledgeEndpoint = "";
-            localStorage.removeItem("smart_trans_worker_url");
-            localStorage.removeItem("smart_trans_knowledge_endpoint");
         }
 
+        function resetDefaultKeys() {
+            state.geminiKey = DEFAULT_GEMINI_KEY;
+            state.groqKey = DEFAULT_GROQ_KEY;
+            modelsDiscovered = false;
+            localStorage.setItem("smart_trans_gemini_key", DEFAULT_GEMINI_KEY);
+            localStorage.setItem("smart_trans_groq_key", DEFAULT_GROQ_KEY);
+            document.getElementById("gemini-key-input").value = DEFAULT_GEMINI_KEY;
+            document.getElementById("groq-key-input").value = DEFAULT_GROQ_KEY;
+            state.knowledgeEndpoint = "";
+            localStorage.removeItem("smart_trans_knowledge_endpoint");
+            document.getElementById("knowledge-endpoint-input").value = "";
+        }
     </script>
 </body>
 </html>
