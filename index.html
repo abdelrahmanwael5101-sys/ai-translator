@@ -763,11 +763,11 @@
         LEGACY_KEY_STORAGE.forEach(k => { try { localStorage.removeItem(k); } catch (_) {} });
         // أعلى وأدق النماذج المتاحة للترجمة الطبيعية وفهم اللهجة المصرية والسياق
         const GEMINI_HIGH_ACCURACY_MODELS = [
-            "gemini-2.5-pro",
-            "gemini-2.5-flash"
+            "gemini-2.5-flash",
+            "gemini-2.5-pro"
         ];
         let GEMINI_MODELS = [...GEMINI_HIGH_ACCURACY_MODELS];
-        // ترتيب نماذج Groq من الأدق لغوياً وسياقياً إلى الأسرع
+        // ترتيب نماذج Groq من الأقوى والأسرع لفهم الصياغة واللهجة المصرية
         const GROQ_HIGH_ACCURACY_MODELS = [
             "llama-3.3-70b-versatile",
             "openai/gpt-oss-120b",
@@ -782,6 +782,8 @@
         let quickDebounceTimer = null;
         let activeQuickController = null;
         let lastQuickSignature = "";
+        // تثبيت الترجمة الأولية لكل signature بحيث لا تتغير أو يُعاد ترجمتها عند الضغط على Submit
+        const lockedQuickTranslations = new Map();
         // حالة التحليل الشامل في الخلفية (Background Full Analysis)
         let backgroundFullJob = { signature: "", promise: null, data: null, modelUsed: "", provider: "", controller: null };
         const translationCache = new Map();
@@ -1521,10 +1523,10 @@
         }
 
         function buildQuickPrompt(text, effectiveSrcLang, effectiveTgtLang) {
-            return `You are a master native-level translator specializing in Arabic (including Egyptian colloquial Arabic, idioms, slang, and cultural nuance) and English.
-Translate the intended meaning naturally and idiomatically from ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang}) to ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang}).
-- Never translate word-for-word when a natural native expression or idiom conveys the exact meaning better.
-- Preserve tone, emotion, and register accurately.
+            return `You are a fast, sharp native-level translator who deeply understands Arabic dialects (especially Egyptian Arabic / العامية المصرية, phrasing, tone, sarcasm, idioms, and natural speech) and English.
+Translate the intended meaning naturally and accurately from ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang}) to ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang}).
+- Understand Egyptian colloquial phrasing and context first; never fall back to stiff word-for-word translation when natural phrasing fits better.
+- Keep the translation concise, accurate, and natural.
 Return ONLY valid raw JSON (no markdown):
 {"translation":"string","transcription":"string"}
 Text:
@@ -1535,10 +1537,10 @@ Text:
             clearTimeout(quickDebounceTimer);
             const text = document.getElementById(`box${srcNum}-text`).value.trim();
             if (!text) return;
-            quickDebounceTimer = setTimeout(() => executeQuickTranslation(srcNum), 420);
+            quickDebounceTimer = setTimeout(() => executeQuickTranslation(srcNum), 350);
         }
 
-        function startBackgroundFullAnalysis(inputText, effectiveSrcLang, effectiveTgtLang) {
+        function startBackgroundFullAnalysis(inputText, effectiveSrcLang, effectiveTgtLang, lockedTranslationText = "") {
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
             const cacheId = signature + "::smart-v3";
 
@@ -1556,7 +1558,8 @@ Text:
                     const cached = await getCachedTranslation(cacheId);
                     if (controller.signal.aborted) return null;
                     if (cached?.data) {
-                        job.data = cached.data;
+                        const preserved = lockedTranslationText || lockedQuickTranslations.get(signature) || cached.data.translation || "";
+                        job.data = { ...cached.data, translation: preserved || cached.data.translation };
                         job.provider = "cache";
                         job.modelUsed = "Cache";
                         updateEngineBadge("جاهز للتحليل الكامل ⚡", false);
@@ -1579,6 +1582,10 @@ Text:
                     }
                     if (controller.signal.aborted || !winner) return null;
 
+                    const preserved = lockedTranslationText || lockedQuickTranslations.get(signature) || winner.data.translation || "";
+                    if (preserved) {
+                        winner.data.translation = preserved;
+                    }
                     if (knowledgeContext) {
                         winner.data._knowledgeSource = knowledgeContext.verifiedOxford ? "Oxford" : knowledgeContext.source;
                         winner.data._knowledgeVerified = !!knowledgeContext.verifiedOxford;
@@ -1618,8 +1625,18 @@ Text:
             const quickSig = "quick::" + signature;
             if (quickSig === lastQuickSignature) return;
 
+            if (lockedQuickTranslations.has(signature)) {
+                const lockedText = lockedQuickTranslations.get(signature);
+                applyQuickResult({ translation: lockedText }, tgtNum, effectiveTgtLang);
+                lastQuickSignature = quickSig;
+                startBackgroundFullAnalysis(inputText, effectiveSrcLang, effectiveTgtLang, lockedText);
+                return;
+            }
+
             const cachedFull = await getCachedTranslation(signature + "::smart-v3");
             if (cachedFull?.data?.translation) {
+                const lockedText = cachedFull.data.translation.trim();
+                lockedQuickTranslations.set(signature, lockedText);
                 applyQuickResult(cachedFull.data, tgtNum, effectiveTgtLang);
                 lastQuickSignature = quickSig;
                 backgroundFullJob = { signature, promise: Promise.resolve({ data: cachedFull.data, provider: "cache", modelUsed: "Cache" }), data: cachedFull.data, modelUsed: "Cache", provider: "cache", controller: null };
@@ -1628,8 +1645,6 @@ Text:
             }
 
             cancelQuickTranslation(false);
-            // ابدأ فوراً في الخلفية بتحضير القاموس و smart-insights بأدق موديل حتى تكون جاهزة بمجرد الضغط على Submit
-            startBackgroundFullAnalysis(inputText, effectiveSrcLang, effectiveTgtLang);
 
             const controller = new AbortController();
             activeQuickController = controller;
@@ -1639,7 +1654,7 @@ Text:
             try {
                 let data = null;
                 let modelUsed = GROQ_HIGH_ACCURACY_MODELS[0];
-                // استخدام أدق موديل في Groq (llama-3.3-70b-versatile ثم gpt-oss-120b) للترجمة الفورية عالية الجودة
+                // استخدام أقوى وأسرع النماذج المتاحة لفهم الكلام والصياغة واللهجة المصرية
                 for (const m of GROQ_HIGH_ACCURACY_MODELS) {
                     if (controller.signal.aborted) return;
                     try {
@@ -1661,14 +1676,16 @@ Text:
                 }
                 if (controller.signal.aborted || !data) return;
 
-                lastQuickSignature = quickSig;
-                // إذا كان التحليل الكامل في الخلفية قد انتهى بالفعل، استخدم ترجمته الأدق
-                const finalQuickData = (backgroundFullJob.signature === signature && backgroundFullJob.data) ? backgroundFullJob.data : data;
-                applyQuickResult(finalQuickData, tgtNum, effectiveTgtLang);
-                if (!(backgroundFullJob.signature === signature && backgroundFullJob.data)) {
-                    updateEngineBadge(`ترجمة فورية (${modelUsed}) · جاري تجهيز التحليل...`, false);
+                const finalQuickText = (data.translation || "").trim();
+                if (finalQuickText) {
+                    lockedQuickTranslations.set(signature, finalQuickText);
                 }
-                updatePerformance({ total: performance.now() - start, knowledge: 0, ai: performance.now() - start, source: "High-accuracy auto-translate + background prefetch", route: "Smart background route" });
+                lastQuickSignature = quickSig;
+                applyQuickResult(data, tgtNum, effectiveTgtLang);
+                // نبدأ التحليل في الخلفية ونمرر له الترجمة الثابتة حتى لا تتغير
+                startBackgroundFullAnalysis(inputText, effectiveSrcLang, effectiveTgtLang, finalQuickText);
+                updateEngineBadge(`ترجمة فورية ثابتة (${modelUsed})`, false);
+                updatePerformance({ total: performance.now() - start, knowledge: 0, ai: performance.now() - start, source: "Fast & accurate quick translation", route: "Locked quick + background analysis" });
             } catch (err) {
                 if (err.name !== "AbortError") console.warn("Quick translate error:", err.message);
             } finally {
@@ -2203,13 +2220,19 @@ function updateStreamPreview(rawText, tgtNum) {
             const cacheId=signature + "::smart-v3";
             hideAlert(); document.getElementById("diagnostic-box").classList.add("hidden");
 
-            // 1) إذا انتهى التحليل في الخلفية بالفعل، اعرض النتيجة في 0 ثانية فوراً!
+            // تثبيت الترجمة الحالية الظاهرة على الشاشة بحيث لا تتغير عند الضغط على الزرار
+            const existingDisplayedTranslation = (document.getElementById(`box${tgtNum}-text`)?.value || "").trim() || lockedQuickTranslations.get(signature) || "";
+            if (existingDisplayedTranslation && !lockedQuickTranslations.has(signature)) {
+                lockedQuickTranslations.set(signature, existingDisplayedTranslation);
+            }
+
+            // 1) إذا انتهى التحليل في الخلفية بالفعل، اعرض التحليل الجديد فوراً مع الإبقاء على الترجمة الثابتة
             if (backgroundFullJob.signature === signature && backgroundFullJob.data) {
-                const bgData = backgroundFullJob.data;
+                const bgData = { ...backgroundFullJob.data, translation: existingDisplayedTranslation || backgroundFullJob.data.translation || "" };
                 updateEngineBadge(`فوري من الخلفية (${backgroundFullJob.modelUsed})`, false);
                 addHistory({input:inputText,translation:bgData.translation||"",source:effectiveSrcLang,target:effectiveTgtLang});
                 latestTranslationText = bgData.translation || "";
-                updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:0,source:"Background pre-computed",route:"Instant 0ms hit"});
+                updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:0,source:"Background pre-computed (translation locked)",route:"Instant 0ms hit"});
                 renderResults(bgData,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum);
                 activeRequestSignature="";
                 return;
@@ -2219,37 +2242,39 @@ function updateStreamPreview(rawText, tgtNum) {
             const cached=await getCachedTranslation(cacheId);
             if(requestId!==activeTranslationId) return;
             if(cached) {
+                const lockedData = { ...cached.data, translation: existingDisplayedTranslation || cached.data.translation || "" };
                 updateEngineBadge("Cache (instant)",false);
-                updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:0,source:cached.source,route:"Cache hit"});
-                renderResults(cached.data,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum); activeRequestSignature=""; return;
+                updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:0,source:cached.source,route:"Cache hit (translation locked)"});
+                renderResults(lockedData,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum); activeRequestSignature=""; return;
             }
 
-            // 3) إذا كان التحليل شغالاً حالياً في الخلفية، انتظر إكماله بدون تكرار الطلب!
+            // 3) إذا كان التحليل شغالاً حالياً في الخلفية، انتظر إكماله بدون إعادة ترجمة النص
             if (backgroundFullJob.signature === signature && backgroundFullJob.promise) {
                 setLoading(true);
-                setLoadingStage("جاري استكمال باقي العناصر المحضّرة في الخلفية...");
+                setLoadingStage("جاري إظهار التحليل والقاموس بدون تغيير الترجمة...");
                 const completedJob = await backgroundFullJob.promise;
                 if (requestId !== activeTranslationId) return;
                 if (completedJob && completedJob.data) {
+                    const lockedData = { ...completedJob.data, translation: existingDisplayedTranslation || completedJob.data.translation || "" };
                     setLoading(false);
                     updateEngineBadge(`${completedJob.provider === "gemini" ? "Gemini" : "Groq"} (${completedJob.modelUsed})`, false);
-                    addHistory({input:inputText,translation:completedJob.data.translation||"",source:effectiveSrcLang,target:effectiveTgtLang});
-                    latestTranslationText = completedJob.data.translation || "";
-                    updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:performance.now()-totalStart,source:"Background completed",route:"Prefetch join"});
-                    renderResults(completedJob.data,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum);
+                    addHistory({input:inputText,translation:lockedData.translation||"",source:effectiveSrcLang,target:effectiveTgtLang});
+                    latestTranslationText = lockedData.translation || "";
+                    updatePerformance({total:performance.now()-totalStart,knowledge:0,ai:performance.now()-totalStart,source:"Background completed (translation locked)",route:"Prefetch join"});
+                    renderResults(lockedData,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum);
                     activeRequestSignature="";
                     return;
                 }
             }
 
             cancelBackgroundFullAnalysis();
-            setLoading(true); setLoadingStage("البحث عن المعاني والتعبيرات المرتبطة...");
+            setLoading(true); setLoadingStage("جاري تجهيز التحليل والقاموس مع تثبيت الترجمة...");
             const knowledgeStart=performance.now();
             const lexicalHints=buildLexicalHints(inputText,effectiveSrcLang,effectiveTgtLang);
             const knowledgeContext=await retrieveKnowledgeContext(inputText,effectiveSrcLang,effectiveTgtLang,requestId);
             const knowledgeMs=performance.now()-knowledgeStart;
             if(requestId!==activeTranslationId) return;
-            setLoadingStage("تحليل السياق وتجهيز الترجمة بأدق نموذج...");
+            setLoadingStage("تحليل المعنى والقاموس بأدق نموذج...");
             const prompt=buildUnifiedPrompt(inputText,effectiveSrcLang,effectiveTgtLang,knowledgeContext,lexicalHints);
             const geminiController=new AbortController(), groqController=new AbortController();
             activeControllers=[...activeControllers,geminiController,groqController];
@@ -2259,15 +2284,17 @@ function updateStreamPreview(rawText, tgtNum) {
                 if(requestId!==activeTranslationId) return;
                 if(activeStreamOwner===null) activeStreamOwner=provider;
                 if(activeStreamOwner!==provider) return;
-                updateStreamPreview(raw,tgtNum);
-                setLoadingStage("ظهرت الترجمة — جارٍ استكمال التحليل اللغوي...");
+                // إذا كانت الترجمة الأولية موجودة وثابتة، لا نبدلها أثناء البث
+                if (!existingDisplayedTranslation) {
+                    updateStreamPreview(raw,tgtNum);
+                }
+                setLoadingStage("جارٍ استكمال التحليل اللغوي والقاموس...");
             };
             const aiStart=performance.now();
             try {
                 let winner=null;
                 const geminiAttempt=()=>callGeminiAPI(prompt,geminiController.signal,streamFor("gemini")).then(r=>({provider:"gemini",...r}));
                 const groqAttempt=()=>callGroqAPI(prompt,groqController.signal,streamFor("groq")).then(r=>({provider:"groq",...r}));
-                // نبدأ بـ Gemini 2.5 Pro/Flash كأدق محرك للتحليل الشامل مع Groq 70B/120B كبديل فوري
                 try {
                     winner = await geminiAttempt();
                 } catch (gemErr) {
@@ -2278,6 +2305,11 @@ function updateStreamPreview(rawText, tgtNum) {
                 if(requestId!==activeTranslationId) return;
                 if(winner.provider==="gemini") { groqController.abort(); updateEngineBadge(`Gemini (${winner.modelUsed})`,false); }
                 else { geminiController.abort(); updateEngineBadge(`Groq (${winner.modelUsed})`,true); }
+                const finalLockedTranslation = existingDisplayedTranslation || winner.data.translation || "";
+                if (finalLockedTranslation) {
+                    winner.data.translation = finalLockedTranslation;
+                    lockedQuickTranslations.set(signature, finalLockedTranslation);
+                }
                 if(knowledgeContext) {
                     winner.data._knowledgeSource=knowledgeContext.verifiedOxford?"Oxford":knowledgeContext.source;
                     winner.data._knowledgeVerified=!!knowledgeContext.verifiedOxford;
@@ -2287,13 +2319,13 @@ function updateStreamPreview(rawText, tgtNum) {
                 addHistory({input:inputText,translation:winner.data.translation||"",source:effectiveSrcLang,target:effectiveTgtLang});
                 latestTranslationText=winner.data.translation||"";
                 const aiMs=performance.now()-aiStart;
-                updatePerformance({total:performance.now()-totalStart,knowledge:knowledgeMs,ai:aiMs,source:knowledgeContext?(knowledgeContext.source||"Knowledge + AI"):"AI (no external dictionary)",route:route.label});
+                updatePerformance({total:performance.now()-totalStart,knowledge:knowledgeMs,ai:aiMs,source:knowledgeContext?(knowledgeContext.source||"Knowledge + AI"):"AI (translation locked)",route:route.label});
                 setLoading(false); activeControllers=[]; activeRequestSignature="";
                 renderResults(winner.data,inputText,effectiveSrcLang,effectiveTgtLang,tgtNum);
             } catch(err) {
                 if(requestId!==activeTranslationId || err.name==="AbortError") return;
                 setLoading(false); activeControllers=[]; activeRequestSignature="";
-                showAlert(`تعذر إتمام الترجمة حالياً. يرجى التحقق من الاتصال أو مفاتيح API. (${err.message})`);
+                showAlert(`تعذر إتمام التحليل حالياً. يرجى التحقق من الاتصال أو مفاتيح API. (${err.message})`);
             }
         }
 
@@ -2403,7 +2435,8 @@ function updateStreamPreview(rawText, tgtNum) {
             tgtTextarea.dir = targetObj.dir;
 
             const isEnToEn = effectiveSrcLang.startsWith("en") && effectiveTgtLang.startsWith("en");
-            const finalTranslation = data.translation || originalInput;
+            const currentBoxValue = (tgtTextarea.value || "").trim();
+            const finalTranslation = currentBoxValue || data.translation || originalInput;
             const transcriptionText = (data.transcription || "").trim();
             const ipaText = (data.ipa || "").trim();
 
