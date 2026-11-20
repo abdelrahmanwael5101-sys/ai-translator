@@ -167,8 +167,10 @@
         #box-1-container,#box-2-container { border-color:#d8e3eb; box-shadow:0 12px 34px rgba(27,51,72,.055); }
         #box-1-container:focus-within,#box-2-container:focus-within { border-color:#55aeb0; box-shadow:0 0 0 4px rgba(15,143,145,.10),0 16px 42px rgba(27,91,104,.08); }
         #dictionary-section > div { border-color:#dce5ed; box-shadow:0 20px 58px rgba(24,46,68,.075); }
-        #dictionary-section .bg-gradient-to-l { background:linear-gradient(110deg,#eaf5f5,#fff 54%,#f1f5f8) !important; }
-        #dict-word { color:#155e75 !important; letter-spacing:-.025em; }
+        #dictionary-section .bg-gradient-to-l { background:linear-gradient(110deg,#f1f7f7,#fcfdfe 55%,#f4f7fa) !important; }
+        #dict-word { color:#1d4ed8 !important; letter-spacing:-.02em; }
+        #smart-insights .smart-insight-card { background:#f8fafc; border-color:#e2e8f0; border-radius:16px; }
+        body.dark #smart-insights .smart-insight-card { background:#142235; border-color:#2b4155; }
         #dictionary-section [id^="acc-"] { border-radius:16px; border-color:#dfe7ed; box-shadow:0 3px 12px rgba(25,48,68,.025); }
         #dictionary-section [id^="acc-"] > button { min-height:48px; }
         .premium-toolbar { border-color:#dce5ed; box-shadow:0 10px 28px rgba(24,46,68,.045); }
@@ -237,7 +239,7 @@
                 </button>
                 <div id="engine-badge" onclick="toggleDiagnosticBanner()" class="cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all" title="اضغط لعرض أو إخفاء تفاصيل اتصال Gemini">
                     <span id="engine-dot" class="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
-                    <span id="engine-status-text" class="ltr-text truncate max-w-[160px] sm:max-w-none">Groq Primary</span>
+                    <span id="engine-status-text" class="ltr-text truncate max-w-[160px] sm:max-w-none">Groq Fast + Gemini</span>
                 </div>
             </div>
         </div>
@@ -250,8 +252,8 @@
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[11px] sm:text-xs font-bold mb-3">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>SMART TRANSLATION EXPERIENCE</span>
             </div>
-            <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">ترجم بدقة. افهم المعنى. عبّر بطبيعية.</h2>
-            <p class="mt-2 text-xs sm:text-sm text-slate-500">ترجمة ذكية وتحليل لغوي ونطق واضح في مكان واحد</p>
+            <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">ترجمة ذكية تفهم المصري والإنجليزي حتى لو مش مثالي</h2>
+            <p class="mt-2 text-xs sm:text-sm text-slate-500">بديل سريع للترجمة الحرفية ولفتح شات الذكاء الاصطناعي في كل مرة</p>
         </section>
 
         <!-- حاوية صناديق الترجمة المتجاوبة -->
@@ -430,6 +432,10 @@
                             <span id="dict-cefr" class="hidden ltr-text px-3 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs tracking-wider" title="CEFR Level"></span>
                             <span id="dict-detected-info" class="text-[11px] sm:text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg"></span>
                             <span id="dict-source-badge" class="text-[10px] sm:text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">AI + Knowledge</span>
+                            <button id="toggle-smart-insights-btn" type="button" onclick="toggleSmartInsightsPanel()" class="hidden text-[11px] font-sans font-semibold text-blue-700 hover:text-blue-900 bg-blue-50/90 hover:bg-blue-100 border border-blue-200/80 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i>
+                                <span id="toggle-smart-insights-label">بدائل وسياق المعنى</span>
+                            </button>
                         </div>
                         <!-- الـ Transcription وبجانبه الرموز الصوتية IPA كاملة -->
                         <div id="dict-phonetics-row" class="hidden ltr-text flex flex-wrap items-center gap-2 mt-0.5">
@@ -505,9 +511,9 @@
 
                 <!-- جسم البطاقة -->
                 <div class="p-4 sm:p-6 space-y-5 sm:space-y-6">
-                    <!-- Smart translation intelligence: optional detail, kept visually quiet -->
-                    <section id="smart-insights" class="space-y-3">
-                        <div class="flex items-center justify-between gap-2"><h3 class="text-sm font-extrabold text-slate-800">فهم الترجمة وتحسينها</h3><span id="naturalness-badge" class="hidden text-[10px] font-bold rounded-full px-2.5 py-1 border"></span></div>
+                    <!-- Smart translation intelligence: optional detail, kept visually quiet and collapsible -->
+                    <section id="smart-insights" class="hidden space-y-3">
+                        <div class="flex items-center justify-between gap-2"><h3 class="text-xs font-bold text-slate-500">تفاصيل إضافية لفهم السياق والبدائل</h3><span id="naturalness-badge" class="hidden text-[10px] font-bold rounded-full px-2.5 py-1 border"></span></div>
                         <div id="alternatives-card" class="smart-insight-card hidden">
                             <div class="smart-insight-title"> <span>بدائل طبيعية للترجمة</span></div>
                             <div id="alternatives-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
@@ -740,11 +746,11 @@
             </div>
             <div class="p-4 sm:p-6 space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">1. مفتاح Google Gemini API (المحرك الاحتياطي التلقائي)</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">1. مفتاح Google Gemini API (المحرك الأساسي)</label>
                     <input id="gemini-key-input" type="text" class="w-full ltr-text text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="أدخل مفتاح Gemini API (AIza...)...">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">2. مفتاح Groq API (المحرك الأساسي فائق السرعة)</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">2. مفتاح Groq API (المحرك الاحتياطي التلقائي Fallback)</label>
                     <input id="groq-key-input" type="text" class="w-full ltr-text text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" placeholder="أدخل مفتاح Groq API (gsk_...)...">
                 </div>
                 <div class="pt-3 border-t border-slate-200">
@@ -778,7 +784,7 @@
             localStorage.setItem("smart_trans_key_ver", KEY_VERSION);
         }
 
-        // ترتيب الأولوية لنماذج Groq (الأساسي فائق السرعة والدقة للصياغة والمصري)
+        // النماذج الأساسية فائقة السرعة للفهم العميق للعامية المصرية والإنجليزية غير القياسية
         const GROQ_MODELS = [
             "llama-3.3-70b-versatile",
             "openai/gpt-oss-120b",
@@ -786,7 +792,7 @@
             "llama-3.1-8b-instant"
         ];
 
-        // ترتيب الأولوية لنماذج Gemini (الاحتياطي التلقائي: 2.5-flash ثم 2.5-pro)
+        // النماذج الاحتياطية التلقائية عند الحاجة
         let GEMINI_MODELS = [
             "gemini-2.5-flash",
             "gemini-2.5-pro",
@@ -1517,7 +1523,7 @@
             }
             document.getElementById("dictionary-section").classList.add("hidden");
             document.getElementById("idiom-section").classList.add("hidden");
-            ["alternatives-card","breakdown-card","quality-card","context-card","regional-card","naturalness-badge"].forEach(id=>document.getElementById(id)?.classList.add("hidden"));
+            ["smart-insights","toggle-smart-insights-btn","alternatives-card","breakdown-card","quality-card","context-card","regional-card","naturalness-badge"].forEach(id=>document.getElementById(id)?.classList.add("hidden"));
             hideAlert();
             textarea.focus();
         }
@@ -1617,7 +1623,13 @@
             return `You are an elite bilingual lexicographer and dictionary engine.
 
 TASK:
-Analyze and translate the user's input text.
+You are a smart translator built to replace opening a raw AI chat window while avoiding literal word-for-word machine translation.
+Understand what the user ACTUALLY means even when the input uses:
+- Egyptian Arabic dialect / slang / idioms (e.g., "مكبر دماغي", "الدنيا واقفة", "على الله", "هنجيب آخرنا", "فكك منه", "مش مستاهلة").
+- Imperfect, casual, abbreviated, or non-native / slightly broken English (e.g., "i no understand why he do like that", "gonna lay low for a bit", typos, missing articles or grammar).
+- Implicit intent or cultural nuance.
+
+Infer the intended meaning first, translate it naturally into the target language, and provide concise alternatives, context notes, and idiomatic equivalents when helpful.
 - Source Language: ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang})
 - Target Language: ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang})
 - Translation approach: meaning-first, context-aware, natural and accurate.
@@ -1934,13 +1946,13 @@ USER INPUT TEXT:
                 const groqAttempt=()=>callGroqAPI(prompt,groqController.signal,streamFor("groq")).then(r=>({provider:"groq",...r}));
                 if(route.parallel) {
                     const attempts=[];
-                    if(state.geminiKey.trim()) attempts.push(geminiAttempt());
                     if(state.groqKey.trim()) attempts.push(groqAttempt());
+                    if(state.geminiKey.trim()) attempts.push(geminiAttempt());
                     if(!attempts.length) throw new Error("No API keys configured");
                     try { winner=await Promise.any(attempts); }
                     catch(aggregate) { throw new Error((aggregate.errors||[]).map(e=>e.message).join(" | ")||"All providers failed"); }
                 } else {
-                    // Short lookups use Groq primary (llama-3.3-70b-versatile) with automatic fallback to Gemini (2.5-flash -> 2.5-pro).
+                    // Fast primary on Groq for instant Egyptian/slang/broken-English comprehension, automatic fallback to Gemini.
                     try { if(state.groqKey.trim()) winner=await groqAttempt(); } catch(e) { if(e.name==="AbortError") throw e; }
                     if(!winner && state.geminiKey.trim()) winner=await geminiAttempt();
                     if(!winner) throw new Error((!state.geminiKey.trim() && !state.groqKey.trim()) ? "No API keys configured" : "All configured translation providers failed");
@@ -2212,14 +2224,26 @@ USER INPUT TEXT:
             lucide.createIcons();
         }
 
+        function toggleSmartInsightsPanel() {
+            const section = document.getElementById("smart-insights");
+            const label = document.getElementById("toggle-smart-insights-label");
+            if (!section) return;
+            const willShow = section.classList.contains("hidden");
+            section.classList.toggle("hidden", !willShow);
+            if (label) label.textContent = willShow ? "إخفاء البدائل والسياق" : "بدائل وسياق المعنى";
+        }
+
         function scheduleSmartInsights(data, sourceLang, targetLang) {
-            const section=document.getElementById("smart-insights");
-            if(!section) return renderSmartInsights(data,sourceLang,targetLang);
-            if(smartInsightsObserver) smartInsightsObserver.disconnect();
-            const renderOnce=()=>{ if(smartInsightsObserver) smartInsightsObserver.disconnect(); smartInsightsObserver=null; renderSmartInsights(data,sourceLang,targetLang); };
-            if(!("IntersectionObserver" in window)) return renderOnce();
-            smartInsightsObserver=new IntersectionObserver(entries=>{ if(entries.some(e=>e.isIntersecting)) renderOnce(); },{rootMargin:"180px 0px"});
-            smartInsightsObserver.observe(section);
+            renderSmartInsights(data, sourceLang, targetLang);
+            const section = document.getElementById("smart-insights");
+            const btn = document.getElementById("toggle-smart-insights-btn");
+            const label = document.getElementById("toggle-smart-insights-label");
+            if (!section || !btn) return;
+            const hasAnyInsight = ["alternatives-card","breakdown-card","quality-card","context-card","regional-card"]
+                .some(id => !document.getElementById(id)?.classList.contains("hidden"));
+            section.classList.add("hidden");
+            if (label) label.textContent = "بدائل وسياق المعنى";
+            btn.classList.toggle("hidden", !hasAnyInsight);
         }
 
         function renderSmartInsights(data, sourceLang, targetLang) {
