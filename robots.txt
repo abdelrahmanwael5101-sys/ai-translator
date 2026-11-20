@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://abdelrahmanwael5101-sys.github.io/ai-translator/sitemap.xml
