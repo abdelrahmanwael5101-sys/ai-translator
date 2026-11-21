@@ -734,15 +734,15 @@
             localStorage.setItem("smart_trans_key_ver", KEY_VERSION);
         }
 
-        const GROQ_MODELS = [
-            "llama-3.1-8b-instant",
-            "llama-3.3-70b-versatile"
-        ];
+       const GROQ_MODELS = [
+    "llama-3.3-70b-versatile",
+    "openai/gpt-oss-120b"
+];
 
-        let GEMINI_MODELS = [
-            "gemini-3.8-flash",
-            "gemini-2.5-flash-lite"
-        ];
+let GEMINI_MODELS = [
+    "gemini-3.8-flash",
+    "gemini-3.5-flash-lite"
+];
 
         let lastGeminiError = "";
         let activeTranslationId = 0;
@@ -1869,27 +1869,27 @@ TEXT: """${text}"""`;
             return JSON.parse(jsonOnly);
         }
 
-        function chooseModelRoute(text, src, tgt) {
-            const clean = String(text || "").trim();
-            const ctx = inferImplicitContext(clean, src, tgt);
-            const complex =
-                clean.length > 100 ||
-                ctx.isEgyptianArabic ||
-                ctx.signals.length > 0;
+       function chooseModelRoute(text, src, tgt) {
+    const clean = String(text || "").trim();
+    const ctx = inferImplicitContext(clean, src, tgt);
+    const complex =
+        clean.length > 100 ||
+        ctx.isEgyptianArabic ||
+        ctx.signals.length > 0;
 
-            if (complex) {
-                return {
-                    mode: "context_70b_first",
-                    label: `Context-Aware (${ctx.inferredRegister})`,
-                    models: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"]
-                };
-            }
-            return {
-                mode: "fast_primary",
-                label: "Token-Saver Instant",
-                models: ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"]
-            };
-        }
+    if (complex) {
+        return {
+            mode: "context_70b_first",
+            label: `Context-Aware (${ctx.inferredRegister})`,
+            models: ["llama-3.3-70b-versatile", "openai/gpt-oss-120b"]
+        };
+    }
+    return {
+        mode: "balanced_primary",
+        label: "Groq Primary",
+        models: ["llama-3.3-70b-versatile", "openai/gpt-oss-120b"]
+    };
+}
 
         function setLoadingStage(message) {
             const el = document.getElementById("loading-status");
