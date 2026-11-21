@@ -237,6 +237,7 @@
           #dictionary-section > div > div { padding:15px !important; }
           .premium-toolbar { gap:8px; }
           .premium-toolbar button { min-height:40px; }
+          #settings-modal > div { max-height:92dvh; overflow-y:auto; }
         }
         @media (max-width:380px) {
           header .max-w-6xl { gap:5px; }
@@ -256,7 +257,7 @@
                 </div>
                 <div class="min-w-0">
                     <h1 class="text-base sm:text-xl font-bold text-slate-900 truncate leading-tight">المترجم الذكي</h1>
-                    <p class="text-[11px] text-slate-500 hidden sm:block truncate">ترجمة فورية وتحليل لغوي دقيق</p>
+                    <p class="text-[11px] text-slate-500 hidden sm:block truncate">ترجمة فورية تفهم السياق والنبرة تلقائياً</p>
                 </div>
             </div>
 
@@ -279,32 +280,14 @@
 
         <section class="mb-5 sm:mb-7 text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[11px] sm:text-xs font-bold mb-3">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>SMART TRANSLATION EXPERIENCE · V2</span>
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>SMART TRANSLATION EXPERIENCE</span>
             </div>
             <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">ترجمة ذكية تفهم المصري والإنجليزي حتى لو مش مثالي</h2>
-            <p class="mt-2 text-xs sm:text-sm text-slate-500">ترجمة تلقائية بمجرد التوقف عن الكتابة مع أوضاع ترجمة متخصصة وتحليل سياقي ولغوي متدرج</p>
+            <p class="mt-2 text-xs sm:text-sm text-slate-500">يفهم صياغة الكلام ونبرته تلقائياً ويترجم بالمعنى الطبيعي المناسب للسياق</p>
         </section>
-
-        <!-- شريط اختيار نمط الترجمة -->
-        <div class="premium-toolbar mb-4 px-3 py-2.5 flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2 text-xs font-bold text-slate-700">
-                <i data-lucide="sliders-horizontal" class="w-4 h-4 text-teal-600 shrink-0"></i>
-                <span>نمط الترجمة:</span>
-            </div>
-            <div class="flex flex-wrap items-center gap-1.5" id="translation-mode-pills" role="group" aria-label="أنماط الترجمة">
-                <button type="button" data-mode="Natural" onclick="setTranslationMode('Natural')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">طبيعية (Natural)</button>
-                <button type="button" data-mode="Literal" onclick="setTranslationMode('Literal')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">حرفية (Literal)</button>
-                <button type="button" data-mode="Formal" onclick="setTranslationMode('Formal')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">رسمية (Formal)</button>
-                <button type="button" data-mode="Casual" onclick="setTranslationMode('Casual')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">عامية (Casual)</button>
-                <button type="button" data-mode="Business" onclick="setTranslationMode('Business')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">أعمال (Business)</button>
-                <button type="button" data-mode="Academic" onclick="setTranslationMode('Academic')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">أكاديمية (Academic)</button>
-                <button type="button" data-mode="Technical" onclick="setTranslationMode('Technical')" class="mode-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all">تقنية (Technical)</button>
-            </div>
-        </div>
 
         <div class="relative flex flex-col lg:grid lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-8 items-stretch">
 
-            <!-- الصندوق الأول (Box 1) -->
             <div id="box-1-container" class="w-full min-w-0 bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col overflow-hidden focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
                 <div class="bg-slate-50/90 border-b border-slate-200 p-2.5 sm:px-3.5 sm:py-2.5 flex items-center gap-2">
                     <div class="relative flex-1 min-w-0">
@@ -351,7 +334,6 @@
                 </button>
             </div>
 
-            <!-- الصندوق الثاني (Box 2) -->
             <div id="box-2-container" class="w-full min-w-0 bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col overflow-hidden focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
                 <div class="bg-slate-50/90 border-b border-slate-200 p-2.5 sm:px-3.5 sm:py-2.5 flex items-center gap-2">
                     <div class="relative flex-1 min-w-0">
@@ -416,7 +398,6 @@
             <button type="button" onclick="toggleHistory()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سجل الترجمات <span id="history-count" class="font-en">0</span></button>
             <button type="button" onclick="togglePerformance()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سرعة الموقع</button>
         </div>
-
         <section id="performance-panel" class="hidden mt-3 bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 animate-fade-in">
             <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm">مراقبة الأداء</h3><span id="perf-route" class="text-[11px] text-slate-500">لم تبدأ عملية بعد</span></div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -427,7 +408,6 @@
             </div>
             <p class="smart-muted mt-2">الأوقات تقاس على جهازك واتصالك الحالي، وقد تختلف من طلب لآخر.</p>
         </section>
-
         <section id="history-panel" class="hidden mt-4 bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 animate-fade-in">
             <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm">آخر الترجمات</h3><button type="button" onclick="clearHistory()" class="text-xs text-red-500 hover:text-red-700">مسح السجل</button></div>
             <div id="history-list" class="space-y-2"></div>
@@ -736,7 +716,7 @@
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
             <p>مدعوم بـ <strong class="text-blue-600">Cloudflare Worker</strong> مع <strong class="text-slate-700">Groq</strong> و <strong class="text-slate-700">Google Gemini</strong></p>
-            <p>المترجم الذكي والقاموس التفاعلي · v7 (Engine V2)</p>
+            <p>المترجم الذكي والقاموس التفاعلي · v7.2</p>
         </div>
     </footer>
 
@@ -745,56 +725,20 @@
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const TRANSLATION_MODES = {
-            Natural: {
-                label: "Natural",
-                arLabel: "طبيعية",
-                instruction: "Produce fluent, idiomatic, native-sounding language that fits natural everyday or editorial usage without literal calques."
-            },
-            Literal: {
-                label: "Literal",
-                arLabel: "حرفية",
-                instruction: "Stay closely faithful to the source wording and clause order where grammatical in the target language, while still remaining intelligible and avoiding obvious gibberish."
-            },
-            Formal: {
-                label: "Formal",
-                arLabel: "رسمية",
-                instruction: "Use polished, respectful, formal phrasing suitable for official correspondence, polite communication, or formal prose; avoid slang and colloquialisms."
-            },
-            Casual: {
-                label: "Casual",
-                arLabel: "عامية",
-                instruction: "Use relaxed, natural spoken phrasing appropriate for friendly everyday conversation (including natural Egyptian colloquial Arabic or natural conversational English where fitting)."
-            },
-            Business: {
-                label: "Business",
-                arLabel: "أعمال",
-                instruction: "Use clear, concise, credible workplace and business communication phrasing appropriate for emails, stakeholders, product discussions, and negotiations."
-            },
-            Academic: {
-                label: "Academic",
-                arLabel: "أكاديمية",
-                instruction: "Use objective, precise, scholarly register suitable for academic papers, research summaries, and educational explanations."
-            },
-            Technical: {
-                label: "Technical",
-                arLabel: "تقنية",
-                instruction: "Prioritize accurate domain, engineering, software, scientific, or specialized terminology while keeping explanations and sentences clear and unambiguous."
-            }
-        };
-
-        const KEY_VERSION = "v2_modes_pipeline_cache";
+        const KEY_VERSION = "v18_implicit_context_v2";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
+            localStorage.removeItem("smart_trans_cache");
+            localStorage.removeItem("smart_trans_knowledge_cache");
             localStorage.setItem("smart_trans_key_ver", KEY_VERSION);
         }
 
         const GROQ_MODELS = [
-            "llama-3.3-70b-versatile",
-            "openai/gpt-oss-120b",
             "llama-3.1-8b-instant",
-            "openai/gpt-oss-20b"
+            "llama-3.3-70b-versatile",
+            "openai/gpt-oss-20b",
+            "openai/gpt-oss-120b"
         ];
 
         let GEMINI_MODELS = [
@@ -813,7 +757,7 @@
         const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
         const KNOWLEDGE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
         const IDB_NAME = "smart-translator-db";
-        const IDB_VERSION = 1;
+        const IDB_VERSION = 2;
         let idbPromise = null;
         let translationHistory = [];
         let latestTranslationText = "";
@@ -845,10 +789,7 @@
             if (showMessage) showAlert("تم إلغاء عملية الترجمة.");
         }
 
-        function cacheKey(text, src, tgt, mode = "Natural") {
-            return [mode, src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::");
-        }
-
+        function cacheKey(text, src, tgt) { return [src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::"); }
         function openTranslatorDB() {
             if (!('indexedDB' in window)) return Promise.resolve(null);
             if (idbPromise) return idbPromise;
@@ -966,6 +907,59 @@
             return { normalizedQuery: normalized, tokens: tokens.slice(0,25), candidateLemmas: lemmas, phraseCandidates: phrases, phraseFirst: true, note:"Hints only: AI must confirm meaning from full context; do not treat heuristic lemmas as facts." };
         }
 
+        // استنتاج أسلوب ونبرة وسياق الكلام تلقائياً في الخلفية بدون أي اختيار يدوي من المستخدم
+        function inferImplicitContext(text, src, tgt) {
+            const raw = String(text || "").trim();
+            const norm = normalizeLookupText(raw);
+            const signals = [];
+
+            const hasEgyptianMarkers =
+                /\b(مش|عشان|دلوقتي|عايز|عاوز|عندي|عنده|عندنا|ازيك|إزيك|عامل ايه|عامل إيه|بتاع|بتاعة|بتوع|ايه|إيه|ليه|فين|كده|كدا|قوي|أوي|خالص|مفيش|مافيش|بلاش|يلا|خلاص|معلش|معلشي|حاجة|حاجات|واحد|واحدة|الواد|البنت|الدنيا|دماغي|طايق|موتني|فكك|مستاهلة|هنجيب اخرنا|على الله)\b/.test(norm) ||
+                /(?:^|\s)(ب|هـ|هن|هت)(روح|اجي|أجي|شوف|قول|عمل|اخد|آخد|ابعت|أبعت|كلم|فهم|عرف)(?:\s|$|[؟!])/i.test(norm);
+
+            const hasSlangOrCasual =
+                hasEgyptianMarkers ||
+                /\b(gonna|wanna|gotta|kinda|sorta|dunno|idk|btw|lol|lmao|bro|dude|hang out|chill|rip off|pulling my leg|under the weather|piece of cake|no way|whatever)\b/i.test(raw);
+
+            const hasTechnicalMarkers =
+                /\b(api|sdk|json|sql|database|server|worker|latency|cache|endpoint|webhook|token|auth|oauth|docker|kubernetes|deployment|bug|commit|branch|frontend|backend|algorithm|neural|model|llm|prompt|css|html|javascript|typescript|react)\b/i.test(raw) ||
+                /[{}[\]<>]=|\/api\/|https?:\/\//i.test(raw);
+
+            const hasAcademicOrFormalMarkers =
+                /\b(therefore|furthermore|moreover|consequently|nevertheless|hypothesis|methodology|empirical|correlation|framework|paradigm|analysis|evaluation|propose|demonstrate|regarding|pursuant|hereby|sincerely|respectfully)\b/i.test(raw) ||
+                /\b(بناءً على|علاوة على ذلك|من ناحية أخرى|في ضوء|يهدف البحث|المنهجية|الفرضية|الدراسة|المؤسسة|المحترم|السادة)\b/.test(norm);
+
+            const hasBusinessMarkers =
+                /\b(deadline|invoice|contract|stakeholder|kpi|roi|quarterly|meeting|schedule|budget|client|vendor|proposal|deliverable|onboarding|escalate|follow up)\b/i.test(raw) ||
+                /\b(اجتماع|موعد نهائي|ميزانية|عميل|عقد|فاتورة|عرض سعر|خطة عمل|تقرير|إدارة|مبيعات)\b/.test(norm);
+
+            let inferredRegister = "Natural Contextual";
+            if (hasTechnicalMarkers) {
+                inferredRegister = "Technical / Domain-Accurate";
+                signals.push("technical or software/domain phrasing");
+            } else if (hasAcademicOrFormalMarkers) {
+                inferredRegister = "Formal / Academic";
+                signals.push("formal or academic phrasing");
+            } else if (hasBusinessMarkers) {
+                inferredRegister = "Business / Professional";
+                signals.push("workplace or business phrasing");
+            } else if (hasSlangOrCasual) {
+                inferredRegister = hasEgyptianMarkers ? "Egyptian Colloquial / Natural Conversational" : "Conversational / Idiomatic";
+                if (hasEgyptianMarkers) signals.push("Egyptian Arabic dialect cues");
+                else signals.push("casual or idiomatic phrasing");
+            }
+
+            if (/[؟?!]/.test(raw)) signals.push("interactive/emotive punctuation");
+            if (raw.length > 180) signals.push("multi-clause/long-form text");
+
+            return {
+                inferredRegister,
+                isEgyptianArabic: hasEgyptianMarkers && (src === "ar" || /[\u0600-\u06FF]/.test(raw)),
+                signals,
+                instruction: "Adapt wording, tone, and phrasing naturally to match the speaker's actual phrasing, intent, and context automatically without forcing a single rigid style."
+            };
+        }
+
         function cleanKnowledgePayload(payload) {
             if (!payload || typeof payload !== "object") return null;
             const raw = payload.data ?? payload.knowledge ?? payload.results ?? payload;
@@ -1018,7 +1012,7 @@
             translationHistory.unshift(entry);
             translationHistory = translationHistory.slice(0, 50);
             try { localStorage.setItem("smart_trans_history", JSON.stringify(translationHistory)); } catch (_) {}
-            idbPut("history", { id: `${entry.time}::${entry.source}::${entry.target}::${entry.mode || "Natural"}`, item: entry });
+            idbPut("history", { id: `${entry.time}::${entry.source}::${entry.target}`, item: entry });
             renderHistory();
         }
         function renderHistory() {
@@ -1032,9 +1026,9 @@
                 const row = document.createElement("div"); row.className = "history-item flex items-center gap-2 p-2.5 rounded-xl border border-slate-100 bg-slate-50";
                 const body = document.createElement("button"); body.type="button"; body.className="min-w-0 flex-1 text-right";
                 const a=document.createElement("span"); a.className="block text-xs font-bold text-slate-700 truncate"; a.textContent=item.input;
-                const b=document.createElement("span"); b.className="block text-xs text-slate-500 truncate mt-1"; b.textContent=`[${item.mode || "Natural"}] ${item.translation}`;
-                body.append(a,b); body.onclick=()=>{ if (item.mode) setTranslationMode(item.mode, false); document.getElementById("box1-text").value=item.input; onBoxInput(1, false); document.getElementById("box2-text").value=item.translation; onBoxInput(2, false); state.activeInputBox=1; };
-                const copy=document.createElement("button"); copy.type="button"; copy.className="text-xs text-blue-600 px-2"; copy.textContent="نسخ"; copy.onclick=()=>copyPlainString(item.translation);
+                const b=document.createElement("span"); b.className="block text-xs text-slate-500 truncate mt-1"; b.textContent=item.translation;
+                body.append(a,b); body.onclick=()=>{ document.getElementById("box1-text").value=item.input; onBoxInput(1, false); document.getElementById("box2-text").value=item.translation; onBoxInput(2, false); state.activeInputBox=1; };
+                const copy=document.createElement("button"); copy.type="button"; copy.className="text-xs text-blue-600 px-2"; copy.textContent="نسخ"; copy.onclick=()=>navigator.clipboard?.writeText(item.translation);
                 row.append(body,copy); list.appendChild(row);
             });
         }
@@ -1050,7 +1044,6 @@
 
         let state = {
             activeInputBox: 1,
-            mode: "Natural",
             box1: { selectedLang: "ar", detectedLang: null, manualOverride: false },
             box2: { selectedLang: "en-US", detectedLang: null, manualOverride: false },
             currentDictLang: "en-US",
@@ -1059,30 +1052,6 @@
             groqKey: "",
             knowledgeEndpoint: ""
         };
-
-        function renderModePills() {
-            document.querySelectorAll("#translation-mode-pills .mode-pill").forEach(btn => {
-                const modeKey = btn.getAttribute("data-mode");
-                const active = modeKey === state.mode;
-                btn.className = active
-                    ? "mode-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-2xs transition-all cursor-pointer"
-                    : "mode-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-700 border border-slate-200/80 transition-all cursor-pointer";
-            });
-        }
-
-        function setTranslationMode(modeName, shouldRecompute = true) {
-            if (!TRANSLATION_MODES[modeName]) return;
-            state.mode = modeName;
-            try { localStorage.setItem("smart_trans_mode", modeName); } catch (_) {}
-            renderModePills();
-            lastPreparedPayload = null;
-            lastRenderedSignature = "";
-            if (!shouldRecompute) return;
-            const activeText = (document.getElementById(`box${state.activeInputBox}-text`)?.value || "").trim();
-            if (activeText) {
-                executeTranslation({ manualTrigger: false, autoTriggered: true });
-            }
-        }
 
         const TOP_10_LANGUAGES = [
             { code: "ar", name: "العربية (Arabic)", shortName: "العربية", dir: "rtl" },
@@ -1157,9 +1126,7 @@
             lucide.createIcons();
             applySavedTheme();
             applySavedFocusMode();
-            const savedMode = localStorage.getItem("smart_trans_mode");
-            if (savedMode && TRANSLATION_MODES[savedMode]) state.mode = savedMode;
-            renderModePills();
+            localStorage.removeItem("smart_trans_style");
             loadCache();
             try { translationHistory = JSON.parse(localStorage.getItem("smart_trans_history") || "[]"); } catch (_) { translationHistory=[]; }
             renderHistory();
@@ -1172,7 +1139,7 @@
             document.addEventListener("keydown",e=>{
                 if(e.key==="Escape" && (activeControllers.length || activeRequestSignature)) cancelActiveTranslation(true);
                 if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="h"){e.preventDefault();toggleHistory();}
-                if((e.ctrlKey||e.metaKey)&&e.altKey&&e.key.toLowerCase()==="c"){e.preventDefault();const out=document.getElementById("box2-text").value;if(out)copyPlainString(out);}
+                if((e.ctrlKey||e.metaKey)&&e.altKey&&e.key.toLowerCase()==="c"){e.preventDefault();const out=document.getElementById("box2-text").value;if(out)navigator.clipboard?.writeText(out);}
             });
             populateLanguageSelect("box1-lang-select", state.box1.selectedLang);
             populateLanguageSelect("box2-lang-select", state.box2.selectedLang);
@@ -1460,8 +1427,6 @@
             const boxState = boxNum === 1 ? state.box1 : state.box2;
             boxState.selectedLang = select.value;
             boxState.manualOverride = true;
-            lastPreparedPayload = null;
-            lastRenderedSignature = "";
 
             const textarea = document.getElementById(`box${boxNum}-text`);
             const trimmed = textarea.value.trim();
@@ -1618,108 +1583,105 @@
             document.getElementById("box2-phonetics-row").classList.add("hidden");
 
             document.getElementById("box1-char-count").textContent = `${t1.value.length} / 2000`;
+            document.getElementById("box2-char-count") && (document.getElementById("box2-char-count").textContent = `${t2.value.length} / 2000`);
             document.getElementById("box1-clear-btn").classList.toggle("hidden", t1.value.trim().length === 0);
             document.getElementById("box2-clear-btn").classList.toggle("hidden", t2.value.trim().length === 0);
-            lastPreparedPayload = null;
-            lastRenderedSignature = "";
             if (t1.value.trim()) scheduleAutoTranslate(1);
         }
 
-        async function copyPlainString(text) {
-            if (!text) return false;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                try {
-                    await navigator.clipboard.writeText(text);
-                    return true;
-                } catch (_) {}
-            }
+        function copyBoxText(elementId, btnElement) {
+            const el = document.getElementById(elementId);
+            const textToCopy = el.value;
+            if (!textToCopy || textToCopy.trim() === "") return;
+
             const tempTextarea = document.createElement("textarea");
-            tempTextarea.value = text;
+            tempTextarea.value = textToCopy;
             document.body.appendChild(tempTextarea);
             tempTextarea.select();
             try {
-                return document.execCommand("copy");
-            } catch (_) {
-                return false;
+                document.execCommand("copy");
+                const originalHTML = btnElement.innerHTML;
+                btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">Copied!</span>`;
+                btnElement.classList.add("border-emerald-300", "bg-emerald-50");
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    btnElement.innerHTML = originalHTML;
+                    btnElement.classList.remove("border-emerald-300", "bg-emerald-50");
+                    lucide.createIcons();
+                }, 1500);
+            } catch (err) {
+                console.error("Copy failed", err);
             } finally {
                 document.body.removeChild(tempTextarea);
             }
         }
 
-        async function copyBoxText(elementId, btnElement) {
-            const el = document.getElementById(elementId);
-            const textToCopy = el?.value || "";
-            if (!textToCopy.trim()) return;
-            const ok = await copyPlainString(textToCopy);
-            if (!ok || !btnElement) return;
-            const originalHTML = btnElement.innerHTML;
-            btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">Copied!</span>`;
-            btnElement.classList.add("border-emerald-300", "bg-emerald-50");
-            lucide.createIcons();
-            setTimeout(() => {
-                btnElement.innerHTML = originalHTML;
-                btnElement.classList.remove("border-emerald-300", "bg-emerald-50");
-                lucide.createIcons();
-            }, 1500);
-        }
-
-        function buildUnifiedPrompt(text, effectiveSrcLang, effectiveTgtLang, modeName = "Natural", knowledgeContext = null, lexicalHints = null) {
+        function buildUnifiedPrompt(text, effectiveSrcLang, effectiveTgtLang, knowledgeContext = null, lexicalHints = null) {
             const isEnToEn = effectiveSrcLang.startsWith("en") && effectiveTgtLang.startsWith("en");
-            const modeConfig = TRANSLATION_MODES[modeName] || TRANSLATION_MODES.Natural;
+            const implicitCtx = inferImplicitContext(text, effectiveSrcLang, effectiveTgtLang);
 
             const verbatimRule = isEnToEn
                 ? `ENGLISH-TO-ENGLISH DICTIONARY MODE:
-- Treat the input as a dictionary lookup or style reformulation, not a translation into another language.
+- Treat the input as a dictionary lookup, not a translation into another language.
 - Keep the headword or phrase as the main result. Explain its meaning in clear, concise, original English.
 - Include part of speech, useful pronunciation, common usage, and natural example sentences.
-- Do NOT claim that definitions or examples are copied from Oxford unless verified Oxford API data is actually supplied to you. Never invent a source citation.
-- Prefer standard British English by default when British is selected, or standard US English when US is selected, noting differences when relevant.`
-                : `CONTEXT-AWARE TRANSLATION MODE (STAGED PIPELINE):
-- Stage A (Input Analysis): Detect source intent, Egyptian colloquial Arabic vs. MSA vs. English register, idioms, phrasal verbs, sarcasm, humor, named entities, numbers, and imperfect/typo-ridden grammar.
-- Stage B (Context Understanding): Resolve intended meaning from the full sentence/paragraph before translating individual words. Never invent facts not present in the source.
-- Stage C (Style-Applied Translation): Apply the selected translation mode ("${modeConfig.label}"): ${modeConfig.instruction}
-  * For Egyptian Arabic ↔ English: convey natural Egyptian pragmatic tone (e.g. "أنا مش طايق نفسي", "إنت موتني من الضحك", "خليك في حالك", "He is pulling my leg", "I'm feeling under the weather", "That's a bit rich coming from you") naturally without forced or awkward idioms when plain natural phrasing is clearer.
-- Stage D (Quality Review & Controlled Repair): Check semantic fidelity, omissions, hallucinations, grammar, tone, and mode alignment; if flawed, produce the corrected version directly in "translation".
-- Preserve names, numbers, dates, technical terms, and paragraph structure.
-- Return 2–3 useful alternative translations with labels, sentence breakdown only when the input is multi-word or a sentence, a concise quality_check summary, context_note, naturalness label, and British/American differences only when English is involved and a real difference exists.`;
+- Do NOT claim that definitions or examples are copied from Oxford unless verified Oxford API data is actually supplied to you. Never invent a source citation. When official Oxford data is unavailable, write original explanations and examples instead of pretending they came from Oxford.
+- Prefer standard British English by default, while noting common US differences when relevant.
+- If verified Oxford dictionary data is included in the retrieved context, prioritize its sense structure, pronunciation, labels, and lexical facts. Clearly distinguish retrieved Oxford facts from your own explanation. Do not invent Oxford content if no verified Oxford data is present.`
+                : `CONTEXT- & PHRASING-AWARE TRANSLATION MODE:
+- Automatically infer the speaker's phrasing, register, tone, dialect (especially Egyptian Arabic), sarcasm/humor, or technical/business/academic context from the text itself.
+- Translate the intended meaning and emotional/pragmatic tone naturally into the target language, not literal word-for-word equivalents.
+- If the input is written in formal, academic, business, or technical phrasing, reflect that appropriate level in the target language; if it is written in casual/Egyptian colloquial phrasing or slang, translate into natural everyday speech that matches the real meaning without sounding stiff or robotic.
+- Preserve names, numbers, dates, technical terms, facts, intent, and politeness. Never add or remove information.
+- If the input is ambiguous, choose the most likely meaning in context and briefly note the ambiguity if relevant.
+- Recognize idioms, phrasal verbs, and multi-word expressions BEFORE translating individual words.
+- Treat lemma and phrase candidates as search hints only; verify every candidate against grammar and the full sentence. Never let simplistic suffix rules override context.
+- Give a concise, original definition and 2 natural example sentences with translations.
+- Return 2–3 useful alternative translations reflecting different natural phrasings, sentence breakdown when appropriate, a transparent quality check, context note, naturalness label, and British/American differences when relevant.
+- Do not invent numeric confidence scores, frequency rankings, regional differences, or dictionary citations. Show British/American differences only when English is involved and a meaningful difference exists; otherwise leave those fields empty.`;
 
-            return `You are an elite bilingual lexicographer, translation specialist, and quality reviewer.
+            return `You are an elite context-aware translation engine and bilingual lexicographer.
 
-SELECTED TRANSLATION MODE: ${modeConfig.label} (${modeConfig.arLabel})
-MODE RULE: ${modeConfig.instruction}
+AUTOMATIC CONTEXT & PHRASING ANALYSIS (INFERRED FROM INPUT):
+- Detected Phrasing / Register: ${implicitCtx.inferredRegister}
+- Egyptian Arabic Detected: ${implicitCtx.isEgyptianArabic ? "Yes" : "No"}
+- Phrasing Signals: ${implicitCtx.signals.length ? implicitCtx.signals.join(", ") : "general text"}
+- Rule: ${implicitCtx.instruction}
+
 - Source Language: ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang})
 - Target Language: ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang})
 
 ${verbatimRule}
 
-IDIOM / EXPRESSION RULE:
-- Understand the intended meaning first (including Egyptian Arabic expressions, slang, typos, and English idioms/phrasal verbs).
-- Only set "idiom.has_idiom": true when a genuine idiom or a natural, widely-used idiomatic equivalent in ${getLangObj(effectiveTgtLang).name} genuinely fits the meaning and selected mode (avoiding idioms in strictly Literal/Academic/Technical modes unless genuinely idiomatic and relevant). Never invent an idiom just to fill the field.
-- If "idiom.has_idiom" is true, provide "phrase", "meaning" (in ${getLangObj(effectiveSrcLang).name}), and 2 examples; otherwise set "has_idiom": false, "phrase": "", "meaning": "", "examples": [].
+IDIOM / EXPRESSION RULE (MANDATORY SEMANTIC EQUIVALENCE CHECK — NEVER SKIP):
+- Understand the intended meaning first—including Egyptian Arabic expressions (such as "أنا مش طايق نفسي", "إنت موتني من الضحك", "خليك في حالك", "مكبر دماغي", "هنجيب آخرنا"), idioms, phrasal verbs, sarcasm, and implied intent—then find a natural equivalent in the TARGET language when one fits.
+- Do not translate idioms or emotional expressions literally if a native speaker would express the meaning naturally.
+- If a genuine idiom OR a strong, widely-used idiomatic equivalent exists, set "has_idiom": true and populate "idiom"; otherwise set "has_idiom": false with empty "phrase"/"meaning" and "examples": [].
 
-ADVANCED LEXICAL FIELDS:
-1. "transcription": Phonetic respelling or Latin transliteration guide of the translated text/word.
-2. "ipa": Standard IPA transcription between slashes (provide US and UK when helpful for English).
-2b. "ipa_symbols": Array of objects [{"symbol": "/.../", "example": "..."}].
-3. "cefr_level": "A1", "A2", "B1", "B2", "C1", or "C2".
-4. "collocations": Array of 3 to 4 natural collocations/combinations.
-5. "word_family": Array of 2 to 4 morphologically accurate forms with part of speech in parentheses (do not use simplistic suffix stripping).
-6. "grammar_patterns": Array of 2 to 4 grammatical structures/patterns.
-7. "frequency": Concise usage frequency description.
-8. "register": Style/formality/register description matching the requested mode ("${modeConfig.label}").
-9. "related_words": Array of 3 to 4 related words/expressions in ${getLangObj(effectiveTgtLang).name}.
-10. "etymology": Concise origin/etymology note.
+ADVANCED LEXICAL FIELDS (REQUIRED FOR THE TRANSLATED WORD/PHRASE):
+1. "transcription": Phonetic respelling or Latin transliteration guide of the translated word/phrase.
+2. "ipa": Standard International Phonetic Alphabet transcription between slashes when applicable.
+2b. "ipa_symbols": Array of objects breaking down key IPA phonetic symbols when applicable (e.g., [{"symbol": "/ɪ/", "example": "kit"}]).
+3. "cefr_level": Standard CEFR proficiency level tag ("A1", "A2", "B1", "B2", "C1", or "C2").
+4. "collocations": Array of 3 to 4 common natural collocations/word combinations in ${getLangObj(effectiveTgtLang).name}.
+5. "word_family": Array of 2 to 4 morphological forms of the word with their part of speech in parentheses.
+6. "grammar_patterns": Array of 2 to 4 common grammatical structures/patterns.
+7. "frequency": Concise description of how common/frequent the expression/word is.
+8. "register": Style and formality level inferred from context (e.g., "Conversational / Egyptian Colloquial", "Formal / Professional", "Neutral / Natural").
+9. "related_words": Array of 3 to 4 thematically or semantically related words/expressions in ${getLangObj(effectiveTgtLang).name}.
+10. "etymology": Concise, accurate historical origin or root note.
 
 STRICT SCHEMA RULES:
-- "part_of_speech": MUST be in English (e.g., "Noun", "Verb", "Adjective", "Adverb", "Phrase", "Idiom", "Sentence").
-- "synonyms": Array of 3 to 5 accurate synonyms in ${getLangObj(effectiveTgtLang).name}.
-- "antonyms": Array of 3 to 5 accurate antonyms in ${getLangObj(effectiveTgtLang).name}.
+- "part_of_speech": MUST ALWAYS be written in English (e.g., "Noun", "Verb", "Adjective", "Adverb", "Phrase", "Idiom", "Sentence").
+- "synonyms": Array of 3 to 5 accurate synonyms/equivalents in ${getLangObj(effectiveTgtLang).name}.
+- "antonyms": Array of 3 to 5 accurate antonyms/opposites in ${getLangObj(effectiveTgtLang).name}.
 - Return ONLY a valid raw JSON object (no markdown fences, no commentary) matching this exact structure:
 {
   "detected_source_code": "${effectiveSrcLang}",
   "detected_source_name": "${getLangObj(effectiveSrcLang).name}",
   "resolved_target_code": "${effectiveTgtLang}",
-  "translation_mode": "${modeConfig.label}",
+  "inferred_style": "${implicitCtx.inferredRegister}",
   "translation": "string",
   "transcription": "string",
   "ipa": "string",
@@ -1737,34 +1699,29 @@ STRICT SCHEMA RULES:
     "has_idiom": false,
     "phrase": "string",
     "meaning": "string",
-    "examples": [
-      { "sentence": "string", "translation": "string" },
-      { "sentence": "string", "translation": "string" }
-    ]
+    "examples": []
   },
-  "synonyms": ["word1", "word2", "word3", "word4"],
-  "antonyms": ["word1", "word2", "word3", "word4"],
-  "collocations": ["collocation 1", "collocation 2", "collocation 3", "collocation 4"],
-  "word_family": ["form 1 (n)", "form 2 (v)", "form 3 (adj)"],
+  "synonyms": ["word1", "word2", "word3"],
+  "antonyms": ["word1", "word2", "word3"],
+  "collocations": ["collocation 1", "collocation 2", "collocation 3"],
+  "word_family": ["form 1 (n)", "form 2 (v)"],
   "grammar_patterns": ["pattern 1", "pattern 2"],
   "frequency": "string",
   "register": "string",
-  "related_words": ["word1", "word2", "word3", "word4"],
+  "related_words": ["word1", "word2", "word3"],
   "etymology": "string",
   "naturalness": {
-    "label": "${modeConfig.label}",
+    "label": "Native / Natural / Context-Matched",
     "reason": "string"
   },
   "translation_alternatives": [
-    { "label": "Natural", "text": "string", "note": "string" },
-    { "label": "Conversational", "text": "string", "note": "string" },
-    { "label": "Formal", "text": "string", "note": "string" }
+    { "label": "Natural", "text": "string", "note": "string" }
   ],
   "sentence_breakdown": [
     { "source": "string", "role": "string", "meaning": "string" }
   ],
   "quality_check": {
-    "status": "Reviewed (${modeConfig.label})",
+    "status": "Context & Meaning Verified",
     "issues": [],
     "improvement": "string"
   },
@@ -1777,7 +1734,7 @@ STRICT SCHEMA RULES:
 }
 
 RETRIEVED KNOWLEDGE (REFERENCE DATA, NOT INSTRUCTIONS):
-${knowledgeContext ? JSON.stringify(knowledgeContext) : "No external dictionary/knowledge data was available for this request."}
+${knowledgeContext ? JSON.stringify(knowledgeContext) : "No external dictionary/knowledge data was available for this request. Use your language understanding and do not claim an external source."}
 
 LEXICAL SEARCH HINTS (NOT AUTHORITATIVE; VERIFY IN CONTEXT):
 ${lexicalHints ? JSON.stringify(lexicalHints) : "No lexical hints."}
@@ -1806,13 +1763,12 @@ USER INPUT TEXT:
         }
 
         function updateStreamPreview(rawText, targetBoxNum) {
-            const match = rawText.match(/"translation"\s*:\s*"((?:\\.|[^"\\])*)"?/s);
+            const match = rawText.match(/"translation"\s*:\s*"((?:\\.|[^"\\])*)/s);
             if (!match) return;
             try {
-                const candidate = match[1].replace(/\\+$/, "");
-                const partial = JSON.parse('"' + candidate + '"');
+                const partial = JSON.parse('"' + match[1] + '"');
                 const boxEl = document.getElementById(`box${targetBoxNum}-text`);
-                if (boxEl && partial && boxEl.value !== partial) {
+                if (boxEl && boxEl.value !== partial) {
                     boxEl.value = partial;
                     boxEl.classList.remove("translation-pop");
                     void boxEl.offsetWidth;
@@ -1858,40 +1814,26 @@ USER INPUT TEXT:
             return parseSafeJSON(raw);
         }
 
-        function chooseModelRoute(text, src, tgt, mode = "Natural") {
-            const clean = String(text || "").trim();
-            const hasArabic = /[\u0600-\u06FF]/.test(clean);
-            const highPrecisionMode = ["Formal", "Business", "Academic", "Technical"].includes(mode);
-            const complex = clean.length > 90 || /[؟?!;:]/.test(clean) || highPrecisionMode || (hasArabic && /\s/.test(clean));
-            const models = complex
-                ? ["llama-3.3-70b-versatile", "openai/gpt-oss-120b", "llama-3.1-8b-instant"]
-                : ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"];
-            return {
-                mode: complex ? "quality_context" : "fast_primary",
-                label: `${mode} · ${complex ? "70B/120B Context" : "Instant Primary"}`,
-                models
-            };
-        }
-
-        async function callWorkerGroqStream(prompt, route, mode, signal, onText) {
+        async function callWorkerGroqStream(prompt, signal, onText, route = null) {
             const baseUrl = getWorkerBaseUrl();
+            const modelsToTry = Array.isArray(route?.models) && route.models.length ? route.models : GROQ_MODELS;
             let lastErr = null;
-            const candidateModels = route?.models || GROQ_MODELS;
-            for (const modelName of candidateModels) {
+            for (const modelName of modelsToTry) {
                 if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
                 try {
                     const response = await fetch(`${baseUrl}/api/groq`, {
                         method: "POST",
                         signal,
                         headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
-                        body: JSON.stringify({ model: modelName, mode, prompt })
+                        body: JSON.stringify({ model: modelName, prompt })
                     });
                     if (!response.ok) {
-                        const errBody = (await response.text()).slice(0, 250);
+                        const errBody = (await response.text()).slice(0, 300);
                         throw new Error(`Worker Groq (${modelName}) HTTP ${response.status}: ${errBody}`);
                     }
                     const parsed = await readSSE(response, onText, "groq", signal);
-                    return { data: parsed, modelUsed: modelName, provider: "groq" };
+                    const actualModel = response.headers.get("X-Model-Used") || modelName;
+                    return { data: parsed, modelUsed: actualModel, provider: "groq" };
                 } catch (err) {
                     lastErr = err;
                     if (err.name === "AbortError") throw err;
@@ -1900,7 +1842,7 @@ USER INPUT TEXT:
             throw lastErr || new Error("Groq via Worker failed");
         }
 
-        async function callWorkerGeminiStream(prompt, mode, signal, onText) {
+        async function callWorkerGeminiStream(prompt, signal, onText) {
             const baseUrl = getWorkerBaseUrl();
             let lastErr = null;
             for (const modelName of GEMINI_MODELS) {
@@ -1910,10 +1852,10 @@ USER INPUT TEXT:
                         method: "POST",
                         signal,
                         headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
-                        body: JSON.stringify({ model: modelName, mode, prompt })
+                        body: JSON.stringify({ model: modelName, prompt })
                     });
                     if (!response.ok) {
-                        const errBody = (await response.text()).slice(0, 250);
+                        const errBody = (await response.text()).slice(0, 300);
                         throw new Error(`Worker Gemini (${modelName}) HTTP ${response.status}: ${errBody}`);
                     }
                     const parsed = await readSSE(response, onText, "gemini", signal);
@@ -1966,18 +1908,19 @@ USER INPUT TEXT:
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
                 body: JSON.stringify({ model: modelName, temperature: 0.15, stream: false, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
             });
-            if (!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0, 250)}`);
+            if (!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
             const json = await response.json();
             const text = json?.choices?.[0]?.message?.content || "";
             if (text) onText?.(text);
             return parseSafeJSON(text);
         }
 
-        async function callDirectGroqAPI(prompt, signal, onText) {
+        async function callDirectGroqAPI(prompt, signal, onText, route = null) {
             const apiKey = state.groqKey.trim();
             if (!apiKey) throw new Error("Missing local Groq API Key");
+            const modelsToTry = Array.isArray(route?.models) && route.models.length ? route.models : GROQ_MODELS;
             let lastError = null;
-            for (const modelName of GROQ_MODELS) {
+            for (const modelName of modelsToTry) {
                 if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
                 try {
                     const result = await callDirectGroqWithModel(prompt, modelName, apiKey, signal, onText);
@@ -2000,6 +1943,32 @@ USER INPUT TEXT:
             return JSON.parse(jsonOnly);
         }
 
+        function chooseModelRoute(text, src, tgt) {
+            const clean = String(text || "").trim();
+            const ctx = inferImplicitContext(clean, src, tgt);
+            const complex =
+                clean.length > 90 ||
+                /[؟?!;:]/.test(clean) ||
+                ctx.isEgyptianArabic ||
+                ctx.signals.length > 0 ||
+                /\b(although|unless|whereas|provided that|in spite of|figure out|break down|give up|look forward|piece of cake|under the weather)\b/i.test(clean);
+
+            if (complex) {
+                return {
+                    mode: "context_70b_first",
+                    label: `Context-Aware (${ctx.inferredRegister}) · 70B → Fast → Gemini`,
+                    models: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "openai/gpt-oss-120b"],
+                    parallel: true
+                };
+            }
+            return {
+                mode: "fast_primary",
+                label: "Instant · 8B → 70B → Gemini",
+                models: ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"],
+                parallel: false
+            };
+        }
+
         function setLoadingStage(message) {
             const el = document.getElementById("loading-status");
             if (el) el.textContent = message;
@@ -2020,7 +1989,6 @@ USER INPUT TEXT:
         async function executeTranslation(options = {}) {
             const manualTrigger = options.manualTrigger !== false;
             const autoTriggered = Boolean(options.autoTriggered);
-            const currentMode = state.mode || "Natural";
 
             let srcNum = state.activeInputBox, tgtNum = srcNum === 1 ? 2 : 1;
             let srcTextarea = document.getElementById(`box${srcNum}-text`), inputText = srcTextarea.value.trim();
@@ -2043,8 +2011,8 @@ USER INPUT TEXT:
             const tgtState = tgtNum === 1 ? state.box1 : state.box2;
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
-            const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang, currentMode);
-            const cacheId = signature + "::v2";
+            const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
+            const cacheId = signature + "::implicit-ctx-v2";
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
@@ -2077,8 +2045,8 @@ USER INPUT TEXT:
             const cached = await getCachedTranslation(cacheId);
             if (requestId !== activeTranslationId) return;
             if (cached) {
-                updateEngineBadge(`Cache (${currentMode})`, false);
-                updatePerformance({ total: performance.now() - totalStart, knowledge: 0, ai: 0, source: cached.source, route: `${currentMode} · Cache hit` });
+                updateEngineBadge("Cache (instant)", false);
+                updatePerformance({ total: performance.now() - totalStart, knowledge: 0, ai: 0, source: cached.source, route: "Cache hit" });
                 activeRequestSignature = "";
                 setLoading(false);
                 lastPreparedPayload = { signature, data: cached.data };
@@ -2098,17 +2066,17 @@ USER INPUT TEXT:
             }
 
             setLoading(true);
-            setLoadingStage(autoTriggered ? `ترجمة تلقائية (${currentMode})...` : `تحليل السياق وتجهيز ترجمة ${currentMode}...`);
+            setLoadingStage(autoTriggered ? "فهم السياق والترجمة التلقائية..." : "تحليل صياغة الكلام وتجهيز الترجمة الطبيعية...");
             const knowledgeStart = performance.now();
             const lexicalHints = buildLexicalHints(inputText, effectiveSrcLang, effectiveTgtLang);
             const knowledgeContext = await retrieveKnowledgeContext(inputText, effectiveSrcLang, effectiveTgtLang, requestId);
             const knowledgeMs = performance.now() - knowledgeStart;
             if (requestId !== activeTranslationId) return;
 
-            const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, currentMode, knowledgeContext, lexicalHints);
+            const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, knowledgeContext, lexicalHints);
             const controller = new AbortController();
             activeControllers = [controller];
-            const route = chooseModelRoute(inputText, effectiveSrcLang, effectiveTgtLang, currentMode);
+            const route = chooseModelRoute(inputText, effectiveSrcLang, effectiveTgtLang);
             activeStreamOwner = null;
 
             const onStreamText = (raw) => {
@@ -2121,19 +2089,19 @@ USER INPUT TEXT:
                 let winner = null;
                 if (hasWorker) {
                     try {
-                        winner = await callWorkerGroqStream(prompt, route, currentMode, controller.signal, onStreamText);
+                        winner = await callWorkerGroqStream(prompt, controller.signal, onStreamText, route);
                     } catch (groqErr) {
                         if (groqErr.name === "AbortError") throw groqErr;
                         lastGeminiError = groqErr.message;
                         try {
-                            winner = await callWorkerGeminiStream(prompt, currentMode, controller.signal, onStreamText);
+                            winner = await callWorkerGeminiStream(prompt, controller.signal, onStreamText);
                         } catch (gemErr) {
                             if (gemErr.name === "AbortError") throw gemErr;
                             throw new Error(`${groqErr.message} | Fallback: ${gemErr.message}`);
                         }
                     }
                 } else if (state.groqKey.trim()) {
-                    winner = await callDirectGroqAPI(prompt, controller.signal, onStreamText);
+                    winner = await callDirectGroqAPI(prompt, controller.signal, onStreamText, route);
                 } else {
                     winner = await callDirectGeminiAPI(prompt, controller.signal, onStreamText);
                 }
@@ -2146,13 +2114,13 @@ USER INPUT TEXT:
                     winner.data._knowledgeSource = knowledgeContext.verifiedOxford ? "Oxford" : knowledgeContext.source;
                     winner.data._knowledgeVerified = !!knowledgeContext.verifiedOxford;
                 } else {
-                    winner.data._knowledgeSource = hasWorker ? `Cloudflare Worker (${winner.provider || "AI"}) · ${currentMode}` : "Local AI";
+                    winner.data._knowledgeSource = hasWorker ? `Cloudflare Worker (${winner.provider || "AI"})` : "Local AI";
                     winner.data._knowledgeVerified = false;
                 }
                 winner.data._route = route.label;
 
                 saveCache(cacheId, winner.data);
-                addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang, mode: currentMode });
+                addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang });
                 latestTranslationText = winner.data.translation || "";
                 lastPreparedPayload = { signature, data: winner.data };
 
@@ -2191,8 +2159,8 @@ USER INPUT TEXT:
             }
             const workerState = normalizeWorkerUrl(state.workerUrl) || "غير مضبوط";
             diagMsg.textContent = lastGeminiError
-                ? `Worker: ${workerState} | Mode: ${state.mode} | آخر خطأ: (${lastGeminiError})`
-                : `Worker: ${workerState} | Mode: ${state.mode} | حالة الاتصال: جاهز`;
+                ? `Worker: ${workerState} | آخر خطأ: (${lastGeminiError})`
+                : `Worker: ${workerState} | حالة الاتصال: جاهز`;
             diagBox.classList.remove("hidden");
             lucide.createIcons();
         }
@@ -2360,9 +2328,10 @@ USER INPUT TEXT:
             }
 
             const detectedLabel = document.getElementById("dict-detected-info");
+            const inferredStyleTag = data.inferred_style ? ` · ${data.inferred_style}` : "";
             detectedLabel.textContent = isEnToEn
-                ? `English → English · ${state.mode}`
-                : `اللغة: ${getLangObj(effectiveSrcLang).name} · ${state.mode}`;
+                ? `English → English${inferredStyleTag}`
+                : `اللغة: ${getLangObj(effectiveSrcLang).name}${inferredStyleTag}`;
             detectedLabel.classList.remove("hidden");
 
             const sourceBadge = document.getElementById("dict-source-badge");
@@ -2393,7 +2362,7 @@ USER INPUT TEXT:
 
             const idiomSection = document.getElementById("idiom-section");
             const idiomData = data.idiom;
-            if (idiomData && idiomData.has_idiom === true && idiomData.phrase && String(idiomData.phrase).trim()) {
+            if (idiomData && idiomData.phrase && String(idiomData.phrase).trim() && (idiomData.has_idiom !== false || idiomData.phrase.trim().length > 0)) {
                 const phraseEl = document.getElementById("idiom-phrase");
                 phraseEl.dir = targetObj.dir;
                 phraseEl.textContent = idiomData.phrase.trim();
@@ -2434,7 +2403,7 @@ USER INPUT TEXT:
             freqEl.innerHTML = `<p dir="auto" class="font-medium text-slate-700 leading-relaxed">${escapeHTML(data.frequency || "متوسط الاستخدام")}</p>`;
 
             const regEl = document.getElementById("content-register");
-            regEl.innerHTML = `<span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 ltr-text">${escapeHTML(data.register || state.mode)}</span>`;
+            regEl.innerHTML = `<span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 ltr-text">${escapeHTML(data.register || data.inferred_style || "Natural Contextual")}</span>`;
 
             renderBadgeList("content-related", data.related_words, targetObj.dir, true);
 
@@ -2564,7 +2533,7 @@ USER INPUT TEXT:
             const natural = data.naturalness || {};
             const badge = document.getElementById("naturalness-badge");
             if (natural.label) {
-                badge.textContent = "Mode / Tone: " + natural.label + (natural.reason ? " · " + natural.reason : "");
+                badge.textContent = "Naturalness: " + natural.label + (natural.reason ? " · " + natural.reason : "");
                 badge.className = "text-[10px] font-bold rounded-full px-2.5 py-1 border bg-emerald-50 text-emerald-700 border-emerald-200";
                 badge.classList.remove("hidden");
             } else {
@@ -2642,11 +2611,11 @@ USER INPUT TEXT:
 
         function escapeHTML(str) {
             return String(str).replace(/[&<>"']/g, m => ({
-                "&": "&",
-                "<": "<",
-                ">": ">",
-                '"': """,
-                "'": "'"
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
             }[m]));
         }
 
