@@ -257,7 +257,7 @@
                 </div>
                 <div class="min-w-0">
                     <h1 class="text-base sm:text-xl font-bold text-slate-900 truncate leading-tight">المترجم الذكي</h1>
-                    <p class="text-[11px] text-slate-500 hidden sm:block truncate">ترجمة فورية تفهم السياق والنبرة تلقائياً</p>
+                    <p class="text-[11px] text-slate-500 hidden sm:block truncate">ترجمة فورية تفهم السياق والنبرة وتراجع الجودة تلقائياً</p>
                 </div>
             </div>
 
@@ -283,7 +283,7 @@
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>SMART TRANSLATION EXPERIENCE</span>
             </div>
             <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">ترجمة ذكية تفهم المصري والإنجليزي حتى لو مش مثالي</h2>
-            <p class="mt-2 text-xs sm:text-sm text-slate-500">يفهم صياغة الكلام ونبرته تلقائياً ويترجم بالمعنى الطبيعي المناسب للسياق</p>
+            <p class="mt-2 text-xs sm:text-sm text-slate-500">يفهم صياغة الكلام ونبرته تلقائياً ويراجع جودة المعنى والطبيعية في الخلفية</p>
         </section>
 
         <div class="relative flex flex-col lg:grid lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-8 items-stretch">
@@ -716,7 +716,7 @@
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
             <p>مدعوم بـ <strong class="text-blue-600">Cloudflare Worker</strong> مع <strong class="text-slate-700">Groq</strong> و <strong class="text-slate-700">Google Gemini</strong></p>
-            <p>المترجم الذكي والقاموس التفاعلي · v7.2</p>
+            <p>المترجم الذكي والقاموس التفاعلي · v7.3</p>
         </div>
     </footer>
 
@@ -725,7 +725,7 @@
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const KEY_VERSION = "v18_implicit_context_v2";
+        const KEY_VERSION = "v19_quality_lexicon_v2_1";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -757,7 +757,7 @@
         const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
         const KNOWLEDGE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
         const IDB_NAME = "smart-translator-db";
-        const IDB_VERSION = 2;
+        const IDB_VERSION = 3;
         let idbPromise = null;
         let translationHistory = [];
         let latestTranslationText = "";
@@ -907,7 +907,6 @@
             return { normalizedQuery: normalized, tokens: tokens.slice(0,25), candidateLemmas: lemmas, phraseCandidates: phrases, phraseFirst: true, note:"Hints only: AI must confirm meaning from full context; do not treat heuristic lemmas as facts." };
         }
 
-        // استنتاج أسلوب ونبرة وسياق الكلام تلقائياً في الخلفية بدون أي اختيار يدوي من المستخدم
         function inferImplicitContext(text, src, tgt) {
             const raw = String(text || "").trim();
             const norm = normalizeLookupText(raw);
@@ -919,7 +918,7 @@
 
             const hasSlangOrCasual =
                 hasEgyptianMarkers ||
-                /\b(gonna|wanna|gotta|kinda|sorta|dunno|idk|btw|lol|lmao|bro|dude|hang out|chill|rip off|pulling my leg|under the weather|piece of cake|no way|whatever)\b/i.test(raw);
+                /\b(gonna|wanna|gotta|kinda|sorta|dunno|idk|btw|lol|lmao|bro|dude|hang out|chill|rip off|pulling my leg|under the weather|piece of cake|crack me up|no way|whatever)\b/i.test(raw);
 
             const hasTechnicalMarkers =
                 /\b(api|sdk|json|sql|database|server|worker|latency|cache|endpoint|webhook|token|auth|oauth|docker|kubernetes|deployment|bug|commit|branch|frontend|backend|algorithm|neural|model|llm|prompt|css|html|javascript|typescript|react)\b/i.test(raw) ||
@@ -958,6 +957,45 @@
                 signals,
                 instruction: "Adapt wording, tone, and phrasing naturally to match the speaker's actual phrasing, intent, and context automatically without forcing a single rigid style."
             };
+        }
+
+        function shouldRunQualityRefinement(inputText, parsedData, effectiveSrcLang, effectiveTgtLang) {
+            if (effectiveSrcLang.startsWith("en") && effectiveTgtLang.startsWith("en")) return false;
+            const clean = String(inputText || "").trim();
+            const trans = String(parsedData?.translation || "").trim();
+            if (!clean || !trans) return false;
+
+            const ctx = inferImplicitContext(clean, effectiveSrcLang, effectiveTgtLang);
+            const issues = Array.isArray(parsedData?.quality_check?.issues) ? parsedData.quality_check.issues : [];
+            const hasFlaggedIssues = issues.some(x => typeof x === "string" && x.trim().length > 0);
+            const looksStiffOrLiteral =
+                ctx.isEgyptianArabic ||
+                ctx.signals.length > 0 ||
+                hasFlaggedIssues ||
+                (clean.length > 45 && trans.length < clean.length * 0.35);
+
+            return looksStiffOrLiteral;
+        }
+
+        function buildQualityRefinementPrompt(originalText, effectiveSrcLang, effectiveTgtLang, initialData) {
+            const implicitCtx = inferImplicitContext(originalText, effectiveSrcLang, effectiveTgtLang);
+            return `You are a senior translation quality auditor and bilingual editor.
+Review the initial translation of the user's text and refine it ONLY if needed so that:
+1. Meaning, nuance, tone, and facts are preserved accurately without adding or removing information.
+2. Egyptian Arabic expressions, idioms, sarcasm, humor, or casual/formal/technical phrasing are rendered naturally rather than literally.
+3. Lexical fields (synonyms, antonyms, collocations, word_family, grammar_patterns, idiom, alternatives) match the true contextual meaning rather than generic/unrelated words.
+
+Source Language: ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang})
+Target Language: ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang})
+Inferred Context: ${implicitCtx.inferredRegister}
+
+ORIGINAL USER TEXT:
+"""${originalText}"""
+
+INITIAL JSON OUTPUT:
+${JSON.stringify(initialData)}
+
+Return ONLY a valid raw JSON object matching the exact same schema. Keep what is already strong, and improve any literal, awkward, or inaccurate parts.`;
         }
 
         function cleanKnowledgePayload(payload) {
@@ -1659,6 +1697,11 @@ IDIOM / EXPRESSION RULE (MANDATORY SEMANTIC EQUIVALENCE CHECK — NEVER SKIP):
 - Do not translate idioms or emotional expressions literally if a native speaker would express the meaning naturally.
 - If a genuine idiom OR a strong, widely-used idiomatic equivalent exists, set "has_idiom": true and populate "idiom"; otherwise set "has_idiom": false with empty "phrase"/"meaning" and "examples": [].
 
+LEXICAL & MORPHOLOGICAL ACCURACY (REQUIRED FOR LANGUAGE INTELLIGENCE):
+- Ensure "synonyms", "antonyms", "collocations", "word_family", "grammar_patterns", and "related_words" are contextually accurate to the actual sense of the input/translation—never generic filler or crude suffix-chopping.
+- For "word_family", include accurate morphological forms with clear part-of-speech labels matching the real root/stem of the word in context.
+- For "collocations", provide natural word combinations commonly used together in ${getLangObj(effectiveTgtLang).name} for this sense.
+
 ADVANCED LEXICAL FIELDS (REQUIRED FOR THE TRANSLATED WORD/PHRASE):
 1. "transcription": Phonetic respelling or Latin transliteration guide of the translated word/phrase.
 2. "ipa": Standard International Phonetic Alphabet transcription between slashes when applicable.
@@ -1933,6 +1976,41 @@ USER INPUT TEXT:
             throw lastError || new Error("All Groq models failed");
         }
 
+        async function refineTranslationQuality(initialWinner, inputText, effectiveSrcLang, effectiveTgtLang, hasWorker, signal, tgtNum) {
+            if (!shouldRunQualityRefinement(inputText, initialWinner?.data, effectiveSrcLang, effectiveTgtLang)) {
+                return initialWinner;
+            }
+            if (signal?.aborted || String(inputText || "").length > 1200) {
+                return initialWinner;
+            }
+            setLoadingStage("مراجعة جودة المعنى والطبيعية في الخلفية...");
+            const refinePrompt = buildQualityRefinementPrompt(inputText, effectiveSrcLang, effectiveTgtLang, initialWinner.data);
+            const refineRoute = {
+                mode: "quality_audit",
+                models: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"]
+            };
+            try {
+                let audited = null;
+                if (hasWorker) {
+                    audited = await callWorkerGroqStream(refinePrompt, signal, (raw) => updateStreamPreview(raw, tgtNum), refineRoute);
+                } else if (state.groqKey.trim()) {
+                    audited = await callDirectGroqAPI(refinePrompt, signal, (raw) => updateStreamPreview(raw, tgtNum), refineRoute);
+                }
+                if (audited && audited.data && typeof audited.data.translation === "string" && audited.data.translation.trim()) {
+                    return {
+                        data: {
+                            ...initialWinner.data,
+                            ...audited.data,
+                            _refined: true
+                        },
+                        modelUsed: audited.modelUsed || initialWinner.modelUsed,
+                        provider: audited.provider || initialWinner.provider
+                    };
+                }
+            } catch (_) {}
+            return initialWinner;
+        }
+
         function parseSafeJSON(raw) {
             const cleaned = String(raw || "").replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
             const firstBrace = cleaned.indexOf("{");
@@ -2012,7 +2090,7 @@ USER INPUT TEXT:
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const cacheId = signature + "::implicit-ctx-v2";
+            const cacheId = signature + "::quality-lexicon-v2.1";
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
@@ -2107,6 +2185,9 @@ USER INPUT TEXT:
                 }
 
                 if (requestId !== activeTranslationId) return;
+                winner = await refineTranslationQuality(winner, inputText, effectiveSrcLang, effectiveTgtLang, hasWorker, controller.signal, tgtNum);
+                if (requestId !== activeTranslationId) return;
+
                 lastGeminiError = "";
                 updateEngineBadge(`${winner.modelUsed || winner.provider || "Worker AI"}`, winner.provider !== "gemini");
 
@@ -2117,7 +2198,7 @@ USER INPUT TEXT:
                     winner.data._knowledgeSource = hasWorker ? `Cloudflare Worker (${winner.provider || "AI"})` : "Local AI";
                     winner.data._knowledgeVerified = false;
                 }
-                winner.data._route = route.label;
+                winner.data._route = route.label + (winner.data._refined ? " · Reviewed" : "");
 
                 saveCache(cacheId, winner.data);
                 addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang });
@@ -2125,7 +2206,7 @@ USER INPUT TEXT:
                 lastPreparedPayload = { signature, data: winner.data };
 
                 const aiMs = performance.now() - aiStart;
-                updatePerformance({ total: performance.now() - totalStart, knowledge: knowledgeMs, ai: aiMs, source: knowledgeContext ? (knowledgeContext.source || "Knowledge + Worker") : (hasWorker ? `Worker (${winner.provider})` : "Local AI"), route: route.label });
+                updatePerformance({ total: performance.now() - totalStart, knowledge: knowledgeMs, ai: aiMs, source: knowledgeContext ? (knowledgeContext.source || "Knowledge + Worker") : (hasWorker ? `Worker (${winner.provider})` : "Local AI"), route: winner.data._route });
 
                 activeControllers = [];
                 activeRequestSignature = "";
