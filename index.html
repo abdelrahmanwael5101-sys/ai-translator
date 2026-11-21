@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Premium Smart Translator v7 | AI Translator & Dictionary</title>
+    <title>Premium Smart Translator v8.0 | AI Translator & Dictionary</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -574,6 +574,7 @@
                         </div>
 
                         <p id="idiom-meaning" class="text-xs sm:text-base text-slate-700 font-medium leading-relaxed"></p>
+                        <div id="idioms-detected-list" class="grid grid-cols-1 gap-2"></div>
 
                         <div>
                             <div class="text-[11px] sm:text-xs font-bold text-indigo-700 mb-2.5 flex items-center gap-1.5">
@@ -716,7 +717,7 @@
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
             <p>مدعوم بـ <strong class="text-blue-600">Cloudflare Worker</strong> مع <strong class="text-slate-700">Groq</strong> و <strong class="text-slate-700">Google Gemini</strong></p>
-            <p>المترجم الذكي والقاموس التفاعلي · v7.3</p>
+            <p>المترجم الذكي والقاموس التفاعلي · v8.0 Semantic Update</p>
         </div>
     </footer>
 
@@ -725,10 +726,9 @@
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const KEY_VERSION = "v19_quality_lexicon_v2_1";
+        const KEY_VERSION = "v20_semantic_idiom_audit_v3";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
-            localStorage.removeItem("smart_trans_gemini_key");
-            localStorage.removeItem("smart_trans_groq_key");
+            // Clear stale result caches only; keep the user's saved API keys and settings.
             localStorage.removeItem("smart_trans_cache");
             localStorage.removeItem("smart_trans_knowledge_cache");
             localStorage.setItem("smart_trans_key_ver", KEY_VERSION);
@@ -912,9 +912,15 @@
             const norm = normalizeLookupText(raw);
             const signals = [];
 
-            const hasEgyptianMarkers =
-                /\b(مش|عشان|دلوقتي|عايز|عاوز|عندي|عنده|عندنا|ازيك|إزيك|عامل ايه|عامل إيه|بتاع|بتاعة|بتوع|ايه|إيه|ليه|فين|كده|كدا|قوي|أوي|خالص|مفيش|مافيش|بلاش|يلا|خلاص|معلش|معلشي|حاجة|حاجات|واحد|واحدة|الواد|البنت|الدنيا|دماغي|طايق|موتني|فكك|مستاهلة|هنجيب اخرنا|على الله)\b/.test(norm) ||
-                /(?:^|\s)(ب|هـ|هن|هت)(روح|اجي|أجي|شوف|قول|عمل|اخد|آخد|ابعت|أبعت|كلم|فهم|عرف)(?:\s|$|[؟!])/i.test(norm);
+            // Do not use \b for Arabic tokens: JavaScript's \b is ASCII-word based.
+            const arabicTokenBoundary = /(?:^|[\s،؛.!؟?()\[\]{}"'“”])(?:مش|عشان|دلوقتي|عايز|عاوز|عندي|عنده|عندنا|ازيك|إزيك|عامل ايه|عامل إيه|بتاع|بتاعة|بتوع|ايه|إيه|ليه|فين|كده|كدا|قوي|أوي|خالص|مفيش|مافيش|بلاش|يلا|خلاص|معلش|معلشي|حاجة|حاجات|واحد|واحدة|الواد|البنت|الدنيا|دماغي|طايق|موتني|فكك|مستاهلة|هنجيب اخرنا|على الله|شاطر|تيجي|تواجهه|بغلطه|يقلب|الترابيزة|يخليك|فضلت|أدي|ادي|يمكن|المرة دي|يتغير|واضح|بنفخ|قربة|مقطوعة|كل مرة|يرجع|طبعه|ساعات|الواحد|مكنش|قد ما|مينفعش|ضيّع|ضيع|مش بتاعه|مش هفضل)(?=$|[\s،؛.!؟?()\[\]{}"'“”])/u.test(norm);
+
+            const hasEgyptianMarkers = arabicTokenBoundary ||
+                /(?:^|\s)(ب|هـ|هن|هت)(روح|اجي|أجي|شوف|قول|عمل|اخد|آخد|ابعت|أبعت|كلم|فهم|عرف)(?:\s|$|[؟!])/u.test(norm);
+
+            const hasArabicIdioms = /(?:بنفخ في قربة مقطوعة|كأنك يا أبو زيد ما غزيت|يا أبو زيد ما غزيت|قلب الترابيزة|يقلب الترابيزة|على قد لحافك|إيد لوحدها ما تسقفش|اللي اختشوا ماتوا)/u.test(raw);
+            const hasEnglishIdioms = /\b(turn(?:ing)? over a new leaf|play(?:ing)? both sides|save face|that ship (?:has|had) (?:already )?sailed|bite the bullet|face the music|open(?:ed)? a can of worms|get away with it|came back to bite|push came to shove|beat(?:ing)? around the bush|connect the dots|caught up with|selective amnesia|turn(?:s|ed|ing)? the tables|flip(?:s|ped|ping)? the table)\b/i.test(raw);
+            const hasIdiomaticMarkers = hasArabicIdioms || hasEnglishIdioms;
 
             const hasSlangOrCasual =
                 hasEgyptianMarkers ||
@@ -926,11 +932,11 @@
 
             const hasAcademicOrFormalMarkers =
                 /\b(therefore|furthermore|moreover|consequently|nevertheless|hypothesis|methodology|empirical|correlation|framework|paradigm|analysis|evaluation|propose|demonstrate|regarding|pursuant|hereby|sincerely|respectfully)\b/i.test(raw) ||
-                /\b(بناءً على|علاوة على ذلك|من ناحية أخرى|في ضوء|يهدف البحث|المنهجية|الفرضية|الدراسة|المؤسسة|المحترم|السادة)\b/.test(norm);
+                /(?:^|[\s،؛.!؟?])(?:بناءً على|علاوة على ذلك|من ناحية أخرى|في ضوء|يهدف البحث|المنهجية|الفرضية|الدراسة|المؤسسة|المحترم|السادة)(?=$|[\s،؛.!؟?])/u.test(norm);
 
             const hasBusinessMarkers =
                 /\b(deadline|invoice|contract|stakeholder|kpi|roi|quarterly|meeting|schedule|budget|client|vendor|proposal|deliverable|onboarding|escalate|follow up)\b/i.test(raw) ||
-                /\b(اجتماع|موعد نهائي|ميزانية|عميل|عقد|فاتورة|عرض سعر|خطة عمل|تقرير|إدارة|مبيعات)\b/.test(norm);
+                /(?:^|[\s،؛.!؟?])(?:اجتماع|موعد نهائي|ميزانية|عميل|عقد|فاتورة|عرض سعر|خطة عمل|تقرير|إدارة|مبيعات)(?=$|[\s،؛.!؟?])/u.test(norm);
 
             let inferredRegister = "Natural Contextual";
             if (hasTechnicalMarkers) {
@@ -948,12 +954,14 @@
                 else signals.push("casual or idiomatic phrasing");
             }
 
+            if (hasIdiomaticMarkers) signals.push("idiomatic or proverb-like phrasing");
             if (/[؟?!]/.test(raw)) signals.push("interactive/emotive punctuation");
             if (raw.length > 180) signals.push("multi-clause/long-form text");
 
             return {
                 inferredRegister,
-                isEgyptianArabic: hasEgyptianMarkers && (src === "ar" || /[\u0600-\u06FF]/.test(raw)),
+                isEgyptianArabic: hasEgyptianMarkers && (String(src || "").startsWith("ar") || /[\u0600-\u06FF]/.test(raw)),
+                hasIdiomaticMarkers,
                 signals,
                 instruction: "Adapt wording, tone, and phrasing naturally to match the speaker's actual phrasing, intent, and context automatically without forcing a single rigid style."
             };
@@ -970,7 +978,7 @@
             const hasFlaggedIssues = issues.some(x => typeof x === "string" && x.trim().length > 0);
             const looksStiffOrLiteral =
                 ctx.isEgyptianArabic ||
-                ctx.signals.length > 0 ||
+                ctx.hasIdiomaticMarkers ||
                 hasFlaggedIssues ||
                 (clean.length > 45 && trans.length < clean.length * 0.35);
 
@@ -979,36 +987,46 @@
 
         function buildQualityRefinementPrompt(originalText, effectiveSrcLang, effectiveTgtLang, initialData) {
             const implicitCtx = inferImplicitContext(originalText, effectiveSrcLang, effectiveTgtLang);
-            return `You are a senior translation quality auditor and bilingual editor.
-Review the initial translation of the user's text and refine it ONLY if needed so that:
-1. Meaning, nuance, tone, and facts are preserved accurately without adding or removing information.
-2. Egyptian Arabic expressions, idioms, sarcasm, humor, or casual/formal/technical phrasing are rendered naturally rather than literally.
-3. Lexical fields (synonyms, antonyms, collocations, word_family, grammar_patterns, idiom, alternatives) match the true contextual meaning rather than generic/unrelated words.
+            return `You are an independent senior bilingual translation auditor. You are NOT asked to praise the first model. You must actively look for semantic errors.
 
-Source Language: ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang})
-Target Language: ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang})
-Inferred Context: ${implicitCtx.inferredRegister}
+SOURCE LANGUAGE: ${getLangObj(effectiveSrcLang).name} (${effectiveSrcLang})
+TARGET LANGUAGE: ${getLangObj(effectiveTgtLang).name} (${effectiveTgtLang})
+INFERRED REGISTER: ${implicitCtx.inferredRegister}
 
-ORIGINAL USER TEXT:
+SOURCE TEXT:
 """${originalText}"""
 
-INITIAL JSON OUTPUT:
+INITIAL RESULT:
 ${JSON.stringify(initialData)}
 
-Return ONLY a valid raw JSON object matching the exact same schema. Keep what is already strong, and improve any literal, awkward, or inaccurate parts.`;
-        }
+AUDIT PROCEDURE (perform internally before writing JSON):
+1. Split the source into meaning units. Check who did what, to whom, when, why, polarity, tense, agency, cause/effect, emphasis, and emotional tone.
+2. Identify every idiom, phrasal verb, proverb, sarcasm, indirect criticism, and culturally specific expression. Check whether the target wording conveys the intended meaning naturally to a native speaker.
+3. A literal rendering of an idiom/proverb is a defect unless that exact image is conventional and natural in the target language. For Egyptian Arabic proverbs, translate the intended lesson or choose a genuinely equivalent target-language expression; never invent a matching proverb.
+4. Preserve the speaker's register. Do not make colloquial speech awkwardly formal, and do not make formal text slangy.
+5. Check every alternative and every sentence-breakdown role. Do not label a time clause as conditional/concessive, or a complement clause as a result clause.
+6. If the translation is already accurate, keep it. Do not rewrite merely to sound different. Do not claim perfection when a meaningful issue remains.
 
-        function cleanKnowledgePayload(payload) {
-            if (!payload || typeof payload !== "object") return null;
-            const raw = payload.data ?? payload.knowledge ?? payload.results ?? payload;
-            let serialized;
-            try { serialized = JSON.stringify(raw); } catch (_) { return null; }
-            if (!serialized || serialized.length > 9000) serialized = serialized.slice(0, 9000);
-            let safeData;
-            try { safeData = JSON.parse(serialized); } catch (_) { safeData = { excerpt: serialized }; }
-            const source = typeof payload.source === "string" ? payload.source.slice(0, 80) : "External knowledge";
-            const verifiedOxford = payload.verified === true && /oxford/i.test(source);
-            return { source, verifiedOxford, data: safeData };
+QUALITY STATUS RULES:
+- "Verified": use ONLY when all important meaning units, idioms, tone, and details are accurately preserved and the target is natural. issues must be [].
+- "Minor improvements": use when meaning is accurate but wording/register has a noticeable non-critical weakness. List it in issues and provide a concise improvement.
+- "Needs review": use when any meaning is lost, added, reversed, ambiguous, or an idiom/proverb is mistranslated. Explain the exact problem and correct it where possible.
+- Never use "Verified" if issues is non-empty. Never write "No improvement needed" without actually checking the points above.
+
+Return ONLY valid JSON with exactly these fields (no markdown):
+{
+  "translation": "revised or unchanged complete translation",
+  "idiom": {"has_idiom": false, "phrase": "", "meaning": "", "examples": []},
+  "idioms_detected": [
+    {"source_phrase": "source idiom/proverb", "meaning": "intended meaning in context", "target_equivalent": "natural target-language equivalent", "note": "brief explanation or translation strategy"}
+  ],
+  "translation_alternatives": [],
+  "sentence_breakdown": [],
+  "quality_check": {"status": "Needs review", "issues": [], "improvement": ""},
+  "context_note": ""
+}
+
+For idioms_detected, return one item per genuinely idiomatic expression. If none exists, return []. Keep idiom as the best single expression for compatibility with the current interface. Do not fabricate idioms.`;
         }
 
         async function retrieveKnowledgeContext(text, src, tgt, requestId) {
@@ -1673,11 +1691,17 @@ Return ONLY a valid raw JSON object matching the exact same schema. Keep what is
 - If the input is written in formal, academic, business, or technical phrasing, reflect that appropriate level in the target language; if it is written in casual/Egyptian colloquial phrasing or slang, translate into natural everyday speech that matches the real meaning without sounding stiff or robotic.
 - Preserve names, numbers, dates, technical terms, facts, intent, and politeness. Never add or remove information.
 - If the input is ambiguous, choose the most likely meaning in context and briefly note the ambiguity if relevant.
-- Recognize idioms, phrasal verbs, and multi-word expressions BEFORE translating individual words.
+- Recognize idioms, phrasal verbs, proverbs, sarcasm, and multi-word expressions BEFORE translating individual words.
+- For every genuine idiom/proverb, identify its intended meaning in THIS context, then choose a conventional natural equivalent in the target language. If no reliable equivalent exists, translate the meaning naturally; do NOT preserve a strange literal image.
+- Never turn an Egyptian proverb into an invented English/Arabic proverb. Explain the intended lesson briefly when useful.
+- Distinguish near-neighbours carefully (e.g. turn the tables = reverse the situation; flip the table = react angrily/disruptively; a ship has sailed = an opportunity is gone).
 - Treat lemma and phrase candidates as search hints only; verify every candidate against grammar and the full sentence. Never let simplistic suffix rules override context.
 - Give a concise, original definition and 2 natural example sentences with translations.
 - Return 2–3 useful alternative translations reflecting different natural phrasings, sentence breakdown when appropriate, a transparent quality check, context note, naturalness label, and British/American differences when relevant.
-- Do not invent numeric confidence scores, frequency rankings, regional differences, or dictionary citations. Show British/American differences only when English is involved and a meaningful difference exists; otherwise leave those fields empty.`;
+- Do not invent numeric confidence scores, frequency rankings, regional differences, or dictionary citations. Show British/American differences only when English is involved and a meaningful difference exists; otherwise leave those fields empty.
+- The only allowed quality_check.status values are exactly "Verified", "Minor improvements", or "Needs review".
+- Quality status is evidence-based: "Verified" only if meaning, idioms, tone, and details all pass; "Minor improvements" for non-critical wording issues; "Needs review" for meaning loss, additions, ambiguity, or a mistranslated idiom. Never default to Verified.
+- Sentence breakdown roles must be grammatically precise. Use time clause, conditional clause, concessive clause, complement clause, relative clause, etc. only when that label is actually correct; use a plain descriptive label if uncertain.`;
 
             return `You are an elite context-aware translation engine and bilingual lexicographer.
 
@@ -1695,10 +1719,12 @@ ${verbatimRule}
 IDIOM / EXPRESSION RULE (MANDATORY SEMANTIC EQUIVALENCE CHECK — NEVER SKIP):
 - Understand the intended meaning first—including Egyptian Arabic expressions (such as "أنا مش طايق نفسي", "إنت موتني من الضحك", "خليك في حالك", "مكبر دماغي", "هنجيب آخرنا"), idioms, phrasal verbs, sarcasm, and implied intent—then find a natural equivalent in the TARGET language when one fits.
 - Do not translate idioms or emotional expressions literally if a native speaker would express the meaning naturally.
-- If a genuine idiom OR a strong, widely-used idiomatic equivalent exists, set "has_idiom": true and populate "idiom"; otherwise set "has_idiom": false with empty "phrase"/"meaning" and "examples": [].
+- Populate "idioms_detected" with one item for EACH genuine source idiom/proverb, its contextual meaning, and the natural target equivalent actually used. Return [] when none exists.
+- Keep "idiom" as the single most useful idiom for compatibility with the current interface; if several exist, "idioms_detected" is the complete list. Do not mark ordinary literal phrases as idioms.
 
 LEXICAL & MORPHOLOGICAL ACCURACY (REQUIRED FOR LANGUAGE INTELLIGENCE):
 - Ensure "synonyms", "antonyms", "collocations", "word_family", "grammar_patterns", and "related_words" are contextually accurate to the actual sense of the input/translation—never generic filler or crude suffix-chopping.
+- If the input is a complete sentence or long clause, do NOT invent sentence-level synonyms/antonyms. Return [] for synonyms/antonyms unless there is one clearly central word or phrase whose equivalents are genuinely useful.
 - For "word_family", include accurate morphological forms with clear part-of-speech labels matching the real root/stem of the word in context.
 - For "collocations", provide natural word combinations commonly used together in ${getLangObj(effectiveTgtLang).name} for this sense.
 
@@ -1717,8 +1743,8 @@ ADVANCED LEXICAL FIELDS (REQUIRED FOR THE TRANSLATED WORD/PHRASE):
 
 STRICT SCHEMA RULES:
 - "part_of_speech": MUST ALWAYS be written in English (e.g., "Noun", "Verb", "Adjective", "Adverb", "Phrase", "Idiom", "Sentence").
-- "synonyms": Array of 3 to 5 accurate synonyms/equivalents in ${getLangObj(effectiveTgtLang).name}.
-- "antonyms": Array of 3 to 5 accurate antonyms/opposites in ${getLangObj(effectiveTgtLang).name}.
+- "synonyms": 3 to 5 accurate synonyms only for a word or short phrase; otherwise [] when sentence-level synonyms would be misleading.
+- "antonyms": 3 to 5 accurate antonyms only for a word or short phrase with real lexical opposites; otherwise [] (do not substitute loosely opposite behaviours).
 - Return ONLY a valid raw JSON object (no markdown fences, no commentary) matching this exact structure:
 {
   "detected_source_code": "${effectiveSrcLang}",
@@ -1744,6 +1770,9 @@ STRICT SCHEMA RULES:
     "meaning": "string",
     "examples": []
   },
+  "idioms_detected": [
+    { "source_phrase": "string", "meaning": "string", "target_equivalent": "string", "note": "string" }
+  ],
   "synonyms": ["word1", "word2", "word3"],
   "antonyms": ["word1", "word2", "word3"],
   "collocations": ["collocation 1", "collocation 2", "collocation 3"],
@@ -1764,7 +1793,7 @@ STRICT SCHEMA RULES:
     { "source": "string", "role": "string", "meaning": "string" }
   ],
   "quality_check": {
-    "status": "Context & Meaning Verified",
+    "status": "",
     "issues": [],
     "improvement": "string"
   },
@@ -1832,26 +1861,35 @@ USER INPUT TEXT:
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let buffer = "", raw = "";
-            while (true) {
-                if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
-                const { value, done } = await reader.read();
-                if (done) break;
-                buffer += decoder.decode(value, { stream: true });
-                const events = buffer.split(/\r?\n\r?\n/);
-                buffer = events.pop() || "";
-                for (const event of events) {
-                    const line = event.split(/\r?\n/).find(x => x.startsWith("data:"));
-                    if (!line) continue;
-                    const payload = line.slice(5).trim();
-                    if (!payload || payload === "[DONE]") continue;
-                    try {
-                        const obj = JSON.parse(payload);
-                        const piece = provider === "gemini"
-                            ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
-                            : (obj?.choices?.[0]?.delta?.content || "");
-                        if (piece) { raw += piece; onText?.(raw); }
-                    } catch (_) {}
+            const processEvent = (event) => {
+                const dataLines = event.split(/\r?\n/).filter(x => x.startsWith("data:")).map(x => x.slice(5).trim());
+                if (!dataLines.length) return;
+                const payload = dataLines.join("\n");
+                if (!payload || payload === "[DONE]") return;
+                let obj;
+                try { obj = JSON.parse(payload); }
+                catch (_) { return; }
+                if (obj?.error) throw new Error(obj.error.message || "Upstream stream error");
+                const piece = provider === "gemini"
+                    ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
+                    : (obj?.choices?.[0]?.delta?.content || "");
+                if (piece) { raw += piece; onText?.(raw); }
+            };
+            try {
+                while (true) {
+                    if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const events = buffer.split(/\r?\n\r?\n/);
+                    buffer = events.pop() || "";
+                    for (const event of events) processEvent(event);
                 }
+                buffer += decoder.decode();
+                if (buffer.trim()) processEvent(buffer);
+            } catch (err) {
+                try { await reader.cancel(err); } catch (_) {}
+                throw err;
             }
             if (!raw.trim()) throw new Error("Empty stream response");
             return parseSafeJSON(raw);
@@ -1859,30 +1897,21 @@ USER INPUT TEXT:
 
         async function callWorkerGroqStream(prompt, signal, onText, route = null) {
             const baseUrl = getWorkerBaseUrl();
-            const modelsToTry = Array.isArray(route?.models) && route.models.length ? route.models : GROQ_MODELS;
-            let lastErr = null;
-            for (const modelName of modelsToTry) {
-                if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
-                try {
-                    const response = await fetch(`${baseUrl}/api/groq`, {
-                        method: "POST",
-                        signal,
-                        headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
-                        body: JSON.stringify({ model: modelName, prompt })
-                    });
-                    if (!response.ok) {
-                        const errBody = (await response.text()).slice(0, 300);
-                        throw new Error(`Worker Groq (${modelName}) HTTP ${response.status}: ${errBody}`);
-                    }
-                    const parsed = await readSSE(response, onText, "groq", signal);
-                    const actualModel = response.headers.get("X-Model-Used") || modelName;
-                    return { data: parsed, modelUsed: actualModel, provider: "groq" };
-                } catch (err) {
-                    lastErr = err;
-                    if (err.name === "AbortError") throw err;
-                }
+            const modelName = Array.isArray(route?.models) && route.models.length ? route.models[0] : GROQ_MODELS[0];
+            if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
+            const response = await fetch(`${baseUrl}/api/groq`, {
+                method: "POST",
+                signal,
+                headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
+                body: JSON.stringify({ model: modelName, prompt })
+            });
+            if (!response.ok) {
+                const errBody = (await response.text()).slice(0, 300);
+                throw new Error(`Worker Groq (${modelName}) HTTP ${response.status}: ${errBody}`);
             }
-            throw lastErr || new Error("Groq via Worker failed");
+            const parsed = await readSSE(response, onText, "groq", signal);
+            const actualModel = response.headers.get("X-Model-Used") || modelName;
+            return { data: parsed, modelUsed: actualModel, provider: "groq" };
         }
 
         async function callWorkerGeminiStream(prompt, signal, onText) {
@@ -1980,7 +2009,7 @@ USER INPUT TEXT:
             if (!shouldRunQualityRefinement(inputText, initialWinner?.data, effectiveSrcLang, effectiveTgtLang)) {
                 return initialWinner;
             }
-            if (signal?.aborted || String(inputText || "").length > 1200) {
+            if (signal?.aborted || String(inputText || "").length > 1800) {
                 return initialWinner;
             }
             setLoadingStage("مراجعة جودة المعنى والطبيعية في الخلفية...");
@@ -1997,12 +2026,17 @@ USER INPUT TEXT:
                     audited = await callDirectGroqAPI(refinePrompt, signal, (raw) => updateStreamPreview(raw, tgtNum), refineRoute);
                 }
                 if (audited && audited.data && typeof audited.data.translation === "string" && audited.data.translation.trim()) {
+                    const merged = { ...initialWinner.data };
+                    merged.translation = audited.data.translation.trim();
+                    if (audited.data.idiom && typeof audited.data.idiom === "object") merged.idiom = audited.data.idiom;
+                    if (Array.isArray(audited.data.idioms_detected)) merged.idioms_detected = audited.data.idioms_detected;
+                    if (Array.isArray(audited.data.translation_alternatives) && audited.data.translation_alternatives.length) merged.translation_alternatives = audited.data.translation_alternatives;
+                    if (Array.isArray(audited.data.sentence_breakdown) && audited.data.sentence_breakdown.length) merged.sentence_breakdown = audited.data.sentence_breakdown;
+                    if (audited.data.quality_check && typeof audited.data.quality_check === "object") merged.quality_check = audited.data.quality_check;
+                    if (typeof audited.data.context_note === "string" && audited.data.context_note.trim()) merged.context_note = audited.data.context_note;
+                    merged._refined = true;
                     return {
-                        data: {
-                            ...initialWinner.data,
-                            ...audited.data,
-                            _refined: true
-                        },
+                        data: merged,
                         modelUsed: audited.modelUsed || initialWinner.modelUsed,
                         provider: audited.provider || initialWinner.provider
                     };
@@ -2035,7 +2069,7 @@ USER INPUT TEXT:
                 return {
                     mode: "context_70b_first",
                     label: `Context-Aware (${ctx.inferredRegister}) · 70B → Fast → Gemini`,
-                    models: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "openai/gpt-oss-120b"],
+                    models: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
                     parallel: true
                 };
             }
@@ -2090,7 +2124,7 @@ USER INPUT TEXT:
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const cacheId = signature + "::quality-lexicon-v2.1";
+            const cacheId = signature + "::semantic-idiom-audit-v3";
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
@@ -2442,15 +2476,52 @@ USER INPUT TEXT:
             });
 
             const idiomSection = document.getElementById("idiom-section");
-            const idiomData = data.idiom;
-            if (idiomData && idiomData.phrase && String(idiomData.phrase).trim() && (idiomData.has_idiom !== false || idiomData.phrase.trim().length > 0)) {
+            const idiomData = data.idiom || {};
+            const idiomItems = Array.isArray(data.idioms_detected)
+                ? data.idioms_detected.filter(x => x && String(x.source_phrase || "").trim()).slice(0, 8)
+                : [];
+            const legacyHasIdiom = Boolean(String(idiomData.phrase || "").trim() && idiomData.has_idiom !== false);
+            const idiomListEl = document.getElementById("idioms-detected-list");
+            idiomListEl.innerHTML = "";
+
+            if (idiomItems.length) {
+                const first = idiomItems[0];
                 const phraseEl = document.getElementById("idiom-phrase");
-                phraseEl.dir = targetObj.dir;
-                phraseEl.textContent = idiomData.phrase.trim();
+                phraseEl.dir = getLangObj(effectiveSrcLang).dir;
+                phraseEl.textContent = first.source_phrase;
 
                 const meaningEl = document.getElementById("idiom-meaning");
                 meaningEl.dir = targetObj.dir;
-                meaningEl.textContent = idiomData.meaning || "";
+                meaningEl.textContent = first.meaning || idiomData.meaning || "المعنى المقصود حسب السياق.";
+
+                idiomItems.slice(1).forEach(item => {
+                    const card = document.createElement("div");
+                    card.className = "rounded-xl border border-indigo-200/80 bg-white/70 p-3 space-y-1.5";
+                    const source = document.createElement("div");
+                    source.className = "text-xs font-extrabold text-indigo-800";
+                    source.dir = getLangObj(effectiveSrcLang).dir;
+                    source.textContent = item.source_phrase;
+                    const meaning = document.createElement("p");
+                    meaning.className = "text-xs text-slate-700 leading-relaxed";
+                    meaning.dir = targetObj.dir;
+                    meaning.textContent = item.meaning || "";
+                    card.append(source, meaning);
+                    if (item.target_equivalent) {
+                        const equivalent = document.createElement("p");
+                        equivalent.className = "text-xs font-bold text-indigo-700";
+                        equivalent.dir = targetObj.dir;
+                        equivalent.textContent = `المقابل الطبيعي: ${item.target_equivalent}`;
+                        card.appendChild(equivalent);
+                    }
+                    if (item.note) {
+                        const note = document.createElement("p");
+                        note.className = "smart-muted";
+                        note.dir = targetObj.dir;
+                        note.textContent = item.note;
+                        card.appendChild(note);
+                    }
+                    idiomListEl.appendChild(card);
+                });
 
                 const idiomExamplesContainer = document.getElementById("idiom-examples");
                 idiomExamplesContainer.innerHTML = "";
@@ -2458,7 +2529,20 @@ USER INPUT TEXT:
                 idiomExList.forEach((ex, idx) => {
                     idiomExamplesContainer.appendChild(createExampleCard(ex, idx, targetObj.dir, effectiveTgtLang, isEnToEn, "bg-indigo-600"));
                 });
-
+                idiomSection.classList.remove("hidden");
+            } else if (legacyHasIdiom) {
+                const phraseEl = document.getElementById("idiom-phrase");
+                phraseEl.dir = targetObj.dir;
+                phraseEl.textContent = idiomData.phrase.trim();
+                const meaningEl = document.getElementById("idiom-meaning");
+                meaningEl.dir = targetObj.dir;
+                meaningEl.textContent = idiomData.meaning || "";
+                const idiomExamplesContainer = document.getElementById("idiom-examples");
+                idiomExamplesContainer.innerHTML = "";
+                const idiomExList = Array.isArray(idiomData.examples) ? idiomData.examples.slice(0, 2) : [];
+                idiomExList.forEach((ex, idx) => {
+                    idiomExamplesContainer.appendChild(createExampleCard(ex, idx, targetObj.dir, effectiveTgtLang, isEnToEn, "bg-indigo-600"));
+                });
                 idiomSection.classList.remove("hidden");
             } else {
                 idiomSection.classList.add("hidden");
@@ -2572,13 +2656,21 @@ USER INPUT TEXT:
             const quality = data.quality_check || {};
             const qualityContent = document.getElementById("quality-content");
             qualityContent.innerHTML = "";
-            if (quality.status) {
+            const qualityIssues = Array.isArray(quality.issues) ? quality.issues.filter(Boolean) : [];
+            const rawStatus = String(quality.status || "").trim();
+            if (rawStatus || qualityIssues.length || quality.improvement) {
+                const isVerified = qualityIssues.length === 0 && /^verified$/i.test(rawStatus);
+                const isMinor = !isVerified && /minor|improvement/i.test(rawStatus) && qualityIssues.length <= 2;
                 const status = document.createElement("span");
-                status.className = "inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200";
-                status.textContent = quality.status;
+                status.className = isVerified
+                    ? "inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"
+                    : isMinor
+                        ? "inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200"
+                        : "inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold bg-red-50 text-red-700 border border-red-200";
+                status.textContent = isVerified ? "Verified" : isMinor ? "Minor improvements" : "Needs review";
                 qualityContent.appendChild(status);
             }
-            (Array.isArray(quality.issues) ? quality.issues : []).slice(0, 4).forEach(issue => {
+            qualityIssues.slice(0, 4).forEach(issue => {
                 const p = document.createElement("p");
                 p.className = "text-xs text-slate-600";
                 p.textContent = "• " + issue;
