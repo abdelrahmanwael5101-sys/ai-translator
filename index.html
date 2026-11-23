@@ -32,8 +32,8 @@
         }
     </script>
     <style>
-        html, body { scroll-behavior:smooth; }
-        body { transition:background-color .22s ease,color .22s ease; }
+        html, body { scroll-behavior: smooth; }
+        body { transition: background-color .22s ease, color .22s ease; }
         html, body {
             max-width: 100%;
             overflow-x: hidden;
@@ -114,136 +114,123 @@
             transform: rotate(180deg);
         }
 
-        body.dark { background:#0b1020 !important; color:#e7ecf5 !important; color-scheme:dark; }
-        body.dark main { color:#e7ecf5; }
+        body.dark { background: #0b1020 !important; color: #e7ecf5 !important; color-scheme: dark; }
+        body.dark main { color: #e7ecf5; }
         body.dark header, body.dark footer, body.dark #settings-modal > div,
-        body.dark #dictionary-section > div { background:#111a2d !important; border-color:#26344d !important; color:#e7ecf5 !important; }
-        body.dark .bg-white, body.dark [class~="bg-white/85"], body.dark [class~="bg-white/90"] { background-color:#141f34 !important; }
+        body.dark #dictionary-section > div { background: #111a2d !important; border-color: #26344d !important; color: #e7ecf5 !important; }
+        body.dark .bg-white, body.dark [class~="bg-white/85"], body.dark [class~="bg-white/90"] { background-color: #141f34 !important; }
         body.dark .bg-slate-50, body.dark .bg-slate-100,
-        body.dark [class~="bg-slate-50/80"], body.dark [class~="bg-slate-50/90"], body.dark [class~="bg-slate-100/90"] { background-color:#18253b !important; }
-        body.dark .bg-blue-50, body.dark [class*="bg-blue-50"] { background-color:#172a46 !important; }
-        body.dark [class*="bg-indigo-50"] { background-color:#211f42 !important; }
-        body.dark [class*="bg-emerald-50"] { background-color:#12332f !important; }
-        body.dark [class*="bg-amber-50"], body.dark [class*="bg-yellow-50"] { background-color:#352b18 !important; }
-        body.dark [class*="bg-red-50"] { background-color:#3a2029 !important; }
-        body.dark [class*="bg-purple-50"] { background-color:#2b2042 !important; }
-        body.dark .text-slate-900, body.dark .text-slate-800, body.dark .text-slate-700, body.dark .text-slate-600 { color:#e7ecf5 !important; }
-        body.dark .text-slate-500, body.dark .text-slate-400 { color:#a9b7cc !important; }
+        body.dark [class~="bg-slate-50/80"], body.dark [class~="bg-slate-50/90"], body.dark [class~="bg-slate-100/90"] { background-color: #18253b !important; }
+        body.dark .bg-blue-50, body.dark [class*="bg-blue-50"] { background-color: #172a46 !important; }
+        body.dark [class*="bg-indigo-50"] { background-color: #211f42 !important; }
+        body.dark [class*="bg-emerald-50"] { background-color: #12332f !important; }
+        body.dark [class*="bg-amber-50"], body.dark [class*="bg-yellow-50"] { background-color: #352b18 !important; }
+        body.dark [class*="bg-red-50"] { background-color: #3a2029 !important; }
+        body.dark [class*="bg-purple-50"] { background-color: #2b2042 !important; }
+        body.dark .text-slate-900, body.dark .text-slate-800, body.dark .text-slate-700, body.dark .text-slate-600 { color: #e7ecf5 !important; }
+        body.dark .text-slate-500, body.dark .text-slate-400 { color: #a9b7cc !important; }
         body.dark .text-indigo-900, body.dark .text-indigo-800, body.dark .text-indigo-700,
-        body.dark .text-blue-900, body.dark .text-blue-800, body.dark .text-blue-700 { color:#c7d2fe !important; }
-        body.dark .text-emerald-800, body.dark .text-emerald-700 { color:#9ee6d2 !important; }
-        body.dark .text-amber-900, body.dark .text-amber-700 { color:#fde68a !important; }
-        body.dark .text-red-700, body.dark .text-red-600 { color:#fecdd3 !important; }
+        body.dark .text-blue-900, body.dark .text-blue-800, body.dark .text-blue-700 { color: #c7d2fe !important; }
+        body.dark .text-emerald-800, body.dark .text-emerald-700 { color: #9ee6d2 !important; }
+        body.dark .text-amber-900, body.dark .text-amber-700 { color: #fde68a !important; }
+        body.dark .text-red-700, body.dark .text-red-600 { color: #fecdd3 !important; }
         body.dark .border-slate-100, body.dark .border-slate-200, body.dark .border-slate-300,
-        body.dark [class*="border-indigo-"], body.dark [class*="border-blue-"], body.dark [class*="border-emerald-"] { border-color:#34445f !important; }
-        body.dark textarea, body.dark input, body.dark select { background-color:#101a2c !important; color:#f1f5f9 !important; border-color:#3a4a65 !important; }
-        body.dark textarea::placeholder, body.dark input::placeholder { color:#8798b1 !important; }
-        body.dark .bg-gradient-to-l { background-image:linear-gradient(to left,#1b3154,#141f34,#18243b) !important; }
-        body.dark button:hover { filter:brightness(1.12); }
-        body.dark #idiom-section { border-color:#51458a !important; box-shadow:0 8px 28px rgba(0,0,0,.14); }
-        body.dark #dict-source-badge { background:#172a46 !important; color:#c7d2fe !important; border-color:#34445f !important; }
-        body.dark #idiom-section .bg-white, body.dark #ipa-reference-panel .bg-white { background:#17223a !important; }
-        body.dark #ipa-reference-panel { background:#121c30 !important; border-color:#34445f !important; }
-        body.dark #performance-panel, body.dark #history-panel { background:#111a2d !important; border-color:#2a3a56 !important; color:#e7ecf5 !important; }
-        body.dark #smart-insights p, body.dark #context-content, body.dark #quality-content p, body.dark #breakdown-list p, body.dark #regional-content p { color:#dce5f4 !important; }
-        body.dark kbd { background:#1e2d47 !important; color:#e2e8f0 !important; }
-        body.dark ::selection { background:#334b7b; color:#fff; }
+        body.dark [class*="border-indigo-"], body.dark [class*="border-blue-"], body.dark [class*="border-emerald-"] { border-color: #34445f !important; }
+        body.dark textarea, body.dark input, body.dark select { background-color: #101a2c !important; color: #f1f5f9 !important; border-color: #3a4a65 !important; }
+        body.dark textarea::placeholder, body.dark input::placeholder { color: #8798b1 !important; }
+        body.dark .bg-gradient-to-l { background-image: linear-gradient(to left, #1b3154, #141f34, #18243b) !important; }
+        body.dark button:hover { filter: brightness(1.12); }
+        body.dark #idiom-section { border-color: #51458a !important; box-shadow: 0 8px 28px rgba(0,0,0,.14); }
+        body.dark #dict-source-badge { background: #172a46 !important; color: #c7d2fe !important; border-color: #34445f !important; }
+        body.dark #idiom-section .bg-white, body.dark #ipa-reference-panel .bg-white { background: #17223a !important; }
+        body.dark #ipa-reference-panel { background: #121c30 !important; border-color: #34445f !important; }
+        body.dark #performance-panel, body.dark #history-panel { background: #111a2d !important; border-color: #2a3a56 !important; color: #e7ecf5 !important; }
+        body.dark #smart-insights p, body.dark #context-content, body.dark #quality-content p, body.dark #breakdown-list p, body.dark #regional-content p { color: #dce5f4 !important; }
+        body.dark kbd { background: #1e2d47 !important; color: #e2e8f0 !important; }
+        body.dark ::selection { background: #334b7b; color: #fff; }
 
-        :root { color-scheme: light; --premium-accent:#2563eb; }
-        body { background:radial-gradient(ellipse at 8% 0%,rgba(219,234,254,.58),transparent 34%),#f5f7fb; }
-        header { background:rgba(255,255,255,.88) !important; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
-        main { position:relative; }
-        #box-1-container,#box-2-container { border-radius:24px; border-color:#dce4f0; box-shadow:0 10px 34px rgba(15,23,42,.055); transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease; }
-        #box-1-container:hover,#box-2-container:hover { transform:translateY(-2px); box-shadow:0 16px 42px rgba(37,99,235,.10); }
-        #box-1-container:focus-within,#box-2-container:focus-within { border-color:#7aa7f8; box-shadow:0 0 0 4px rgba(59,130,246,.10),0 16px 42px rgba(37,99,235,.08); }
-        #box1-text,#box2-text { min-height:170px; line-height:1.9; }
-        #submit-btn { border-radius:16px; background:linear-gradient(115deg,#2563eb,#4f46e5 55%,#6366f1); box-shadow:0 12px 26px rgba(79,70,229,.22); }
-        #submit-btn:hover { transform:translateY(-1px); box-shadow:0 16px 32px rgba(79,70,229,.28); }
-        #dictionary-section > div { border-radius:26px; box-shadow:0 18px 55px rgba(15,23,42,.07); }
-        #history-panel,#alert-box,#diagnostic-box { box-shadow:0 8px 24px rgba(15,23,42,.045); }
-        .premium-toolbar { background:rgba(255,255,255,.82); border:1px solid #e2e8f0; border-radius:18px; box-shadow:0 8px 24px rgba(15,23,42,.035); backdrop-filter:blur(10px); }
-        .premium-toolbar select { min-width:190px; }
-        button,select { -webkit-tap-highlight-color:transparent; }
-        button:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid rgba(59,130,246,.28); outline-offset:2px; }
-        body.dark { background:radial-gradient(ellipse at 8% 0%,rgba(49,67,112,.22),transparent 36%),#0b1020 !important; }
-        body.dark header { background:rgba(17,26,45,.92) !important; }
-        body.dark #box-1-container,body.dark #box-2-container,body.dark #history-panel,body.dark .premium-toolbar { background:#111a2d !important; border-color:#2a3a56 !important; box-shadow:0 14px 40px rgba(0,0,0,.22); }
-        body.dark #box-1-container > div:first-child,body.dark #box-2-container > div:first-child { background:#17243a !important; border-color:#2a3a56 !important; }
-        body.dark #box2-text { background:transparent !important; }
-        body.dark #submit-btn { box-shadow:0 12px 28px rgba(37,99,235,.22); }
-        body.dark .premium-toolbar select { background:#101a2c !important; color:#edf3ff !important; border-color:#3a4a65 !important; }
-        @media (max-width:640px) {
-          #box-1-container,#box-2-container { border-radius:19px; }
-          #box1-text,#box2-text { min-height:145px; font-size:17px; }
-          .premium-toolbar { align-items:stretch; }
-          .premium-toolbar select { min-width:0; width:100%; }
+        :root { --premium-ink: #17263d; --premium-accent: #0f8f91; --premium-accent-2: #2563a6; --premium-line: #dce5ed; color-scheme: light; }
+        body { background: radial-gradient(ellipse at 7% 0%, rgba(191,230,229,.42), transparent 34%), linear-gradient(180deg, #f7fafb 0%, #f3f6fa 100%); color: var(--premium-ink); }
+        header { background: rgba(255,255,255,.88) !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-color: #dce5ed !important; box-shadow: 0 5px 24px rgba(24,46,68,.045) !important; }
+        header .bg-gradient-to-br { background: linear-gradient(135deg, #123b55, #0f8f91) !important; }
+        main { position: relative; }
+        #box-1-container, #box-2-container { border-radius: 24px; border-color: #d8e3eb; box-shadow: 0 12px 34px rgba(27,51,72,.055); transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+        #box-1-container:hover, #box-2-container:hover { transform: translateY(-2px); box-shadow: 0 16px 42px rgba(37,99,235,.10); }
+        #box-1-container:focus-within, #box-2-container:focus-within { border-color: #55aeb0; box-shadow: 0 0 0 4px rgba(15,143,145,.10), 0 16px 42px rgba(27,91,104,.08); }
+        #box1-text, #box2-text { min-height: 170px; line-height: 1.9; }
+        #submit-btn { border-radius: 16px; background: linear-gradient(115deg, #126c83, #0f8f91 58%, #267eaa) !important; box-shadow: 0 12px 28px rgba(15,143,145,.20) !important; }
+        #submit-btn:hover { transform: translateY(-1px); box-shadow: 0 16px 34px rgba(15,143,145,.27) !important; }
+        #dictionary-section > div { border-radius: 26px; border-color: #dce5ed; box-shadow: 0 20px 58px rgba(24,46,68,.075); }
+        #dictionary-section .bg-gradient-to-l { background: linear-gradient(110deg, #f1f7f7, #fcfdfe 55%, #f4f7fa) !important; }
+        #dict-word { color: #1d4ed8 !important; letter-spacing: -.02em; }
+        #history-panel, #alert-box, #diagnostic-box { box-shadow: 0 8px 24px rgba(15,23,42,.045); }
+        #smart-insights .smart-insight-card { background: #f8fafc; border-color: #e2e8f0; border-radius: 16px; }
+        body.dark #smart-insights .smart-insight-card { background: #142235; border-color: #2b4155; }
+        #dictionary-section [id^="acc-"] { border-radius: 16px; border-color: #dfe7ed; box-shadow: 0 3px 12px rgba(25,48,68,.025); }
+        #dictionary-section [id^="acc-"] > button { min-height: 48px; }
+        .premium-toolbar { background: rgba(255,255,255,.82); border: 1px solid #dce5ed; border-radius: 18px; box-shadow: 0 10px 28px rgba(24,46,68,.045); backdrop-filter: blur(10px); }
+        .premium-toolbar select { min-width: 190px; }
+        button, select, textarea, input { transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease, color .18s ease; }
+        button:active { transform: translateY(1px) scale(.985); }
+        button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(59,130,246,.28); outline-offset: 2px; }
+        .animate-fade-in { animation: fadeIn .34s cubic-bezier(.2,.7,.2,1) both; }
+        #dictionary-section .accordion-content { line-height: 1.85; }
+        body.dark { background: radial-gradient(ellipse at 8% 0%, rgba(25,112,120,.18), transparent 36%), #0b1422 !important; }
+        body.dark header, body.dark footer { background: rgba(15,29,45,.94) !important; border-color: #26394c !important; }
+        body.dark #box-1-container, body.dark #box-2-container, body.dark #history-panel, body.dark .premium-toolbar { background: #111a2d !important; border-color: #2a3a56 !important; box-shadow: 0 14px 40px rgba(0,0,0,.22); }
+        body.dark #box-1-container > div:first-child, body.dark #box-2-container > div:first-child { background: #17243a !important; border-color: #2a3a56 !important; }
+        body.dark #box2-text { background: transparent !important; }
+        body.dark #submit-btn { box-shadow: 0 12px 28px rgba(37,99,235,.22); }
+        body.dark .premium-toolbar select { background: #101a2c !important; color: #edf3ff !important; border-color: #3a4a65 !important; }
+        body.dark #dictionary-section > div { background: #101e2e !important; border-color: #2a4054 !important; }
+        body.dark #dictionary-section .bg-gradient-to-l { background: linear-gradient(110deg, #142d3a, #142235 54%, #17283a) !important; }
+        body.dark #dict-word { color: #70d0cb !important; }
+        body.dark #dictionary-section [id^="acc-"] { background: #142235 !important; border-color: #2b4155 !important; }
+        body.dark #dictionary-section [id^="acc-"] .accordion-content { background: #101e2e !important; }
+        body.dark #focus-toggle, body.dark #theme-toggle { background: #17283a !important; border-color: #34495e !important; color: #c4e9e6 !important; }
+        body.focus-mode header #engine-badge, body.focus-mode main > section:first-child, body.focus-mode footer,
+        body.focus-mode #history-panel, body.focus-mode #performance-panel { display: none !important; }
+        body.focus-mode main { max-width: 1100px; padding-top: clamp(18px, 4vh, 42px); }
+        body.focus-mode #box-1-container, body.focus-mode #box-2-container { box-shadow: 0 18px 48px rgba(20,48,67,.09); }
+        body.focus-mode #focus-toggle { background: #dff5f2 !important; color: #087b7c !important; border-color: #8bd0ca !important; }
+        body.dark.focus-mode #focus-toggle { background: #174348 !important; color: #9be5df !important; }
+
+        .smart-insight-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px; }
+        .smart-insight-title { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: #334155; margin-bottom: 10px; }
+        .smart-chip { display: inline-flex; align-items: center; gap: 5px; padding: 6px 9px; border-radius: 10px; background: #f1f5f9; border: 1px solid #e2e8f0; font-size: 12px; }
+        .smart-muted { color: #64748b; font-size: 11px; line-height: 1.7; }
+        #performance-panel { font-variant-numeric: tabular-nums; }
+        body.dark .smart-insight-card { background: #111a2d; border-color: #2a3a56; }
+        body.dark .smart-insight-title { color: #dbeafe; }
+        body.dark .smart-chip { background: #18253b; border-color: #34445f; color: #dbeafe; }
+        body.dark .smart-muted { color: #a9b7cc; }
+
+        @media (max-width: 640px) {
+          #box-1-container, #box-2-container { border-radius: 19px; }
+          #box1-text, #box2-text { min-height: 145px; font-size: 17px; }
+          .premium-toolbar { align-items: stretch; }
+          .premium-toolbar select { min-width: 0; width: 100%; }
         }
-
-        .smart-insight-card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:14px; }
-        .smart-insight-title { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:800; color:#334155; margin-bottom:10px; }
-        .smart-chip { display:inline-flex; align-items:center; gap:5px; padding:6px 9px; border-radius:10px; background:#f1f5f9; border:1px solid #e2e8f0; font-size:12px; }
-        .smart-muted { color:#64748b; font-size:11px; line-height:1.7; }
-        #performance-panel { font-variant-numeric:tabular-nums; }
-        body.dark .smart-insight-card { background:#111a2d; border-color:#2a3a56; }
-        body.dark .smart-insight-title { color:#dbeafe; }
-        body.dark .smart-chip { background:#18253b; border-color:#34445f; color:#dbeafe; }
-        body.dark .smart-muted { color:#a9b7cc; }
-
-        @media (prefers-reduced-motion:reduce) {
-            *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; }
-            .stagger-hidden { opacity:1 !important; transform:none !important; }
+        @media (max-width: 768px) {
+          main { padding-left: 12px !important; padding-right: 12px !important; }
+          #box-1-container, #box-2-container { border-radius: 18px; }
+          #box1-text, #box2-text { min-height: 132px; padding: 14px !important; font-size: 16px; line-height: 1.85; }
+          #dictionary-section { margin-top: 18px; }
+          #dictionary-section > div { border-radius: 20px; }
+          #dictionary-section > div > div { padding: 15px !important; }
+          .premium-toolbar { gap: 8px; }
+          .premium-toolbar button { min-height: 40px; }
+          #settings-modal > div { max-height: 92dvh; overflow-y: auto; }
         }
-
-        :root { --premium-ink:#17263d; --premium-accent:#0f8f91; --premium-accent-2:#2563a6; --premium-line:#dce5ed; }
-        body { background:radial-gradient(ellipse at 7% 0%,rgba(191,230,229,.42),transparent 34%),linear-gradient(180deg,#f7fafb 0%,#f3f6fa 100%); color:var(--premium-ink); }
-        header { border-color:#dce5ed !important; box-shadow:0 5px 24px rgba(24,46,68,.045) !important; }
-        header .bg-gradient-to-br { background:linear-gradient(135deg,#123b55,#0f8f91) !important; }
-        #submit-btn { background:linear-gradient(115deg,#126c83,#0f8f91 58%,#267eaa) !important; box-shadow:0 12px 28px rgba(15,143,145,.20) !important; }
-        #submit-btn:hover { box-shadow:0 16px 34px rgba(15,143,145,.27) !important; }
-        #box-1-container,#box-2-container { border-color:#d8e3eb; box-shadow:0 12px 34px rgba(27,51,72,.055); }
-        #box-1-container:focus-within,#box-2-container:focus-within { border-color:#55aeb0; box-shadow:0 0 0 4px rgba(15,143,145,.10),0 16px 42px rgba(27,91,104,.08); }
-        #dictionary-section > div { border-color:#dce5ed; box-shadow:0 20px 58px rgba(24,46,68,.075); }
-        #dictionary-section .bg-gradient-to-l { background:linear-gradient(110deg,#f1f7f7,#fcfdfe 55%,#f4f7fa) !important; }
-        #dict-word { color:#1d4ed8 !important; letter-spacing:-.02em; }
-        #smart-insights .smart-insight-card { background:#f8fafc; border-color:#e2e8f0; border-radius:16px; }
-        body.dark #smart-insights .smart-insight-card { background:#142235; border-color:#2b4155; }
-        #dictionary-section [id^="acc-"] { border-radius:16px; border-color:#dfe7ed; box-shadow:0 3px 12px rgba(25,48,68,.025); }
-        #dictionary-section [id^="acc-"] > button { min-height:48px; }
-        .premium-toolbar { border-color:#dce5ed; box-shadow:0 10px 28px rgba(24,46,68,.045); }
-        button,select,textarea,input { transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease,color .18s ease; }
-        button:active { transform:translateY(1px) scale(.985); }
-        .animate-fade-in { animation:fadeIn .34s cubic-bezier(.2,.7,.2,1) both; }
-        #dictionary-section .accordion-content { line-height:1.85; }
-        body.dark { background:radial-gradient(ellipse at 8% 0%,rgba(25,112,120,.18),transparent 36%),#0b1422 !important; }
-        body.dark header,body.dark footer { background:rgba(15,29,45,.94) !important; border-color:#26394c !important; }
-        body.dark #dictionary-section > div { background:#101e2e !important; border-color:#2a4054 !important; }
-        body.dark #dictionary-section .bg-gradient-to-l { background:linear-gradient(110deg,#142d3a,#142235 54%,#17283a) !important; }
-        body.dark #dict-word { color:#70d0cb !important; }
-        body.dark #dictionary-section [id^="acc-"] { background:#142235 !important; border-color:#2b4155 !important; }
-        body.dark #dictionary-section [id^="acc-"] .accordion-content { background:#101e2e !important; }
-        body.dark #focus-toggle,body.dark #theme-toggle { background:#17283a !important; border-color:#34495e !important; color:#c4e9e6 !important; }
-        body.focus-mode header #engine-badge,body.focus-mode main > section:first-child,body.focus-mode footer,
-        body.focus-mode #history-panel,body.focus-mode #performance-panel { display:none !important; }
-        body.focus-mode main { max-width:1100px; padding-top:clamp(18px,4vh,42px); }
-        body.focus-mode #box-1-container,body.focus-mode #box-2-container { box-shadow:0 18px 48px rgba(20,48,67,.09); }
-        body.focus-mode #focus-toggle { background:#dff5f2 !important; color:#087b7c !important; border-color:#8bd0ca !important; }
-        body.dark.focus-mode #focus-toggle { background:#174348 !important; color:#9be5df !important; }
-        @media (max-width:768px) {
-          main { padding-left:12px !important; padding-right:12px !important; }
-          #box-1-container,#box-2-container { border-radius:18px; }
-          #box1-text,#box2-text { min-height:132px; padding:14px !important; font-size:16px; line-height:1.85; }
-          #dictionary-section { margin-top:18px; }
-          #dictionary-section > div { border-radius:20px; }
-          #dictionary-section > div > div { padding:15px !important; }
-          .premium-toolbar { gap:8px; }
-          .premium-toolbar button { min-height:40px; }
-          #settings-modal > div { max-height:92dvh; overflow-y:auto; }
+        @media (max-width: 380px) {
+          header .max-w-6xl { gap: 5px; }
+          #engine-status-text { max-width: 84px !important; }
+          #theme-toggle, #focus-toggle { width: 34px; height: 34px; }
+          #box1-text, #box2-text { font-size: 15px; }
         }
-        @media (max-width:380px) {
-          header .max-w-6xl { gap:5px; }
-          #engine-status-text { max-width:84px !important; }
-          #theme-toggle,#focus-toggle { width:34px; height:34px; }
-          #box1-text,#box2-text { font-size:15px; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+            .stagger-hidden { opacity: 1 !important; transform: none !important; }
         }
     </style>
 </head>
@@ -363,6 +350,8 @@
                     <button id="box2-clear-btn" type="button" onclick="clearBox(2)" class="hidden absolute top-2.5 left-2.5 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors" title="مسح النص">
                         <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </button>
+
+                    <span id="box2-char-count" class="hidden absolute bottom-3.5 right-3.5 text-[11px] text-slate-400 font-en">0 / 2000</span>
 
                     <div class="absolute bottom-2.5 left-3 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-2">
                         <button type="button" onclick="speakBoxText(2, this)" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95" title="استمع للترجمة">
@@ -725,7 +714,7 @@
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const KEY_VERSION = "v21_stream_idle_fix";
+        const KEY_VERSION = "v22_stable_full_html";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -739,7 +728,7 @@
             "openai/gpt-oss-120b"
         ];
 
-        let GEMINI_MODELS = [
+        const GEMINI_MODELS = [
             "gemini-3.8-flash",
             "gemini-3.5-flash-lite"
         ];
@@ -760,10 +749,8 @@
         const IDB_VERSION = 3;
         let idbPromise = null;
         let translationHistory = [];
-        let latestTranslationText = "";
         let activeRequestSignature = "";
         let lastPerformance = { total: 0, knowledge: 0, ai: 0, source: "—", route: "—" };
-        let activeStreamOwner = null;
         const languageDetectionTimers = { 1: null, 2: null };
         let autoTranslateTimer = null;
         let lastPreparedPayload = null;
@@ -783,15 +770,17 @@
             activeControllers.forEach(c => { try { c.abort(); } catch (_) {} });
             activeControllers = [];
             activeRequestSignature = "";
-            activeStreamOwner = null;
             isRevealingStagger = false;
             setLoading(false);
             if (showMessage) showAlert("تم إلغاء عملية الترجمة.");
         }
 
-        function cacheKey(text, src, tgt) { return [src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::"); }
+        function cacheKey(text, src, tgt) {
+            return [src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::");
+        }
+
         function openTranslatorDB() {
-            if (!('indexedDB' in window)) return Promise.resolve(null);
+            if (!("indexedDB" in window)) return Promise.resolve(null);
             if (idbPromise) return idbPromise;
             idbPromise = new Promise(resolve => {
                 try {
@@ -809,63 +798,129 @@
             });
             return idbPromise;
         }
+
         async function idbGet(storeName, key) {
-            const db = await openTranslatorDB(); if (!db) return null;
-            return new Promise(resolve => { try { const tx=db.transaction(storeName,"readonly"); const req=tx.objectStore(storeName).get(key); req.onsuccess=()=>resolve(req.result||null); req.onerror=()=>resolve(null); } catch (_) { resolve(null); } });
+            const db = await openTranslatorDB();
+            if (!db) return null;
+            return new Promise(resolve => {
+                try {
+                    const tx = db.transaction(storeName, "readonly");
+                    const req = tx.objectStore(storeName).get(key);
+                    req.onsuccess = () => resolve(req.result || null);
+                    req.onerror = () => resolve(null);
+                } catch (_) { resolve(null); }
+            });
         }
+
         async function idbPut(storeName, value) {
-            const db = await openTranslatorDB(); if (!db) return false;
-            return new Promise(resolve => { try { const tx=db.transaction(storeName,"readwrite"); tx.objectStore(storeName).put(value); tx.oncomplete=()=>resolve(true); tx.onerror=()=>resolve(false); tx.onabort=()=>resolve(false); } catch (_) { resolve(false); } });
+            const db = await openTranslatorDB();
+            if (!db) return false;
+            return new Promise(resolve => {
+                try {
+                    const tx = db.transaction(storeName, "readwrite");
+                    tx.objectStore(storeName).put(value);
+                    tx.oncomplete = () => resolve(true);
+                    tx.onerror = () => resolve(false);
+                    tx.onabort = () => resolve(false);
+                } catch (_) { resolve(false); }
+            });
         }
+
         async function idbGetAll(storeName) {
-            const db = await openTranslatorDB(); if (!db) return [];
-            return new Promise(resolve => { try { const req=db.transaction(storeName,"readonly").objectStore(storeName).getAll(); req.onsuccess=()=>resolve(req.result||[]); req.onerror=()=>resolve([]); } catch (_) { resolve([]); } });
+            const db = await openTranslatorDB();
+            if (!db) return [];
+            return new Promise(resolve => {
+                try {
+                    const req = db.transaction(storeName, "readonly").objectStore(storeName).getAll();
+                    req.onsuccess = () => resolve(req.result || []);
+                    req.onerror = () => resolve([]);
+                } catch (_) { resolve([]); }
+            });
         }
+
         async function idbClear(storeName) {
-            const db = await openTranslatorDB(); if (!db) return;
-            return new Promise(resolve => { try { const tx=db.transaction(storeName,"readwrite"); tx.objectStore(storeName).clear(); tx.oncomplete=()=>resolve(); tx.onerror=()=>resolve(); } catch (_) { resolve(); } });
+            const db = await openTranslatorDB();
+            if (!db) return;
+            return new Promise(resolve => {
+                try {
+                    const tx = db.transaction(storeName, "readwrite");
+                    tx.objectStore(storeName).clear();
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => resolve();
+                } catch (_) { resolve(); }
+            });
         }
+
         function saveCache(key, data) {
-            const savedAt=Date.now();
-            translationCache.set(key, data); translationCacheTimes.set(key,savedAt);
-            if (translationCache.size > CACHE_LIMIT) { const oldest=translationCache.keys().next().value; translationCache.delete(oldest); translationCacheTimes.delete(oldest); }
-            try { localStorage.setItem("smart_trans_cache", JSON.stringify([...translationCache.entries()].map(([k,v])=>[k,{__cacheEnvelope:true,data:v,savedAt:translationCacheTimes.get(k)||savedAt}]))); } catch (_) {}
+            const savedAt = Date.now();
+            translationCache.set(key, data);
+            translationCacheTimes.set(key, savedAt);
+            if (translationCache.size > CACHE_LIMIT) {
+                const oldest = translationCache.keys().next().value;
+                translationCache.delete(oldest);
+                translationCacheTimes.delete(oldest);
+            }
+            try {
+                localStorage.setItem("smart_trans_cache", JSON.stringify([...translationCache.entries()].map(([k, v]) => [k, { __cacheEnvelope: true, data: v, savedAt: translationCacheTimes.get(k) || savedAt }])));
+            } catch (_) {}
             idbPut("translations", { key, data, savedAt });
         }
+
         async function getCachedTranslation(key) {
             if (translationCache.has(key)) {
-                const savedAt=translationCacheTimes.get(key)||0;
-                if(Date.now()-savedAt<CACHE_TTL_MS) return { data: translationCache.get(key), source: "Memory / local cache" };
-                translationCache.delete(key); translationCacheTimes.delete(key);
+                const savedAt = translationCacheTimes.get(key) || 0;
+                if (Date.now() - savedAt < CACHE_TTL_MS) return { data: translationCache.get(key), source: "Memory / local cache" };
+                translationCache.delete(key);
+                translationCacheTimes.delete(key);
             }
             const stored = await idbGet("translations", key);
             if (stored && stored.data && Date.now() - stored.savedAt < CACHE_TTL_MS) {
-                translationCache.set(key, stored.data); translationCacheTimes.set(key,stored.savedAt);
+                translationCache.set(key, stored.data);
+                translationCacheTimes.set(key, stored.savedAt);
                 return { data: stored.data, source: "IndexedDB cache" };
             }
             return null;
         }
+
         function loadCache() {
             try {
                 const saved = JSON.parse(localStorage.getItem("smart_trans_cache") || "[]");
-                if (Array.isArray(saved)) saved.slice(-CACHE_LIMIT).forEach(([k,v]) => {
-                    if(v && v.__cacheEnvelope===true && v.data && Date.now()-v.savedAt<CACHE_TTL_MS){translationCache.set(k,v.data);translationCacheTimes.set(k,v.savedAt);}
-                    else if(v && v.__cacheEnvelope!==true){translationCache.set(k,v);translationCacheTimes.set(k,Date.now());}
+                if (Array.isArray(saved)) saved.slice(-CACHE_LIMIT).forEach(([k, v]) => {
+                    if (v && v.__cacheEnvelope === true && v.data && Date.now() - v.savedAt < CACHE_TTL_MS) {
+                        translationCache.set(k, v.data);
+                        translationCacheTimes.set(k, v.savedAt);
+                    } else if (v && v.__cacheEnvelope !== true) {
+                        translationCache.set(k, v);
+                        translationCacheTimes.set(k, Date.now());
+                    }
                 });
             } catch (_) {}
             try {
                 const savedKnowledge = JSON.parse(localStorage.getItem("smart_trans_knowledge_cache") || "[]");
-                if (Array.isArray(savedKnowledge)) savedKnowledge.slice(-KNOWLEDGE_CACHE_LIMIT).forEach(([k,v]) => knowledgeCache.set(k,v));
+                if (Array.isArray(savedKnowledge)) savedKnowledge.slice(-KNOWLEDGE_CACHE_LIMIT).forEach(([k, v]) => knowledgeCache.set(k, v));
             } catch (_) {}
         }
+
         async function hydrateIndexedCaches() {
             const [translations, knowledge, history] = await Promise.all([idbGetAll("translations"), idbGetAll("knowledge"), idbGetAll("history")]);
-            translations.filter(x => x && x.key && x.data && Date.now()-x.savedAt<CACHE_TTL_MS).slice(-CACHE_LIMIT).forEach(x => { if (!translationCache.has(x.key)) { translationCache.set(x.key,x.data); translationCacheTimes.set(x.key,x.savedAt); } });
-            knowledge.filter(x => x && x.key && x.value && Date.now()-x.savedAt<KNOWLEDGE_TTL_MS).slice(-KNOWLEDGE_CACHE_LIMIT).forEach(x => { if (!knowledgeCache.has(x.key)) knowledgeCache.set(x.key,{value:x.value,savedAt:x.savedAt}); });
+            translations.filter(x => x && x.key && x.data && Date.now() - x.savedAt < CACHE_TTL_MS).slice(-CACHE_LIMIT).forEach(x => {
+                if (!translationCache.has(x.key)) {
+                    translationCache.set(x.key, x.data);
+                    translationCacheTimes.set(x.key, x.savedAt);
+                }
+            });
+            knowledge.filter(x => x && x.key && x.value && Date.now() - x.savedAt < KNOWLEDGE_TTL_MS).slice(-KNOWLEDGE_CACHE_LIMIT).forEach(x => {
+                if (!knowledgeCache.has(x.key)) knowledgeCache.set(x.key, { value: x.value, savedAt: x.savedAt });
+            });
             if (Array.isArray(history) && history.length) {
-                const merged = [...translationHistory, ...history.map(x=>x.item).filter(Boolean)];
+                const merged = [...translationHistory, ...history.map(x => x.item).filter(Boolean)];
                 const seen = new Set();
-                translationHistory = merged.sort((a,b)=>(b.time||0)-(a.time||0)).filter(x=>{ const k=[x.input,x.translation,x.time].join("|"); if(seen.has(k)) return false; seen.add(k); return true; }).slice(0,50);
+                translationHistory = merged.sort((a, b) => (b.time || 0) - (a.time || 0)).filter(x => {
+                    const k = [x.input, x.translation, x.time].join("|");
+                    if (seen.has(k)) return false;
+                    seen.add(k);
+                    return true;
+                }).slice(0, 50);
                 renderHistory();
             }
         }
@@ -881,28 +936,38 @@
             try { localStorage.setItem("smart_trans_knowledge_cache", JSON.stringify([...knowledgeCache.entries()])); } catch (_) {}
             idbPut("knowledge", { key, value, savedAt });
         }
+
         function normalizeLookupText(text) {
-            return String(text || "").normalize("NFKC").replace(/[ًٌٍَُِّْـ]/g, "").replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ؤ/g,"و").replace(/ئ/g,"ي").replace(/\s+/g," ").trim().toLowerCase();
+            return String(text || "").normalize("NFKC").replace(/[ًٌٍَُِّْـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ؤ/g, "و").replace(/ئ/g, "ي").replace(/\s+/g, " ").trim().toLowerCase();
         }
+
         function simpleEnglishLemma(token) {
-            const w=String(token||"").toLowerCase();
-            const irregular={went:"go",gone:"go",was:"be",were:"be",is:"be",are:"be",has:"have",had:"have",did:"do",done:"do",children:"child",men:"man",women:"woman",better:"good",best:"good",worse:"bad",worst:"bad",bought:"buy",brought:"bring",thought:"think",ran:"run",written:"write",wrote:"write",taken:"take",took:"take"};
-            if(irregular[w]) return irregular[w];
-            if(w.length>5 && w.endsWith("ies")) return w.slice(0,-3)+"y";
-            if(w.length>5 && w.endsWith("ing")) { let b=w.slice(0,-3); if(b.length>2 && b.at(-1)===b.at(-2)) b=b.slice(0,-1); return b; }
-            if(w.length>4 && w.endsWith("ied")) return w.slice(0,-3)+"y";
-            if(w.length>4 && w.endsWith("ed")) { let b=w.slice(0,-2); if(b.length>2 && b.at(-1)===b.at(-2)) b=b.slice(0,-1); return b; }
-            if(w.length>4 && (w.endsWith("ches")||w.endsWith("shes")||w.endsWith("xes")||w.endsWith("zes"))) return w.slice(0,-2);
-            if(w.length>3 && w.endsWith("s") && !w.endsWith("ss")) return w.slice(0,-1);
+            const w = String(token || "").toLowerCase();
+            const irregular = { went: "go", gone: "go", was: "be", were: "be", is: "be", are: "be", has: "have", had: "have", did: "do", done: "do", children: "child", men: "man", women: "woman", better: "good", best: "good", worse: "bad", worst: "bad", bought: "buy", brought: "bring", thought: "think", ran: "run", written: "write", wrote: "write", taken: "take", took: "take" };
+            if (irregular[w]) return irregular[w];
+            if (w.length > 5 && w.endsWith("ies")) return w.slice(0, -3) + "y";
+            if (w.length > 5 && w.endsWith("ing")) { let b = w.slice(0, -3); if (b.length > 2 && b.at(-1) === b.at(-2)) b = b.slice(0, -1); return b; }
+            if (w.length > 4 && w.endsWith("ied")) return w.slice(0, -3) + "y";
+            if (w.length > 4 && w.endsWith("ed")) { let b = w.slice(0, -2); if (b.length > 2 && b.at(-1) === b.at(-2)) b = b.slice(0, -1); return b; }
+            if (w.length > 4 && (w.endsWith("ches") || w.endsWith("shes") || w.endsWith("xes") || w.endsWith("zes"))) return w.slice(0, -2);
+            if (w.length > 3 && w.endsWith("s") && !w.endsWith("ss")) return w.slice(0, -1);
             return w;
         }
+
         function buildLexicalHints(text, src, tgt) {
-            const tokens=(String(text).match(/[A-Za-zÀ-ÿ']+|[؀-ۿ]+/g)||[]).slice(0,25);
-            const stop=new Set(["the","a","an","is","are","was","were","to","of","in","on","at","and","or","for","with","it","this","that","i","you","he","she","we","they"]);
-            const english=tokens.filter(t=>/^[A-Za-zÀ-ÿ']+$/.test(t));
-            const lemmas=[...new Set(english.map(simpleEnglishLemma).filter(w=>w.length>1 && !stop.has(w)))].slice(0,8);
-            const phrases=[];
-            for(let n=Math.min(4,tokens.length);n>=2;n--){ for(let i=0;i<=tokens.length-n;i++){ const part=tokens.slice(i,i+n).join(" "); if(part.length>3 && !phrases.includes(part)) phrases.push(part); if(phrases.length>=6) break; } if(phrases.length>=6) break; }
+            const tokens = (String(text).match(/[A-Za-zÀ-ÿ']+|[\u0600-\u06FF]+/g) || []).slice(0, 25);
+            const stop = new Set(["the", "a", "an", "is", "are", "was", "were", "to", "of", "in", "on", "at", "and", "or", "for", "with", "it", "this", "that", "i", "you", "he", "she", "we", "they"]);
+            const english = tokens.filter(t => /^[A-Za-zÀ-ÿ']+$/.test(t));
+            const lemmas = [...new Set(english.map(simpleEnglishLemma).filter(w => w.length > 1 && !stop.has(w)))].slice(0, 8);
+            const phrases = [];
+            for (let n = Math.min(4, tokens.length); n >= 2; n--) {
+                for (let i = 0; i <= tokens.length - n; i++) {
+                    const part = tokens.slice(i, i + n).join(" ");
+                    if (part.length > 3 && !phrases.includes(part)) phrases.push(part);
+                    if (phrases.length >= 6) break;
+                }
+                if (phrases.length >= 6) break;
+            }
             return { lemmas, phrases };
         }
 
@@ -958,7 +1023,8 @@
             const raw = payload.data ?? payload.knowledge ?? payload.results ?? payload;
             let serialized;
             try { serialized = JSON.stringify(raw); } catch (_) { return null; }
-            if (!serialized || serialized.length > 4000) serialized = serialized.slice(0, 4000);
+            if (!serialized) return null;
+            if (serialized.length > 4000) serialized = serialized.slice(0, 4000);
             let safeData;
             try { safeData = JSON.parse(serialized); } catch (_) { safeData = { excerpt: serialized }; }
             const source = typeof payload.source === "string" ? payload.source.slice(0, 80) : "External knowledge";
@@ -973,16 +1039,29 @@
             const cached = knowledgeCache.get(key);
             if (cached && Date.now() - cached.savedAt < KNOWLEDGE_TTL_MS) return cached.value;
             const persistent = await idbGet("knowledge", key);
-            if (persistent && persistent.value && Date.now()-persistent.savedAt<KNOWLEDGE_TTL_MS) { saveKnowledgeCache(key,persistent.value); return persistent.value; }
+            if (persistent && persistent.value && Date.now() - persistent.savedAt < KNOWLEDGE_TTL_MS) {
+                saveKnowledgeCache(key, persistent.value);
+                return persistent.value;
+            }
             const controller = new AbortController();
             activeControllers.push(controller);
             let timer;
             try {
-                const timeout = new Promise(resolve => { timer = setTimeout(() => { controller.abort(); resolve(null); }, KNOWLEDGE_WAIT_MS); });
+                const timeout = new Promise(resolve => {
+                    timer = setTimeout(() => { controller.abort(); resolve(null); }, KNOWLEDGE_WAIT_MS);
+                });
                 const request = fetch(endpoint, {
-                    method: "POST", signal: controller.signal,
+                    method: "POST",
+                    signal: controller.signal,
                     headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                    body: JSON.stringify({ query: text, lexicalHints: buildLexicalHints(text,src,tgt), sourceLanguage: src, targetLanguage: tgt, mode: src.startsWith("en") && tgt.startsWith("en") ? "english_dictionary" : "bilingual_context", limit: 6 })
+                    body: JSON.stringify({
+                        query: text,
+                        lexicalHints: buildLexicalHints(text, src, tgt),
+                        sourceLanguage: src,
+                        targetLanguage: tgt,
+                        mode: src.startsWith("en") && tgt.startsWith("en") ? "english_dictionary" : "bilingual_context",
+                        limit: 6
+                    })
                 }).then(async response => {
                     if (!response.ok) throw new Error(`Knowledge backend HTTP ${response.status}`);
                     return cleanKnowledgePayload(await response.json());
@@ -1000,6 +1079,7 @@
                 activeControllers = activeControllers.filter(item => item !== controller);
             }
         }
+
         function addHistory(item) {
             const entry = { ...item, time: Date.now() };
             translationHistory.unshift(entry);
@@ -1008,31 +1088,70 @@
             idbPut("history", { id: `${entry.time}::${entry.source}::${entry.target}`, item: entry });
             renderHistory();
         }
+
         function renderHistory() {
             const list = document.getElementById("history-list");
             const count = document.getElementById("history-count");
             if (!list || !count) return;
             count.textContent = translationHistory.length;
             list.innerHTML = "";
-            if (!translationHistory.length) { list.innerHTML = '<p class="text-xs text-slate-400 py-2">لا توجد ترجمات محفوظة حتى الآن.</p>'; return; }
-            translationHistory.forEach((item) => {
-                const row = document.createElement("div"); row.className = "history-item flex items-center gap-2 p-2.5 rounded-xl border border-slate-100 bg-slate-50";
-                const body = document.createElement("button"); body.type="button"; body.className="min-w-0 flex-1 text-right";
-                const a=document.createElement("span"); a.className="block text-xs font-bold text-slate-700 truncate"; a.textContent=item.input;
-                const b=document.createElement("span"); b.className="block text-xs text-slate-500 truncate mt-1"; b.textContent=item.translation;
-                body.append(a,b); body.onclick=()=>{ document.getElementById("box1-text").value=item.input; onBoxInput(1, false); document.getElementById("box2-text").value=item.translation; onBoxInput(2, false); state.activeInputBox=1; };
-                const copy=document.createElement("button"); copy.type="button"; copy.className="text-xs text-blue-600 px-2"; copy.textContent="نسخ"; copy.onclick=()=>navigator.clipboard?.writeText(item.translation);
-                row.append(body,copy); list.appendChild(row);
+            if (!translationHistory.length) {
+                list.innerHTML = '<p class="text-xs text-slate-400 py-2">لا توجد ترجمات محفوظة حتى الآن.</p>';
+                return;
+            }
+            translationHistory.forEach(item => {
+                const row = document.createElement("div");
+                row.className = "history-item flex items-center gap-2 p-2.5 rounded-xl border border-slate-100 bg-slate-50";
+                const body = document.createElement("button");
+                body.type = "button";
+                body.className = "min-w-0 flex-1 text-right";
+                const a = document.createElement("span");
+                a.className = "block text-xs font-bold text-slate-700 truncate";
+                a.textContent = item.input;
+                const b = document.createElement("span");
+                b.className = "block text-xs text-slate-500 truncate mt-1";
+                b.textContent = item.translation;
+                body.append(a, b);
+                body.onclick = () => {
+                    document.getElementById("box1-text").value = item.input;
+                    onBoxInput(1, false);
+                    document.getElementById("box2-text").value = item.translation;
+                    onBoxInput(2, false);
+                    state.activeInputBox = 1;
+                };
+                const copy = document.createElement("button");
+                copy.type = "button";
+                copy.className = "text-xs text-blue-600 px-2";
+                copy.textContent = "نسخ";
+                copy.onclick = () => navigator.clipboard?.writeText(item.translation);
+                row.append(body, copy);
+                list.appendChild(row);
             });
         }
-        function toggleHistory() { document.getElementById("history-panel").classList.toggle("hidden"); }
-        function clearHistory() { translationHistory=[]; localStorage.removeItem("smart_trans_history"); idbClear("history"); renderHistory(); }
+
+        function toggleHistory() {
+            document.getElementById("history-panel").classList.toggle("hidden");
+        }
+
+        function clearHistory() {
+            translationHistory = [];
+            localStorage.removeItem("smart_trans_history");
+            idbClear("history");
+            renderHistory();
+        }
+
         function populateVoiceSelector() {
-            const select=document.getElementById("speech-voice"); if(!select) return;
-            const chosen=localStorage.getItem("smart_trans_voice") || "";
-            select.innerHTML='<option value="">تلقائي حسب اللغة</option>';
-            cachedVoices.forEach(v=>{ const o=document.createElement("option"); o.value=`${v.name}||${v.lang}`; o.textContent=`${v.name} (${v.lang})`; select.appendChild(o); });
-            select.value=chosen;
+            const select = document.getElementById("speech-voice");
+            if (!select) return;
+            const chosen = localStorage.getItem("smart_trans_voice") || "";
+            select.innerHTML = '<option value="">تلقائي حسب اللغة</option>';
+            cachedVoices.forEach(v => {
+                const o = document.createElement("option");
+                o.value = `${v.name}||${v.lang}`;
+                o.textContent = `${v.name} (${v.lang})`;
+                select.appendChild(o);
+            });
+            select.value = chosen;
         }
 
         let state = {
@@ -1041,8 +1160,8 @@
             box2: { selectedLang: "en-US", detectedLang: null, manualOverride: false },
             currentDictLang: "en-US",
             workerUrl: DEFAULT_WORKER_URL,
-            geminiKey: "",
-            groqKey: "",
+            geminiKey: DEFAULT_GEMINI_KEY,
+            groqKey: DEFAULT_GROQ_KEY,
             knowledgeEndpoint: ""
         };
 
@@ -1121,19 +1240,29 @@
             applySavedFocusMode();
             localStorage.removeItem("smart_trans_style");
             loadCache();
-            try { translationHistory = JSON.parse(localStorage.getItem("smart_trans_history") || "[]"); } catch (_) { translationHistory=[]; }
+            try { translationHistory = JSON.parse(localStorage.getItem("smart_trans_history") || "[]"); } catch (_) { translationHistory = []; }
             renderHistory();
             hydrateIndexedCaches();
-            const rateInput=document.getElementById("speech-rate");
-            rateInput.value=localStorage.getItem("smart_trans_rate") || "1.08";
-            document.getElementById("speech-rate-value").textContent=Number(rateInput.value).toFixed(2)+"x";
-            rateInput.addEventListener("input",()=>{ document.getElementById("speech-rate-value").textContent=Number(rateInput.value).toFixed(2)+"x"; localStorage.setItem("smart_trans_rate",rateInput.value); });
-            document.getElementById("speech-voice").addEventListener("change",e=>localStorage.setItem("smart_trans_voice",e.target.value));
-            document.addEventListener("keydown",e=>{
-                if(e.key==="Escape" && (activeControllers.length || activeRequestSignature)) cancelActiveTranslation(true);
-                if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="h"){e.preventDefault();toggleHistory();}
-                if((e.ctrlKey||e.metaKey)&&e.altKey&&e.key.toLowerCase()==="c"){e.preventDefault();const out=document.getElementById("box2-text").value;if(out)navigator.clipboard?.writeText(out);}
+
+            const rateInput = document.getElementById("speech-rate");
+            rateInput.value = localStorage.getItem("smart_trans_rate") || "1.08";
+            document.getElementById("speech-rate-value").textContent = Number(rateInput.value).toFixed(2) + "x";
+            rateInput.addEventListener("input", () => {
+                document.getElementById("speech-rate-value").textContent = Number(rateInput.value).toFixed(2) + "x";
+                localStorage.setItem("smart_trans_rate", rateInput.value);
             });
+            document.getElementById("speech-voice").addEventListener("change", e => localStorage.setItem("smart_trans_voice", e.target.value));
+
+            document.addEventListener("keydown", e => {
+                if (e.key === "Escape" && (activeControllers.length || activeRequestSignature)) cancelActiveTranslation(true);
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "h") { e.preventDefault(); toggleHistory(); }
+                if ((e.ctrlKey || e.metaKey) && e.altKey && e.key.toLowerCase() === "c") {
+                    e.preventDefault();
+                    const out = document.getElementById("box2-text").value;
+                    if (out) navigator.clipboard?.writeText(out);
+                }
+            });
+
             populateLanguageSelect("box1-lang-select", state.box1.selectedLang);
             populateLanguageSelect("box2-lang-select", state.box2.selectedLang);
             document.getElementById("box1-text").dir = getLangObj(state.box1.selectedLang).dir;
@@ -1152,7 +1281,7 @@
                 const ta = document.getElementById(`box${boxNum}-text`);
                 ta.addEventListener("input", () => onBoxInput(boxNum, true));
                 ta.addEventListener("paste", () => setTimeout(() => onBoxInput(boxNum, true), 25));
-                ta.addEventListener("keydown", (e) => {
+                ta.addEventListener("keydown", e => {
                     if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
                         e.preventDefault();
                         clearTimeout(autoTranslateTimer);
@@ -1444,13 +1573,15 @@
                 nl: "de het een en van ik niet met voor dank hallo",
                 tr: "bir ve bu için değil çok ben sen teşekkür merhaba"
             };
-            let best="", bestScore=0;
+            let best = "", bestScore = 0;
             for (const [code, corpus] of Object.entries(samples)) {
-                const vocab=new Set(corpus.split(" ")); const score=words.reduce((n,w)=>n+(vocab.has(w)?1:0),0);
-                if(score>bestScore){bestScore=score;best=code;}
+                const vocab = new Set(corpus.split(" "));
+                const score = words.reduce((n, w) => n + (vocab.has(w) ? 1 : 0), 0);
+                if (score > bestScore) { bestScore = score; best = code; }
             }
-            return bestScore>=2 ? best : "en-US";
+            return bestScore >= 2 ? best : "en-US";
         }
+
         function detectLanguageFromText(text) {
             const clean = text.replace(/[\s0-9.,!?;:'"()\-_@#$%^&*+=<>\/\\]+/g, "");
             if (clean.length === 0) return null;
@@ -1462,7 +1593,7 @@
             }
             if (/[\u0590-\u05FF]/.test(clean)) return "he";
             if (/[\u0400-\u04FF]/.test(clean)) {
-                if (/[\u0404\u0406\u0407\u0490\u0491]/.test(clean)) return "uk";
+                if (/[\u0404\u0406\u0407\u0490]/.test(clean)) return "uk";
                 return "ru";
             }
             if (/[\u3040-\u309F\u30A0-\u30FF]/.test(clean)) return "ja";
@@ -1538,7 +1669,7 @@
             }
             document.getElementById("dictionary-section").classList.add("hidden");
             document.getElementById("idiom-section").classList.add("hidden");
-            ["smart-insights","toggle-smart-insights-btn","alternatives-card","breakdown-card","quality-card","context-card","regional-card","naturalness-badge"].forEach(id=>document.getElementById(id)?.classList.add("hidden"));
+            ["smart-insights", "toggle-smart-insights-btn", "alternatives-card", "breakdown-card", "quality-card", "context-card", "regional-card", "naturalness-badge"].forEach(id => document.getElementById(id)?.classList.add("hidden"));
             hideAlert();
             textarea.focus();
         }
@@ -1576,7 +1707,8 @@
             document.getElementById("box2-phonetics-row").classList.add("hidden");
 
             document.getElementById("box1-char-count").textContent = `${t1.value.length} / 2000`;
-            document.getElementById("box2-char-count") && (document.getElementById("box2-char-count").textContent = `${t2.value.length} / 2000`);
+            const c2 = document.getElementById("box2-char-count");
+            if (c2) c2.textContent = `${t2.value.length} / 2000`;
             document.getElementById("box1-clear-btn").classList.toggle("hidden", t1.value.trim().length === 0);
             document.getElementById("box2-clear-btn").classList.toggle("hidden", t2.value.trim().length === 0);
             if (t1.value.trim()) scheduleAutoTranslate(1);
@@ -1587,12 +1719,7 @@
             const textToCopy = el.value;
             if (!textToCopy || textToCopy.trim() === "") return;
 
-            const tempTextarea = document.createElement("textarea");
-            tempTextarea.value = textToCopy;
-            document.body.appendChild(tempTextarea);
-            tempTextarea.select();
-            try {
-                document.execCommand("copy");
+            const finishSuccess = () => {
                 const originalHTML = btnElement.innerHTML;
                 btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">Copied!</span>`;
                 btnElement.classList.add("border-emerald-300", "bg-emerald-50");
@@ -1603,6 +1730,27 @@
                     btnElement.classList.remove("border-emerald-300", "bg-emerald-50");
                     lucide.createIcons();
                 }, 1500);
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy).then(finishSuccess).catch(() => {
+                    fallbackCopy(textToCopy, finishSuccess);
+                });
+            } else {
+                fallbackCopy(textToCopy, finishSuccess);
+            }
+        }
+
+        function fallbackCopy(textToCopy, onDone) {
+            const tempTextarea = document.createElement("textarea");
+            tempTextarea.value = textToCopy;
+            tempTextarea.style.position = "fixed";
+            tempTextarea.style.opacity = "0";
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            try {
+                document.execCommand("copy");
+                onDone();
             } catch (err) {
                 console.error("Copy failed", err);
             } finally {
@@ -1751,9 +1899,9 @@ TEXT: """${text}"""`;
                     const events = buffer.split(/\r?\n\r?\n/);
                     buffer = events.pop() || "";
                     for (const event of events) {
-                        const line = event.split(/\r?\n/).find(x => x.startsWith("data:"));
-                        if (!line) continue;
-                        const payload = line.slice(5).trim();
+                        const lines = event.split(/\r?\n/).filter(x => x.startsWith("data:"));
+                        if (!lines.length) continue;
+                        const payload = lines.map(x => x.slice(5).trim()).join("\n");
                         if (!payload || payload === "[DONE]") continue;
                         try {
                             const obj = JSON.parse(payload);
@@ -1765,8 +1913,21 @@ TEXT: """${text}"""`;
                     }
                 }
                 const tail = decoder.decode();
-                if (tail) {
-                    buffer += tail;
+                if (tail) buffer += tail;
+                if (!raw.trim() && buffer.trim()) {
+                    const line = buffer.split(/\r?\n/).find(x => x.startsWith("data:"));
+                    if (line) {
+                        const payload = line.slice(5).trim();
+                        if (payload && payload !== "[DONE]") {
+                            try {
+                                const obj = JSON.parse(payload);
+                                const piece = provider === "gemini"
+                                    ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
+                                    : (obj?.choices?.[0]?.delta?.content || "");
+                                if (piece) { raw += piece; onText?.(raw); }
+                            } catch (_) {}
+                        }
+                    }
                 }
                 if (!raw.trim()) throw new Error("Empty stream response");
                 return parseSafeJSON(raw);
@@ -1947,7 +2108,9 @@ TEXT: """${text}"""`;
             put("perf-route", lastPerformance.route || "—");
         }
 
-        function togglePerformance() { document.getElementById("performance-panel")?.classList.toggle("hidden"); }
+        function togglePerformance() {
+            document.getElementById("performance-panel")?.classList.toggle("hidden");
+        }
 
         async function executeTranslation(options = {}) {
             const manualTrigger = options.manualTrigger !== false;
@@ -2040,9 +2203,8 @@ TEXT: """${text}"""`;
             const controller = new AbortController();
             activeControllers = [controller];
             const route = chooseModelRoute(inputText, effectiveSrcLang, effectiveTgtLang);
-            activeStreamOwner = null;
 
-            const onStreamText = (raw) => {
+            const onStreamText = raw => {
                 if (requestId !== activeTranslationId) return;
                 updateStreamPreview(raw, tgtNum);
             };
@@ -2085,15 +2247,19 @@ TEXT: """${text}"""`;
 
                 saveCache(cacheId, winner.data);
                 addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang });
-                latestTranslationText = winner.data.translation || "";
                 lastPreparedPayload = { signature, data: winner.data };
 
                 const aiMs = performance.now() - aiStart;
-                updatePerformance({ total: performance.now() - totalStart, knowledge: knowledgeMs, ai: aiMs, source: knowledgeContext ? (knowledgeContext.source || "Knowledge + Worker") : (hasWorker ? `Worker (${winner.provider})` : "Local AI"), route: winner.data._route });
+                updatePerformance({
+                    total: performance.now() - totalStart,
+                    knowledge: knowledgeMs,
+                    ai: aiMs,
+                    source: knowledgeContext ? (knowledgeContext.source || "Knowledge + Worker") : (hasWorker ? `Worker (${winner.provider})` : "Local AI"),
+                    route: winner.data._route
+                });
 
                 activeControllers = [];
                 activeRequestSignature = "";
-                activeStreamOwner = null;
                 setLoading(false);
                 const shouldRevealSection = manualTrigger || autoTriggered || lastRenderedSignature === signature;
                 renderResults(winner.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum, { animateStagger: shouldRevealSection });
@@ -2102,7 +2268,6 @@ TEXT: """${text}"""`;
                 if (requestId !== activeTranslationId) return;
                 activeControllers = [];
                 activeRequestSignature = "";
-                activeStreamOwner = null;
                 setLoading(false);
                 if (err.name === "AbortError") return;
                 lastGeminiError = err.message;
@@ -2398,7 +2563,7 @@ TEXT: """${text}"""`;
             const btn = document.getElementById("toggle-smart-insights-btn");
             const label = document.getElementById("toggle-smart-insights-label");
             if (!section || !btn) return;
-            const hasAnyInsight = ["alternatives-card","breakdown-card","quality-card","context-card","regional-card"]
+            const hasAnyInsight = ["alternatives-card", "breakdown-card", "quality-card", "context-card", "regional-card"]
                 .some(id => !document.getElementById(id)?.classList.contains("hidden"));
             section.classList.add("hidden");
             if (label) label.textContent = "بدائل وسياق المعنى";
