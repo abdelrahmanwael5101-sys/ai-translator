@@ -364,8 +364,6 @@
                         <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </button>
 
-                    <span id="box2-char-count" class="hidden absolute bottom-3.5 right-3.5 text-[11px] text-slate-400 font-en">0 / 2000</span>
-
                     <div class="absolute bottom-2.5 left-3 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-2">
                         <button type="button" onclick="speakBoxText(2, this)" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95" title="استمع للترجمة">
                             <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
@@ -727,7 +725,7 @@
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const KEY_VERSION = "v21_stream_idle_fix";
+        const KEY_VERSION = "v20_token_opt_v2_2";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -736,15 +734,14 @@
             localStorage.setItem("smart_trans_key_ver", KEY_VERSION);
         }
 
-        const GROQ_MODELS = [
-            "llama-3.3-70b-versatile",
-            "openai/gpt-oss-120b"
-        ];
+       const GROQ_MODELS = [
+    "openai/gpt-oss-120b"
+];
 
-        let GEMINI_MODELS = [
-            "gemini-3.8-flash",
-            "gemini-3.5-flash-lite"
-        ];
+let GEMINI_MODELS = [
+    "gemini-3.8-flash",
+    "gemini-3.5-flash-lite"
+];
 
         let lastGeminiError = "";
         let activeTranslationId = 0;
@@ -757,7 +754,6 @@
         const KNOWLEDGE_WAIT_MS = 350;
         const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
         const KNOWLEDGE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
-        const STREAM_IDLE_TIMEOUT_MS = 15000;
         const IDB_NAME = "smart-translator-db";
         const IDB_VERSION = 3;
         let idbPromise = null;
@@ -899,7 +895,6 @@
             return w;
         }
         function buildLexicalHints(text, src, tgt) {
-            const normalized=normalizeLookupText(text);
             const tokens=(String(text).match(/[A-Za-zÀ-ÿ']+|[؀-ۿ]+/g)||[]).slice(0,25);
             const stop=new Set(["the","a","an","is","are","was","were","to","of","in","on","at","and","or","for","with","it","this","that","i","you","he","she","we","they"]);
             const english=tokens.filter(t=>/^[A-Za-zÀ-ÿ']+$/.test(t));
@@ -969,7 +964,7 @@
             return { source, verifiedOxford, data: safeData };
         }
 
-        async function retrieveKnowledgeContext(text, src, tgt, requestId) {
+        async function retrieveKnowledgeContext(text, src, tgt, requestId, lexicalHints = null) {
             const endpoint = (state.knowledgeEndpoint || "").trim();
             if (!endpoint) return null;
             const key = knowledgeKey(text, src, tgt);
@@ -985,7 +980,7 @@
                 const request = fetch(endpoint, {
                     method: "POST", signal: controller.signal,
                     headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                    body: JSON.stringify({ query: text, lexicalHints: buildLexicalHints(text,src,tgt), sourceLanguage: src, targetLanguage: tgt, mode: src.startsWith("en") && tgt.startsWith("en") ? "english_dictionary" : "bilingual_context", limit: 6 })
+                    body: JSON.stringify({ query: text, lexicalHints: lexicalHints || buildLexicalHints(text,src,tgt), sourceLanguage: src, targetLanguage: tgt, mode: src.startsWith("en") && tgt.startsWith("en") ? "english_dictionary" : "bilingual_context", limit: 6 })
                 }).then(async response => {
                     if (!response.ok) throw new Error(`Knowledge backend HTTP ${response.status}`);
                     return cleanKnowledgePayload(await response.json());
@@ -1616,56 +1611,58 @@
         function buildUnifiedPrompt(text, effectiveSrcLang, effectiveTgtLang, knowledgeContext = null, lexicalHints = null) {
             const isEnToEn = effectiveSrcLang.startsWith("en") && effectiveTgtLang.startsWith("en");
             const implicitCtx = inferImplicitContext(text, effectiveSrcLang, effectiveTgtLang);
+            const sourceName = getLangObj(effectiveSrcLang).name;
+            const targetName = getLangObj(effectiveTgtLang).name;
 
-            const modeBlock = isEnToEn
-                ? `MODE: En->En dictionary. Keep headword as "translation". Concise definition & 2 examples. Never invent Oxford citations.`
-                : `MODE: Natural context translation (${implicitCtx.inferredRegister}, EG=${implicitCtx.isEgyptianArabic}).
-- Translate meaning, tone, Egyptian slang/idioms, or technical/formal register naturally, not word-for-word.
-- Self-check: replace stiff literal phrasing with natural native speech and note briefly in quality_check.
-- Examples: "أنا مش طايق نفسي" -> "I can't stand myself." | "مكبر دماغي" -> "I'm not sweating it."`;
+            // Put translation first so the UI can reveal useful streamed text as early as possible.
+            const schema = {
+                translation: "",
+                detected_source_code: effectiveSrcLang,
+                detected_source_name: sourceName,
+                resolved_target_code: effectiveTgtLang,
+                inferred_style: implicitCtx.inferredRegister,
+                transcription: "",
+                ipa: "",
+                ipa_symbols: [{ symbol: "", example: "" }],
+                part_of_speech: "",
+                cefr_level: "",
+                definition: "",
+                examples: [{ sentence: "", translation: "" }, { sentence: "", translation: "" }],
+                idiom: { has_idiom: false, phrase: "", meaning: "", examples: [] },
+                synonyms: ["", "", ""],
+                antonyms: ["", "", ""],
+                collocations: ["", "", ""],
+                word_family: ["", ""],
+                grammar_patterns: ["", ""],
+                frequency: "",
+                register: implicitCtx.inferredRegister,
+                related_words: ["", "", ""],
+                etymology: "",
+                naturalness: { label: "", reason: "" },
+                translation_alternatives: [
+                    { label: "", text: "", note: "" },
+                    { label: "", text: "", note: "" }
+                ],
+                sentence_breakdown: [{ source: "", role: "", meaning: "" }],
+                quality_check: { status: "", issues: [], improvement: "" },
+                context_note: "",
+                regional_differences: { british: "", american: "", note: "" }
+            };
 
-            return `Translate & analyze (${getLangObj(effectiveSrcLang).name} -> ${getLangObj(effectiveTgtLang).name}).
-${modeBlock}
-Rules: 1 short sentence per explanation; "part_of_speech" in English; "idiom.has_idiom": true only for real idioms/colloquial expressions. Raw JSON only:
-{
-  "detected_source_code": "${effectiveSrcLang}",
-  "detected_source_name": "${getLangObj(effectiveSrcLang).name}",
-  "resolved_target_code": "${effectiveTgtLang}",
-  "inferred_style": "${implicitCtx.inferredRegister}",
-  "translation": "string",
-  "transcription": "string",
-  "ipa": "string",
-  "ipa_symbols": [{"symbol": "/ɪ/", "example": "kit"}],
-  "part_of_speech": "string",
-  "cefr_level": "B1",
-  "definition": "concise 1-line meaning",
-  "examples": [
-    {"sentence": "string", "translation": "string"},
-    {"sentence": "string", "translation": "string"}
-  ],
-  "idiom": {"has_idiom": false, "phrase": "", "meaning": "", "examples": []},
-  "synonyms": ["w1", "w2", "w3"],
-  "antonyms": ["w1", "w2", "w3"],
-  "collocations": ["c1", "c2", "c3"],
-  "word_family": ["f1 (n)", "f2 (v)"],
-  "grammar_patterns": ["p1", "p2"],
-  "frequency": "short usage frequency note",
-  "register": "${implicitCtx.inferredRegister}",
-  "related_words": ["r1", "r2", "r3"],
-  "etymology": "short root/origin note",
-  "naturalness": {"label": "Native / Natural", "reason": "short reason"},
-  "translation_alternatives": [
-    {"label": "Natural", "text": "string", "note": "short note"},
-    {"label": "Alternative", "text": "string", "note": "short note"}
-  ],
-  "sentence_breakdown": [{"source": "part", "role": "role", "meaning": "meaning"}],
-  "quality_check": {"status": "Verified & Self-Reviewed", "issues": [], "improvement": "short audit note"},
-  "context_note": "short tone/context note",
-  "regional_differences": {"british": "", "american": "", "note": ""}
-}
-${knowledgeContext ? `REF: ${JSON.stringify(knowledgeContext)}` : ""}
-${lexicalHints && (lexicalHints.phrases.length || lexicalHints.lemmas.length) ? `HINTS: ${JSON.stringify(lexicalHints)}` : ""}
-TEXT: """${text}"""`;
+            const mode = isEnToEn
+                ? "English-English dictionary: keep the headword in translation; give an original concise definition and two useful examples."
+                : `Context-aware translation. Infer tone, register and dialect (${implicitCtx.inferredRegister}; Egyptian Arabic=${implicitCtx.isEgyptianArabic}). Translate intended meaning naturally, preserving nuance, idioms, slang and technical terms; never translate mechanically. Self-review for accuracy and native naturalness.`;
+
+            const extras = [
+                knowledgeContext ? `REFERENCE: ${JSON.stringify(knowledgeContext)}` : "",
+                lexicalHints && (lexicalHints.phrases.length || lexicalHints.lemmas.length)
+                    ? `LEXICAL HINTS: ${JSON.stringify(lexicalHints)}` : ""
+            ].filter(Boolean).join("\n");
+
+            return `Translate ${sourceName} (${effectiveSrcLang}) to ${targetName} (${effectiveTgtLang}). ${mode}
+Return one complete JSON object only, with every schema key and its indicated type. Keep explanations concise. Give two examples and up to three items in word lists. Keep part_of_speech in English; set idiom.has_idiom=true only for a genuine idiom or strong colloquial expression. Preserve all source meaning and details.
+SCHEMA: ${JSON.stringify(schema)}
+${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
         }
 
         function normalizeWorkerUrl(url) {
@@ -1689,40 +1686,18 @@ TEXT: """${text}"""`;
 
         function updateStreamPreview(rawText, targetBoxNum) {
             const match = rawText.match(/"translation"\s*:\s*"((?:\\.|[^"\\])*)/s);
-            if (!match) return;
+            if (!match) return false;
             try {
                 const partial = JSON.parse('"' + match[1] + '"');
                 const boxEl = document.getElementById(`box${targetBoxNum}-text`);
-                if (boxEl && boxEl.value !== partial) {
-                    boxEl.value = partial;
-                    boxEl.classList.remove("translation-pop");
-                    void boxEl.offsetWidth;
-                    boxEl.classList.add("translation-pop");
+                if (!boxEl) return false;
+                if (boxEl.value !== partial) boxEl.value = partial;
+                if (partial.length) {
+                    document.getElementById("loading-overlay")?.classList.add("hidden");
+                    return true;
                 }
             } catch (_) {}
-        }
-
-        function createActiveStreamSignal(parentSignal, idleTimeoutMs = STREAM_IDLE_TIMEOUT_MS) {
-            const controller = new AbortController();
-            const onParentAbort = () => controller.abort();
-            if (parentSignal) {
-                if (parentSignal.aborted) controller.abort();
-                else parentSignal.addEventListener("abort", onParentAbort, { once: true });
-            }
-            let timer = null;
-            const bump = () => {
-                clearTimeout(timer);
-                timer = setTimeout(() => controller.abort(new DOMException("Stream idle timeout", "TimeoutError")), idleTimeoutMs);
-            };
-            bump();
-            return {
-                signal: controller.signal,
-                bump,
-                cleanup: () => {
-                    clearTimeout(timer);
-                    if (parentSignal) parentSignal.removeEventListener("abort", onParentAbort);
-                }
-            };
+            return false;
         }
 
         async function readSSE(response, onText, provider, signal) {
@@ -1731,65 +1706,65 @@ TEXT: """${text}"""`;
                 const piece = provider === "gemini"
                     ? (fallbackData?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
                     : (fallbackData?.choices?.[0]?.message?.content || "");
+                if (!piece) throw new Error("Empty provider response");
                 onText?.(piece);
                 return parseSafeJSON(piece);
             }
+
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
-            const streamWatch = createActiveStreamSignal(signal, STREAM_IDLE_TIMEOUT_MS);
-            let buffer = "", raw = "";
+            let buffer = "";
+            let raw = "";
+            let aborted = false;
+            const abortReader = () => {
+                aborted = true;
+                reader.cancel().catch(() => {});
+            };
+            signal?.addEventListener("abort", abortReader, { once: true });
+
+            const consumeEvent = (event) => {
+                const data = event.split(/\r?\n/)
+                    .filter(line => line.startsWith("data:"))
+                    .map(line => line.slice(5).replace(/^ /, ""));
+                if (!data.length) return;
+                const payload = data.join("\n").trim();
+                if (!payload || payload === "[DONE]") return;
+                let obj;
+                try { obj = JSON.parse(payload); }
+                catch (_) { throw new Error("Invalid SSE event from provider"); }
+                if (obj?.error) {
+                    const message = obj.error.message || obj.error.status || JSON.stringify(obj.error);
+                    throw new Error(`${provider} stream error: ${message}`);
+                }
+                const piece = provider === "gemini"
+                    ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
+                    : (obj?.choices?.[0]?.delta?.content || "");
+                if (piece) {
+                    raw += piece;
+                    onText?.(raw);
+                }
+            };
+
             try {
                 while (true) {
-                    if (streamWatch.signal.aborted) {
-                        throw streamWatch.signal.reason || new DOMException("Aborted", "AbortError");
-                    }
+                    if (signal?.aborted || aborted) throw new DOMException("Aborted", "AbortError");
                     const { value, done } = await reader.read();
-                    streamWatch.bump();
                     if (done) break;
                     buffer += decoder.decode(value, { stream: true });
                     const events = buffer.split(/\r?\n\r?\n/);
                     buffer = events.pop() || "";
-                    for (const event of events) {
-                        const lines = event.split(/\r?\n/).filter(x => x.startsWith("data:"));
-                        if (!lines.length) continue;
-                        const payload = lines.map(x => x.slice(5).trim()).join("\n");
-                        if (!payload || payload === "[DONE]") continue;
-                        try {
-                            const obj = JSON.parse(payload);
-                            const piece = provider === "gemini"
-                                ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
-                                : (obj?.choices?.[0]?.delta?.content || "");
-                            if (piece) { raw += piece; onText?.(raw); }
-                        } catch (_) {}
-                    }
+                    for (const event of events) consumeEvent(event);
                 }
-                const tail = decoder.decode();
-                if (tail) buffer += tail;
-                if (!raw.trim() && buffer.trim()) {
-                    const line = buffer.split(/\r?\n/).find(x => x.startsWith("data:"));
-                    if (line) {
-                        const payload = line.slice(5).trim();
-                        if (payload && payload !== "[DONE]") {
-                            try {
-                                const obj = JSON.parse(payload);
-                                const piece = provider === "gemini"
-                                    ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
-                                    : (obj?.choices?.[0]?.delta?.content || "");
-                                if (piece) { raw += piece; onText?.(raw); }
-                            } catch (_) {}
-                        }
-                    }
-                }
+                buffer += decoder.decode();
+                if (buffer.trim()) consumeEvent(buffer);
                 if (!raw.trim()) throw new Error("Empty stream response");
                 return parseSafeJSON(raw);
             } catch (err) {
-                if (streamWatch.signal.aborted && !signal?.aborted) {
-                    try { reader.cancel(); } catch (_) {}
-                    throw new Error("Stream timed out while waiting for data");
-                }
+                try { await reader.cancel(err); } catch (_) {}
                 throw err;
             } finally {
-                streamWatch.cleanup();
+                signal?.removeEventListener("abort", abortReader);
+                try { reader.releaseLock(); } catch (_) {}
             }
         }
 
@@ -1848,19 +1823,16 @@ TEXT: """${text}"""`;
         }
 
         async function sendGeminiModelRequest(modelName, apiKey, payload, signal, onText) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
-            const response = await fetch(url, { method: "POST", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+            const response = await fetch(url, { method: "POST", signal, headers: { "Content-Type": "application/json", "Accept": "text/event-stream" }, body: JSON.stringify(payload) });
             if (!response.ok) throw new Error(`HTTP ${response.status} (${modelName}): ${(await response.text()).slice(0, 220)}`);
-            const json = await response.json();
-            const text = (json?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("");
-            if (text) onText?.(text);
-            return parseSafeJSON(text);
+            return readSSE(response, onText, "gemini", signal);
         }
 
         async function callDirectGeminiAPI(prompt, signal, onText) {
             const apiKey = state.geminiKey.trim();
             if (!apiKey) throw new Error("Missing local Gemini API Key");
-            const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.15, responseMimeType: "application/json" } };
+            const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.15, maxOutputTokens: 3072, responseMimeType: "application/json" } };
             let lastErr = null;
             for (const modelName of GEMINI_MODELS) {
                 if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
@@ -1879,19 +1851,16 @@ TEXT: """${text}"""`;
 
         async function callDirectGroqWithModel(prompt, modelName, apiKey, signal, onText) {
             const url = "https://api.groq.com/openai/v1/chat/completions";
-            const systemMsg = { role: "system", content: "Context-aware translator & bilingual lexicographer. Raw JSON only." };
+            const systemMsg = { role: "system", content: "Expert context-aware translator & bilingual lexicographer. Output strictly valid JSON." };
             const userMsg = { role: "user", content: prompt };
             const response = await fetch(url, {
                 method: "POST",
                 signal,
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-                body: JSON.stringify({ model: modelName, temperature: 0.15, max_tokens: 1200, stream: false, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
+                body: JSON.stringify({ model: modelName, temperature: 0.15, max_tokens: 3072, stream: true, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
             });
             if (!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
-            const json = await response.json();
-            const text = json?.choices?.[0]?.message?.content || "";
-            if (text) onText?.(text);
-            return parseSafeJSON(text);
+            return readSSE(response, onText, "groq", signal);
         }
 
         async function callDirectGroqAPI(prompt, signal, onText, route = null) {
@@ -1934,13 +1903,13 @@ TEXT: """${text}"""`;
         return {
             mode: "context_70b_first",
             label: `Context-Aware (${ctx.inferredRegister})`,
-            models: ["llama-3.3-70b-versatile", "openai/gpt-oss-120b"]
+            models: ["openai/gpt-oss-120b"]
         };
     }
     return {
         mode: "balanced_primary",
         label: "Groq Primary",
-        models: ["llama-3.3-70b-versatile", "openai/gpt-oss-120b"]
+        models: ["openai/gpt-oss-120b"]
     };
 }
 
@@ -1987,7 +1956,7 @@ TEXT: """${text}"""`;
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const cacheId = signature + "::stream-idle-v1";
+            const cacheId = signature + "::token-opt-v2.2";
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
@@ -2044,7 +2013,7 @@ TEXT: """${text}"""`;
             setLoadingStage(autoTriggered ? "فهم السياق والترجمة التلقائية..." : "تحليل صياغة الكلام وتجهيز الترجمة الطبيعية...");
             const knowledgeStart = performance.now();
             const lexicalHints = buildLexicalHints(inputText, effectiveSrcLang, effectiveTgtLang);
-            const knowledgeContext = await retrieveKnowledgeContext(inputText, effectiveSrcLang, effectiveTgtLang, requestId);
+            const knowledgeContext = await retrieveKnowledgeContext(inputText, effectiveSrcLang, effectiveTgtLang, requestId, lexicalHints);
             const knowledgeMs = performance.now() - knowledgeStart;
             if (requestId !== activeTranslationId) return;
 
@@ -2587,11 +2556,11 @@ TEXT: """${text}"""`;
 
         function escapeHTML(str) {
             return String(str).replace(/[&<>"']/g, m => ({
-                "&": "&",
-                "<": "<",
-                ">": ">",
-                '"': """,
-                "'": "'"
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
             }[m]));
         }
 
