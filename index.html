@@ -725,7 +725,7 @@
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
 
-        const KEY_VERSION = "v20_token_opt_v2_2";
+        const KEY_VERSION = "v21_stream_idle_fix";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -734,15 +734,15 @@
             localStorage.setItem("smart_trans_key_ver", KEY_VERSION);
         }
 
-       const GROQ_MODELS = [
-    "llama-3.3-70b-versatile",
-    "openai/gpt-oss-120b"
-];
+        const GROQ_MODELS = [
+            "llama-3.3-70b-versatile",
+            "openai/gpt-oss-120b"
+        ];
 
-let GEMINI_MODELS = [
-    "gemini-3.8-flash",
-    "gemini-3.5-flash-lite"
-];
+        let GEMINI_MODELS = [
+            "gemini-3.8-flash",
+            "gemini-3.5-flash-lite"
+        ];
 
         let lastGeminiError = "";
         let activeTranslationId = 0;
@@ -755,6 +755,7 @@ let GEMINI_MODELS = [
         const KNOWLEDGE_WAIT_MS = 350;
         const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
         const KNOWLEDGE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+        const STREAM_IDLE_TIMEOUT_MS = 15000;
         const IDB_NAME = "smart-translator-db";
         const IDB_VERSION = 3;
         let idbPromise = null;
@@ -896,7 +897,6 @@ let GEMINI_MODELS = [
             return w;
         }
         function buildLexicalHints(text, src, tgt) {
-            const normalized=normalizeLookupText(text);
             const tokens=(String(text).match(/[A-Za-zÀ-ÿ']+|[؀-ۿ]+/g)||[]).slice(0,25);
             const stop=new Set(["the","a","an","is","are","was","were","to","of","in","on","at","and","or","for","with","it","this","that","i","you","he","she","we","they"]);
             const english=tokens.filter(t=>/^[A-Za-zÀ-ÿ']+$/.test(t));
@@ -1703,6 +1703,29 @@ TEXT: """${text}"""`;
             } catch (_) {}
         }
 
+        function createActiveStreamSignal(parentSignal, idleTimeoutMs = STREAM_IDLE_TIMEOUT_MS) {
+            const controller = new AbortController();
+            const onParentAbort = () => controller.abort();
+            if (parentSignal) {
+                if (parentSignal.aborted) controller.abort();
+                else parentSignal.addEventListener("abort", onParentAbort, { once: true });
+            }
+            let timer = null;
+            const bump = () => {
+                clearTimeout(timer);
+                timer = setTimeout(() => controller.abort(new DOMException("Stream idle timeout", "TimeoutError")), idleTimeoutMs);
+            };
+            bump();
+            return {
+                signal: controller.signal,
+                bump,
+                cleanup: () => {
+                    clearTimeout(timer);
+                    if (parentSignal) parentSignal.removeEventListener("abort", onParentAbort);
+                }
+            };
+        }
+
         async function readSSE(response, onText, provider, signal) {
             if (!response.body || !response.body.getReader) {
                 const fallbackData = await response.json();
@@ -1714,30 +1737,48 @@ TEXT: """${text}"""`;
             }
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
+            const streamWatch = createActiveStreamSignal(signal, STREAM_IDLE_TIMEOUT_MS);
             let buffer = "", raw = "";
-            while (true) {
-                if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
-                const { value, done } = await reader.read();
-                if (done) break;
-                buffer += decoder.decode(value, { stream: true });
-                const events = buffer.split(/\r?\n\r?\n/);
-                buffer = events.pop() || "";
-                for (const event of events) {
-                    const line = event.split(/\r?\n/).find(x => x.startsWith("data:"));
-                    if (!line) continue;
-                    const payload = line.slice(5).trim();
-                    if (!payload || payload === "[DONE]") continue;
-                    try {
-                        const obj = JSON.parse(payload);
-                        const piece = provider === "gemini"
-                            ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
-                            : (obj?.choices?.[0]?.delta?.content || "");
-                        if (piece) { raw += piece; onText?.(raw); }
-                    } catch (_) {}
+            try {
+                while (true) {
+                    if (streamWatch.signal.aborted) {
+                        throw streamWatch.signal.reason || new DOMException("Aborted", "AbortError");
+                    }
+                    const { value, done } = await reader.read();
+                    streamWatch.bump();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const events = buffer.split(/\r?\n\r?\n/);
+                    buffer = events.pop() || "";
+                    for (const event of events) {
+                        const line = event.split(/\r?\n/).find(x => x.startsWith("data:"));
+                        if (!line) continue;
+                        const payload = line.slice(5).trim();
+                        if (!payload || payload === "[DONE]") continue;
+                        try {
+                            const obj = JSON.parse(payload);
+                            const piece = provider === "gemini"
+                                ? (obj?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("")
+                                : (obj?.choices?.[0]?.delta?.content || "");
+                            if (piece) { raw += piece; onText?.(raw); }
+                        } catch (_) {}
+                    }
                 }
+                const tail = decoder.decode();
+                if (tail) {
+                    buffer += tail;
+                }
+                if (!raw.trim()) throw new Error("Empty stream response");
+                return parseSafeJSON(raw);
+            } catch (err) {
+                if (streamWatch.signal.aborted && !signal?.aborted) {
+                    try { reader.cancel(); } catch (_) {}
+                    throw new Error("Stream timed out while waiting for data");
+                }
+                throw err;
+            } finally {
+                streamWatch.cleanup();
             }
-            if (!raw.trim()) throw new Error("Empty stream response");
-            return parseSafeJSON(raw);
         }
 
         async function callWorkerGroqStream(prompt, signal, onText, route = null) {
@@ -1832,7 +1873,7 @@ TEXT: """${text}"""`;
                 method: "POST",
                 signal,
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-                body: JSON.stringify({ model: modelName, temperature: 0.15, max_tokens: 1350, stream: false, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
+                body: JSON.stringify({ model: modelName, temperature: 0.15, max_tokens: 1200, stream: false, response_format: { type: "json_object" }, messages: [systemMsg, userMsg] })
             });
             if (!response.ok) throw new Error(`Groq (${modelName}) HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
             const json = await response.json();
@@ -1869,27 +1910,27 @@ TEXT: """${text}"""`;
             return JSON.parse(jsonOnly);
         }
 
-       function chooseModelRoute(text, src, tgt) {
-    const clean = String(text || "").trim();
-    const ctx = inferImplicitContext(clean, src, tgt);
-    const complex =
-        clean.length > 100 ||
-        ctx.isEgyptianArabic ||
-        ctx.signals.length > 0;
+        function chooseModelRoute(text, src, tgt) {
+            const clean = String(text || "").trim();
+            const ctx = inferImplicitContext(clean, src, tgt);
+            const complex =
+                clean.length > 100 ||
+                ctx.isEgyptianArabic ||
+                ctx.signals.length > 0;
 
-    if (complex) {
-        return {
-            mode: "context_70b_first",
-            label: `Context-Aware (${ctx.inferredRegister})`,
-            models: ["llama-3.3-70b-versatile", "openai/gpt-oss-120b"]
-        };
-    }
-    return {
-        mode: "balanced_primary",
-        label: "Groq Primary",
-        models: ["llama-3.3-70b-versatile", "openai/gpt-oss-120b"]
-    };
-}
+            if (complex) {
+                return {
+                    mode: "context_70b_first",
+                    label: `Context-Aware (${ctx.inferredRegister})`,
+                    models: ["llama-3.3-70b-versatile", "openai/gpt-oss-120b"]
+                };
+            }
+            return {
+                mode: "balanced_primary",
+                label: "Groq Primary",
+                models: ["llama-3.3-70b-versatile", "openai/gpt-oss-120b"]
+            };
+        }
 
         function setLoadingStage(message) {
             const el = document.getElementById("loading-status");
@@ -1934,7 +1975,7 @@ TEXT: """${text}"""`;
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const cacheId = signature + "::token-opt-v2.2";
+            const cacheId = signature + "::stream-idle-v1";
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
@@ -2534,11 +2575,11 @@ TEXT: """${text}"""`;
 
         function escapeHTML(str) {
             return String(str).replace(/[&<>"']/g, m => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;"
+                "&": "&",
+                "<": "<",
+                ">": ">",
+                '"': """,
+                "'": "'"
             }[m]));
         }
 
