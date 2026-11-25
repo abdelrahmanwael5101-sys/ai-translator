@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon.svg">
     <title>Premium Smart Translator v7 | AI Translator & Dictionary</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,6 +101,10 @@
         .animate-fade-in {
             animation: fadeIn 0.3s ease-out forwards;
         }
+        /* hidden by request: model/cache badges and site speed indicator (elements kept so JS keeps working) */
+        #engine-badge, #dict-source-badge, #performance-panel, .perf-toggle-btn { display: none !important; }
+        .advanced-loading { opacity: .55; }
+        #advanced-wrap.hidden { display: none; }
         .stagger-hidden {
             opacity: 0;
             transform: translateY(18px) scale(0.985);
@@ -252,12 +260,10 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
         <div class="max-w-6xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white shadow-sm shrink-0">
-                    <i data-lucide="languages" class="w-5 h-5 sm:w-6 sm:h-6"></i>
-                </div>
+                <svg class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 shadow-sm rounded-xl" viewBox="0 0 512 512" role="img" aria-label="المترجم الذكي"><defs><linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#gA)"/><path d="M216.40723981900453 410.40723981900453Q161.65610859728508 410.40723981900453 133.82805429864254 385.5203619909502Q106.0 360.6334841628959 106.0 314.02714932126696Q106.0 294.57013574660635 114.5972850678733 264.25339366515834H134.95927601809956Q134.50678733031674 266.0633484162896 134.05429864253392 274.2081447963801Q133.60180995475113 282.3529411764706 133.60180995475113 286.8778280542987Q133.60180995475113 313.1221719457014 143.78280542986425 327.3755656108598Q153.96380090497738 341.6289592760181 175.68325791855204 349.3212669683258Q186.54298642533936 352.4886877828054 201.02262443438914 354.52488687782807Q215.50226244343892 356.56108597285066 233.14932126696831 356.56108597285066Q272.5158371040724 356.56108597285066 310.52488687782807 349.32126696832574Q348.53393665158376 342.0814479638009 379.75565610859724 328.0542986425339Q375.2307692307693 317.6470588235294 368.21719457013575 304.75113122171945Q361.2036199095022 291.8552036199095 357.131221719457 284.61538461538464Q352.60633484162895 275.5656108597285 349.43891402714934 268.552036199095Q346.2714932126697 261.53846153846155 346.2714932126697 255.65610859728508Q346.2714932126697 244.79638009049773 358.48868778280547 231.67420814479638Q370.7058823529412 218.55203619909503 387.447963800905 209.9547511312217Q394.68778280542983 243.89140271493213 398.5339366515837 265.158371040724Q402.38009049773757 286.42533936651586 404.1900452488688 297.96380090497735Q406.0 309.5022624434389 406.0 314.9321266968326Q406.0 325.3393665158371 400.79638009049773 340.95022624434387Q395.59276018099547 356.56108597285066 388.3529411764706 369.68325791855204Q368.4434389140272 381.9004524886878 340.61538461538464 390.95022624434387Q312.7873303167421 400.0 280.8868778280543 405.20361990950227Q248.98642533936652 410.40723981900453 216.40723981900453 410.40723981900453ZM268.89592760180994 249.32126696832577Q259.39366515837105 241.6289592760181 251.70135746606337 234.84162895927602Q244.00904977375566 228.05429864253392 237.6742081447964 221.26696832579185Q254.4162895927602 205.88235294117646 267.99095022624437 189.59276018099547Q272.0633484162896 194.1176470588235 279.3031674208145 200.90497737556558Q286.54298642533934 207.69230769230768 296.4977375565611 217.6470588235294Q284.28054298642536 234.3891402714932 268.89592760180994 249.32126696832577ZM208.26244343891403 256.10859728506784Q188.8054298642534 240.27149321266967 177.04072398190047 227.6018099547511Q184.73303167420815 219.90950226244343 192.42533936651586 211.9909502262443Q200.11764705882354 204.07239819004522 207.80995475113122 196.38009049773754Q215.9547511312217 205.88235294117646 235.86425339366517 224.4343891402715Q224.55203619909503 240.7239819004525 208.26244343891403 256.10859728506784Z" fill="#fff"/><path d="M392 92l14 38 38 14-38 14-14 38-14-38-38-14 38-14z" fill="#fde68a"/></svg>
                 <div class="min-w-0">
                     <h1 class="text-base sm:text-xl font-bold text-slate-900 truncate leading-tight">المترجم الذكي</h1>
-                    <p class="text-[11px] text-slate-500 hidden sm:block truncate">ترجمة فورية تفهم السياق والنبرة وتراجع الجودة تلقائياً</p>
+                    <p class="text-[11px] text-slate-500 hidden sm:block truncate">ترجمة تفهم مقصدك لا كلماتك فقط</p>
                 </div>
             </div>
 
@@ -280,10 +286,10 @@
 
         <section class="mb-5 sm:mb-7 text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[11px] sm:text-xs font-bold mb-3">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>SMART TRANSLATION EXPERIENCE</span>
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>ترجمة ذكية بالذكاء الاصطناعي</span>
             </div>
-            <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">ترجمة ذكية تفهم المصري والإنجليزي حتى لو مش مثالي</h2>
-            <p class="mt-2 text-xs sm:text-sm text-slate-500">يفهم صياغة الكلام ونبرته تلقائياً ويراجع جودة المعنى والطبيعية في الخلفية</p>
+            <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">اكتب كما تتحدث.. ونحن نتولى الترجمة</h2>
+            <p class="mt-2 text-xs sm:text-sm text-slate-500">يفهم العامية المصرية والفرانكو وحتى الأخطاء الإملائية، ويقدّم لك الترجمة والمعنى والأمثلة في ثوانٍ</p>
         </section>
 
         <div class="relative flex flex-col lg:grid lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-8 items-stretch">
@@ -318,11 +324,11 @@
                     <div class="absolute bottom-2.5 left-3 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-2">
                         <button type="button" onclick="speakBoxText(1, this)" class="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95" title="استمع للنص">
                             <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
-                            <span>Listen</span>
+                            <span>استمع</span>
                         </button>
                         <button type="button" onclick="copyBoxText('box1-text', this)" class="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95">
                             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>Copy</span>
+                            <span>نسخ</span>
                         </button>
                     </div>
                 </div>
@@ -367,11 +373,11 @@
                     <div class="absolute bottom-2.5 left-3 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-2">
                         <button type="button" onclick="speakBoxText(2, this)" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95" title="استمع للترجمة">
                             <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
-                            <span>Listen</span>
+                            <span>استمع</span>
                         </button>
                         <button type="button" onclick="copyBoxText('box2-text', this)" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95">
                             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>Copy</span>
+                            <span>نسخ</span>
                         </button>
                     </div>
                 </div>
@@ -381,13 +387,21 @@
         <div class="mt-5 sm:mt-6 flex flex-col items-center justify-center">
             <button id="submit-btn" type="button" onclick="executeTranslation({ manualTrigger: true })" class="w-full sm:w-auto sm:min-w-[260px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg shadow-blue-200/80 hover:shadow-blue-300 transition-all duration-200 flex items-center justify-center gap-2.5 active:scale-[0.98]">
                 <i data-lucide="sparkles" class="w-5 h-5"></i>
-                <span>Submit / ترجم وحلل</span>
+                <span>ترجم وحلل</span>
             </button>
             <span id="auto-translate-hint" class="text-[11px] text-teal-700 font-semibold mt-2">الترجمة التلقائية مفعّلة عند التوقف عن الكتابة · اضغط الزر لعرض التحليل المتدرج</span>
             <span class="hidden sm:inline-block text-[11px] text-slate-400 mt-1">اختصارات: <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Enter</kbd> للترجمة · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Esc</kbd> للإلغاء · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Shift + H</kbd> للسجل</span>
         </div>
 
-        <div class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs">
+        <div class="mt-3 flex justify-center">
+            <button id="settings-gear-btn" type="button" onclick="toggleSettingsPanel()" aria-expanded="false" aria-controls="settings-panel" title="الإعدادات" aria-label="الإعدادات" class="w-10 h-10 rounded-full border border-slate-200 bg-white text-slate-500 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center transition-colors">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div id="settings-panel" class="hidden mt-3 mx-auto max-w-md bg-white border border-slate-200 rounded-2xl shadow-xs p-3 sm:p-4 flex flex-col items-center justify-center gap-3 text-xs animate-fade-in">
+            <label class="flex items-center gap-2 text-slate-500">الأسلوب
+                <select id="tone-select" onchange="onToneChange(this.value)" class="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-slate-700" aria-label="أسلوب الترجمة"><option value="auto">تلقائي</option><option value="egy">مصري</option><option value="msa">فصحى</option><option value="formal">رسمي</option><option value="casual">عادي</option></select>
+            </label>
             <label class="flex items-center gap-2 text-slate-500">الصوت
                 <select id="speech-voice" class="max-w-[190px] rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-slate-700" aria-label="اختيار صوت النطق"><option value="">تلقائي حسب اللغة</option></select>
             </label>
@@ -396,7 +410,7 @@
                 <span id="speech-rate-value" class="font-en">1.08x</span>
             </label>
             <button type="button" onclick="toggleHistory()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سجل الترجمات <span id="history-count" class="font-en">0</span></button>
-            <button type="button" onclick="togglePerformance()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سرعة الموقع</button>
+            <button type="button" onclick="togglePerformance()" class="perf-toggle-btn px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سرعة الموقع</button>
         </div>
         <section id="performance-panel" class="hidden mt-3 bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 animate-fade-in">
             <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm">مراقبة الأداء</h3><span id="perf-route" class="text-[11px] text-slate-500">لم تبدأ عملية بعد</span></div>
@@ -458,7 +472,7 @@
                             <div class="flex items-center justify-between border-b border-slate-200 pb-2">
                                 <span class="font-bold text-slate-800 flex items-center gap-1.5">
                                     <i data-lucide="audio-waveform" class="w-4 h-4 text-blue-600"></i>
-                                    <span>الدليل الكامل للرموز الصوتية الإنجليزية (Complete IPA Phonemic Chart)</span>
+                                    <span>الدليل الكامل للرموز الصوتية الإنجليزية (IPA)</span>
                                 </span>
                                 <button type="button" onclick="toggleIpaChart()" class="text-slate-400 hover:text-slate-700 p-1">
                                     <i data-lucide="x" class="w-4 h-4"></i>
@@ -517,6 +531,14 @@
                 </div>
 
                 <div class="p-4 sm:p-6 space-y-5 sm:space-y-6">
+                    <div id="alt-row" class="hidden -mb-2">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-bold text-slate-500">بدائل الترجمة:</span>
+                            <div id="alt-buttons" class="flex flex-wrap gap-2"></div>
+                        </div>
+                        <p id="alt-result" class="hidden mt-2 text-base font-semibold text-slate-800 bg-blue-50/60 border border-blue-100 rounded-xl px-3 py-2 break-words"></p>
+                    </div>
+
                     <section id="smart-insights" data-stagger-item class="hidden space-y-3">
                         <div class="flex items-center justify-between gap-2"><h3 class="text-xs font-bold text-slate-500">تفاصيل إضافية لفهم السياق والبدائل</h3><span id="naturalness-badge" class="hidden text-[10px] font-bold rounded-full px-2.5 py-1 border"></span></div>
                         <div id="alternatives-card" class="smart-insight-card hidden">
@@ -533,7 +555,7 @@
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div id="context-card" class="smart-insight-card hidden"><div class="smart-insight-title">المعنى حسب السياق</div><p id="context-content" class="text-sm leading-relaxed text-slate-700"></p></div>
-                            <div id="regional-card" class="smart-insight-card hidden"><div class="smart-insight-title">British vs American</div><div id="regional-content" class="space-y-2"></div></div>
+                            <div id="regional-card" class="smart-insight-card hidden"><div class="smart-insight-title">بريطاني مقابل أمريكي</div><div id="regional-content" class="space-y-2"></div></div>
                         </div>
                     </section>
 
@@ -541,7 +563,7 @@
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-700">
                                 <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
-                                <span id="dict-def-header">المعنى والتعريف الدقيق (Definition & Meaning)</span>
+                                <span id="dict-def-header">المعنى والتعريف</span>
                             </div>
                             <button type="button" onclick="speakDefinitionText(this)" class="p-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200 transition-all active:scale-90" title="استمع للتعريف">
                                 <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
@@ -553,7 +575,7 @@
                     <div id="dict-examples-block" data-stagger-item>
                         <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-700 mb-3">
                             <i data-lucide="quote" class="w-4 h-4 shrink-0"></i>
-                            <span id="dict-ex-header">أمثلة توضيحية في سياقات مختلفة (Contextual Examples)</span>
+                            <span id="dict-ex-header">أمثلة في سياقات مختلفة</span>
                         </div>
                         <div id="dict-examples" class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         </div>
@@ -564,7 +586,7 @@
                             <div class="flex items-center gap-2">
                                 <span class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white text-[11px] sm:text-xs font-bold flex items-center gap-1.5">
                                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                    <span>مصطلح / تعبير شائع (Idiom / Expression)</span>
+                                    <span>مصطلح / تعبير شائع</span>
                                 </span>
                                 <h3 id="idiom-phrase" class="text-base sm:text-xl font-extrabold text-indigo-900 break-words"></h3>
                                 <button type="button" onclick="speakIdiomPhrase(this)" class="w-8 h-8 rounded-full bg-white hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 flex items-center justify-center transition-all active:scale-90 shrink-0" title="استمع للمصطلح">
@@ -578,7 +600,7 @@
                         <div>
                             <div class="text-[11px] sm:text-xs font-bold text-indigo-700 mb-2.5 flex items-center gap-1.5">
                                 <i data-lucide="message-square-quote" class="w-3.5 h-3.5"></i>
-                                <span>أمثلة على استخدام المصطلح (Idiom Examples)</span>
+                                <span>أمثلة على المصطلح</span>
                             </div>
                             <div id="idiom-examples" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             </div>
@@ -590,7 +612,7 @@
                             <div class="flex items-center justify-between mb-3">
                                 <span class="ltr-text text-xs sm:text-sm font-bold text-blue-800 flex items-center gap-1.5">
                                     <i data-lucide="layers" class="w-4 h-4 text-blue-600"></i>
-                                    Synonyms <span class="text-[11px] sm:text-xs font-normal text-slate-500 font-sans">(المرادفات)</span>
+                                    المرادفات
                                 </span>
                             </div>
                             <div id="dict-synonyms" class="flex flex-wrap gap-2">
@@ -601,7 +623,7 @@
                             <div class="flex items-center justify-between mb-3">
                                 <span class="ltr-text text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
                                     <i data-lucide="contrast" class="w-4 h-4 text-blue-600"></i>
-                                    Antonyms <span class="text-[11px] sm:text-xs font-normal text-slate-500 font-sans">(المتضادات / العكس)</span>
+                                    المتضادات
                                 </span>
                             </div>
                             <div id="dict-antonyms" class="flex flex-wrap gap-2">
@@ -613,11 +635,13 @@
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700">
                                 <i data-lucide="book-open-check" class="w-4 h-4 text-blue-600"></i>
-                                <span>تفاصيل التحليل اللغوي المتقدم (اضغط على الخانة لفتحها)</span>
+                                <span>تفاصيل التحليل اللغوي المتقدم</span>
+                                <span id="details-loading-hint" class="hidden text-[11px] font-medium text-slate-400">جارٍ التحميل...</span>
                             </div>
+                            <button id="details-toggle-btn" type="button" aria-expanded="false" onclick="toggleDetails()" class="px-3 py-1.5 rounded-full text-xs font-bold border border-blue-200 bg-white text-blue-700 hover:bg-blue-600 hover:text-white transition-colors"><span id="details-toggle-label">إظهار التفاصيل</span></button>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
+                        <div id="advanced-wrap" class="hidden grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
                             <div class="border border-slate-200 rounded-2xl bg-slate-50/80 overflow-hidden transition-all" id="acc-ipa">
                                 <button type="button" onclick="toggleAccordion('acc-ipa')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
@@ -633,7 +657,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-collocations')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="link-2" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>الكلمات المصاحبة <span class="ltr-text text-blue-600 font-semibold">(Collocations)</span></span>
+                                        <span>الكلمات المصاحبة</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -644,7 +668,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-word-family')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="network" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>عائلة الكلمة <span class="ltr-text text-blue-600 font-semibold">(Word Family)</span></span>
+                                        <span>عائلة الكلمة</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -655,7 +679,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-grammar')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="braces" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>التراكيب النحوية <span class="ltr-text text-blue-600 font-semibold">(Grammar Patterns)</span></span>
+                                        <span>التراكيب النحوية</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -666,7 +690,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-frequency')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>مدى شيوعها <span class="ltr-text text-blue-600 font-semibold">(Frequency)</span></span>
+                                        <span>مدى شيوعها</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -677,7 +701,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-register')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="scale" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>رسمي أو غير رسمي <span class="ltr-text text-blue-600 font-semibold">(Register)</span></span>
+                                        <span>رسمي أو غير رسمي</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -688,7 +712,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-related')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="git-fork" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>الكلمات المرتبطة <span class="ltr-text text-blue-600 font-semibold">(Related Words)</span></span>
+                                        <span>الكلمات المرتبطة</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -699,7 +723,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-etymology')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="scroll-text" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>أصل الكلمة <span class="ltr-text text-blue-600 font-semibold">(Etymology)</span></span>
+                                        <span>أصل الكلمة</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -715,7 +739,6 @@
 
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
-            <p>مدعوم بـ <strong class="text-blue-600">Cloudflare Worker</strong> مع <strong class="text-slate-700">Groq</strong> و <strong class="text-slate-700">Google Gemini</strong></p>
             <p>المترجم الذكي والقاموس التفاعلي · v7.4</p>
         </div>
     </footer>
@@ -1113,11 +1136,17 @@ let GEMINI_MODELS = [
 
         const ALL_LANGUAGES = [...TOP_10_LANGUAGES, ...OTHER_WORLD_LANGUAGES];
 
+        if ("serviceWorker" in navigator && location.protocol === "https:") {
+            window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             lucide.createIcons();
             applySavedTheme();
             applySavedFocusMode();
             localStorage.removeItem("smart_trans_style");
+            { const t = localStorage.getItem("smart_trans_tone") || "auto"; const sel = document.getElementById("tone-select"); if (sel) sel.value = t; }
+            if (window.matchMedia && window.matchMedia("(pointer: fine)").matches) document.getElementById("box1-text")?.focus();
             loadCache();
             try { translationHistory = JSON.parse(localStorage.getItem("smart_trans_history") || "[]"); } catch (_) { translationHistory=[]; }
             renderHistory();
@@ -1592,7 +1621,7 @@ let GEMINI_MODELS = [
             try {
                 document.execCommand("copy");
                 const originalHTML = btnElement.innerHTML;
-                btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">Copied!</span>`;
+                btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">تم النسخ</span>`;
                 btnElement.classList.add("border-emerald-300", "bg-emerald-50");
                 lucide.createIcons();
 
@@ -1608,61 +1637,64 @@ let GEMINI_MODELS = [
             }
         }
 
+        function getToneInstruction() {
+            const tone = localStorage.getItem("smart_trans_tone") || "auto";
+            return ({
+                egy: "STYLE: if the target is Arabic use natural Egyptian colloquial (عامية مصرية).",
+                msa: "STYLE: if the target is Arabic use Modern Standard Arabic (فصحى).",
+                formal: "STYLE: formal, polite register.",
+                casual: "STYLE: casual, conversational register."
+            })[tone] || "";
+        }
+
         function buildUnifiedPrompt(text, effectiveSrcLang, effectiveTgtLang, knowledgeContext = null, lexicalHints = null) {
             const isEnToEn = effectiveSrcLang.startsWith("en") && effectiveTgtLang.startsWith("en");
             const implicitCtx = inferImplicitContext(text, effectiveSrcLang, effectiveTgtLang);
             const sourceName = getLangObj(effectiveSrcLang).name;
             const targetName = getLangObj(effectiveTgtLang).name;
 
-            // Put translation first so the UI can reveal useful streamed text as early as possible.
+            // Key order matters: the UI renders each key as soon as it finishes streaming.
+            // Essentials first (translation, meaning, examples, synonyms, antonyms), advanced last.
             const schema = {
                 translation: "",
-                detected_source_code: effectiveSrcLang,
-                detected_source_name: sourceName,
-                resolved_target_code: effectiveTgtLang,
                 inferred_style: implicitCtx.inferredRegister,
-                transcription: "",
-                ipa: "",
-                ipa_symbols: [{ symbol: "", example: "" }],
                 part_of_speech: "",
                 cefr_level: "",
                 definition: "",
                 examples: [{ sentence: "", translation: "" }, { sentence: "", translation: "" }],
-                idiom: { has_idiom: false, phrase: "", meaning: "", examples: [] },
                 synonyms: ["", "", ""],
                 antonyms: ["", "", ""],
+                idiom: { has_idiom: false, phrase: "", meaning: "", examples: [] },
+                transcription: "",
+                ipa: "",
+                ipa_symbols: [{ symbol: "", example: "" }],
                 collocations: ["", "", ""],
                 word_family: ["", ""],
                 grammar_patterns: ["", ""],
                 frequency: "",
-                register: implicitCtx.inferredRegister,
                 related_words: ["", "", ""],
                 etymology: "",
                 naturalness: { label: "", reason: "" },
-                translation_alternatives: [
-                    { label: "", text: "", note: "" },
-                    { label: "", text: "", note: "" }
-                ],
                 sentence_breakdown: [{ source: "", role: "", meaning: "" }],
                 quality_check: { status: "", issues: [], improvement: "" },
-                context_note: "",
-                regional_differences: { british: "", american: "", note: "" }
+                context_note: ""
             };
 
             const mode = isEnToEn
-                ? "English-English dictionary: keep the headword in translation; give an original concise definition and two useful examples."
-                : `Context-aware translation. Infer tone, register and dialect (${implicitCtx.inferredRegister}; Egyptian Arabic=${implicitCtx.isEgyptianArabic}). Translate intended meaning naturally, preserving nuance, idioms, slang and technical terms; never translate mechanically. Self-review for accuracy and native naturalness.`;
+                ? "English-English dictionary: keep the headword in translation; give a concise original definition."
+                : `Translate the intended meaning naturally (register: ${implicitCtx.inferredRegister}${implicitCtx.isEgyptianArabic ? "; Egyptian Arabic" : ""}), keeping nuance, slang and technical terms. Proverbs and idioms: give the equivalent expression in the target language, never word-for-word. Ambiguous words: put the most likely sense first and mention other senses in context_note. Never add filler or remarks that are not in the source.`;
 
             const extras = [
+                getToneInstruction(),
                 knowledgeContext ? `REFERENCE: ${JSON.stringify(knowledgeContext)}` : "",
                 lexicalHints && (lexicalHints.phrases.length || lexicalHints.lemmas.length)
                     ? `LEXICAL HINTS: ${JSON.stringify(lexicalHints)}` : ""
             ].filter(Boolean).join("\n");
 
-            return `Translate ${sourceName} (${effectiveSrcLang}) to ${targetName} (${effectiveTgtLang}). ${mode}
-Return one complete JSON object only, with every schema key and its indicated type. Keep explanations concise. Give two examples and up to three items in word lists. Keep part_of_speech in English; set idiom.has_idiom=true only for a genuine idiom or strong colloquial expression. Preserve all source meaning and details.
+            return `${sourceName}(${effectiveSrcLang}) to ${targetName}(${effectiveTgtLang}). ${mode}
+Return one JSON object only, using exactly these keys in this order (fill every one; list sizes as shown; part_of_speech in English; idiom.has_idiom true only for a real idiom). Be concise.
 SCHEMA: ${JSON.stringify(schema)}
-${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
+${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
         }
 
         function normalizeWorkerUrl(url) {
@@ -1682,6 +1714,63 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
 
         function isConfiguredWorkerUrl(url) {
             return Boolean(normalizeWorkerUrl(url));
+        }
+
+
+        // Returns the top-level keys of a streaming JSON object that are already complete.
+        function parseCompletedKeys(raw) {
+            const out = {};
+            const start = raw.indexOf("{");
+            if (start < 0) return out;
+            let depth = 0, inStr = false, esc = false, key = null, valStart = -1, strStart = -1, expectKey = true;
+            for (let i = start; i < raw.length; i++) {
+                const c = raw[i];
+                if (inStr) {
+                    if (esc) esc = false;
+                    else if (c === "\\") esc = true;
+                    else if (c === '"') {
+                        inStr = false;
+                        if (depth === 1 && expectKey && key === null) key = raw.slice(strStart + 1, i);
+                    }
+                    continue;
+                }
+                if (c === '"') { inStr = true; strStart = i; continue; }
+                if (c === "{" || c === "[") { depth++; continue; }
+                if (c === "}" || c === "]") {
+                    depth--;
+                    if (depth === 0 && key !== null && valStart >= 0) {
+                        try { out[key] = JSON.parse(raw.slice(valStart, i)); } catch (_) {}
+                    }
+                    continue;
+                }
+                if (depth === 1) {
+                    if (c === ":" && key !== null && valStart < 0) { valStart = i + 1; expectKey = false; }
+                    else if (c === "," && key !== null && valStart >= 0) {
+                        try { out[key] = JSON.parse(raw.slice(valStart, i)); } catch (_) {}
+                        key = null; valStart = -1; expectKey = true;
+                    }
+                }
+            }
+            return out;
+        }
+
+        let progressiveState = { count: 0, shown: false, ctx: null };
+        function progressiveRender(raw, ctx) {
+            const done = parseCompletedKeys(raw);
+            const n = Object.keys(done).length;
+            if (!done.translation || n <= progressiveState.count) return;
+            progressiveState.count = n;
+            progressiveState.shown = true;
+            try { renderResults(done, ctx.input, ctx.src, ctx.tgt, ctx.tgtNum, { partial: true }); } catch (e) { console.warn("partial render", e); }
+        }
+
+        function needsScriptRetry(data, input, src, tgt) {
+            const t = String(data?.translation || "").trim();
+            if (!t) return true;
+            const hasAr = /[\u0600-\u06FF]/, hasLat = /[A-Za-z]/;
+            if (String(tgt).startsWith("ar") && !String(src).startsWith("ar") && hasLat.test(input) && !hasAr.test(t) && !/^[\d\s\W]+$/.test(t)) return true;
+            if (String(tgt).startsWith("en") && String(src).startsWith("ar") && hasAr.test(input) && !hasLat.test(t)) return true;
+            return false;
         }
 
         function updateStreamPreview(rawText, targetBoxNum) {
@@ -1956,7 +2045,7 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const cacheId = signature + "::token-opt-v2.2";
+            const cacheId = signature + "::token-opt-v3::" + (localStorage.getItem("smart_trans_tone") || "auto");
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
@@ -2005,7 +2094,7 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
             if (!hasWorker && !hasLocalKeys) {
                 activeRequestSignature = "";
                 setLoading(false);
-                if (manualTrigger) showAlert("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL.");
+                if (manualTrigger) showAlert("الخدمة غير متاحة حالياً، يرجى المحاولة بعد قليل.");
                 return;
             }
 
@@ -2026,7 +2115,9 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
             const onStreamText = (raw) => {
                 if (requestId !== activeTranslationId) return;
                 updateStreamPreview(raw, tgtNum);
+                progressiveRender(raw, { input: inputText, src: effectiveSrcLang, tgt: effectiveTgtLang, tgtNum });
             };
+            progressiveState = { count: 0, shown: false, ctx: null };
 
             const aiStart = performance.now();
             try {
@@ -2051,6 +2142,17 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
                 }
 
                 if (requestId !== activeTranslationId) return;
+
+                // One retry if the model answered in the wrong script (garbled / untranslated output).
+                if (needsScriptRetry(winner.data, inputText, effectiveSrcLang, effectiveTgtLang)) {
+                    try {
+                        const retryPrompt = prompt + "\nIMPORTANT: write the translation in the target language and script only.";
+                        const retry = hasWorker ? await callWorkerGroqStream(retryPrompt, controller.signal, null, route)
+                            : state.groqKey.trim() ? await callDirectGroqAPI(retryPrompt, controller.signal, null, route)
+                            : await callDirectGeminiAPI(retryPrompt, controller.signal, null);
+                        if (!needsScriptRetry(retry.data, inputText, effectiveSrcLang, effectiveTgtLang)) winner = retry;
+                    } catch (retryErr) { if (retryErr.name === "AbortError") throw retryErr; }
+                }
 
                 lastGeminiError = "";
                 updateEngineBadge(`${winner.modelUsed || winner.provider || "Worker AI"}`, winner.provider !== "gemini");
@@ -2077,7 +2179,7 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
                 activeStreamOwner = null;
                 setLoading(false);
                 const shouldRevealSection = manualTrigger || autoTriggered || lastRenderedSignature === signature;
-                renderResults(winner.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum, { animateStagger: shouldRevealSection });
+                renderResults(winner.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum, { animateStagger: shouldRevealSection && !progressiveState.shown, keepDetails: progressiveState.shown, reveal: progressiveState.shown });
                 if (shouldRevealSection) lastRenderedSignature = signature;
             } catch (err) {
                 if (requestId !== activeTranslationId) return;
@@ -2087,7 +2189,7 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
                 setLoading(false);
                 if (err.name === "AbortError") return;
                 lastGeminiError = err.message;
-                if (manualTrigger) showAlert(`تعذر إتمام الترجمة حالياً: ${err.message}`);
+                if (manualTrigger) { console.error("translation error:", err.message); showAlert("تعذر إتمام الترجمة حالياً، يرجى المحاولة مرة أخرى بعد قليل."); };
             } finally {
                 if (requestId === activeTranslationId && !activeControllers.length) {
                     setLoading(false);
@@ -2209,7 +2311,8 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
         }
 
         function renderResults(data, originalInput, effectiveSrcLang, effectiveTgtLang, tgtNum, options = {}) {
-            const animateStagger = options.animateStagger !== false;
+            const partial = options.partial === true;
+            const animateStagger = !partial && options.animateStagger !== false;
             const tgtTextarea = document.getElementById(`box${tgtNum}-text`);
             const tgtClearBtn = document.getElementById(`box${tgtNum}-clear-btn`);
             const tgtTransRow = document.getElementById(`box${tgtNum}-phonetics-row`);
@@ -2226,10 +2329,13 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
             const transcriptionText = (data.transcription || "").trim();
             const ipaText = (data.ipa || "").trim();
 
-            tgtTextarea.value = finalTranslation;
-            tgtTextarea.classList.remove("translation-pop");
-            void tgtTextarea.offsetWidth;
-            tgtTextarea.classList.add("translation-pop");
+            if (tgtTextarea.value !== finalTranslation) {
+                tgtTextarea.value = finalTranslation;
+                tgtTextarea.classList.remove("translation-pop");
+                void tgtTextarea.offsetWidth;
+                tgtTextarea.classList.add("translation-pop");
+            }
+            if (!partial && !options.keepDetails) setDetailsVisible(false);
 
             if (finalTranslation.trim().length > 0) {
                 tgtClearBtn.classList.remove("hidden");
@@ -2273,9 +2379,11 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
             }
 
             const detectedLabel = document.getElementById("dict-detected-info");
-            const inferredStyleTag = data.inferred_style ? ` · ${data.inferred_style}` : "";
+            const styleAr = { "Egyptian Colloquial / Natural": "عامية مصرية", "Conversational / Idiomatic": "محادثة طبيعية", "Natural Contextual": "طبيعي حسب السياق", "Technical / Domain-Accurate": "تقني دقيق", "Formal / Academic": "رسمي / أكاديمي", "Business / Professional": "أعمال / مهني" };
+            const styleLabel = data.inferred_style ? (styleAr[data.inferred_style] || data.inferred_style) : "";
+            const inferredStyleTag = styleLabel ? ` · ${styleLabel}` : "";
             detectedLabel.textContent = isEnToEn
-                ? `English → English${inferredStyleTag}`
+                ? `إنجليزي ← إنجليزي${inferredStyleTag}`
                 : `اللغة: ${getLangObj(effectiveSrcLang).name}${inferredStyleTag}`;
             detectedLabel.classList.remove("hidden");
 
@@ -2331,7 +2439,15 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
             renderWordChips("dict-synonyms", data.synonyms, "bg-white text-blue-700 border-blue-200 hover:bg-blue-600 hover:text-white", targetObj.dir);
             renderWordChips("dict-antonyms", data.antonyms, "bg-white text-slate-700 border-slate-300 hover:bg-slate-800 hover:text-white", targetObj.dir);
 
-            closeAllAccordions();
+            if (partial) {
+                setAdvancedLoading(true);
+                setupAltRow(originalInput, finalTranslation, effectiveSrcLang, effectiveTgtLang);
+                dictSection.classList.remove("hidden");
+                lucide.createIcons();
+                return;
+            }
+            setAdvancedLoading(false);
+            if (!options.keepDetails) closeAllAccordions();
 
             const ipaEl = document.getElementById("content-ipa");
             const symbolsList = Array.isArray(data.ipa_symbols) ? data.ipa_symbols : [];
@@ -2356,12 +2472,112 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
             etymEl.innerHTML = `<p dir="auto" class="text-slate-700 leading-relaxed">${escapeHTML(data.etymology || "لا تتوفر معلومات تأثيلية مسجلة.")}</p>`;
 
             scheduleSmartInsights(data, effectiveSrcLang, effectiveTgtLang);
+            setupAltRow(originalInput, finalTranslation, effectiveSrcLang, effectiveTgtLang);
 
             if (animateStagger) {
                 dictSection.classList.remove("hidden");
                 animateDictionaryStagger(dictSection);
+            } else if (options.reveal) {
+                dictSection.classList.remove("hidden");
             }
             lucide.createIcons();
+        }
+
+
+        // ---- Details toggle (advanced accordions hidden until requested) ----
+        function setDetailsVisible(show) {
+            const wrap = document.getElementById("advanced-wrap");
+            const label = document.getElementById("details-toggle-label");
+            if (!wrap) return;
+            wrap.classList.toggle("hidden", !show);
+            if (label) label.textContent = show ? "إخفاء التفاصيل" : "إظهار التفاصيل";
+            const btn = document.getElementById("details-toggle-btn");
+            if (btn) btn.setAttribute("aria-expanded", show ? "true" : "false");
+        }
+        function toggleDetails() {
+            const wrap = document.getElementById("advanced-wrap");
+            setDetailsVisible(wrap.classList.contains("hidden"));
+        }
+        function setAdvancedLoading(on) {
+            document.getElementById("dict-advanced-block")?.classList.toggle("advanced-loading", on);
+            const hint = document.getElementById("details-loading-hint");
+            if (hint) hint.classList.toggle("hidden", !on);
+        }
+
+        // ---- Translation alternatives row (fetched only on click) ----
+        const altCache = new Map();
+        let altCtx = null;
+        const ALT_VARIANTS = {
+            en: [["american", "أمريكي", "American English (US spelling and vocabulary)"], ["british", "بريطاني", "British English (UK spelling and vocabulary)"]],
+            ar: [["egyptian", "مصري", "Egyptian colloquial Arabic (عامية مصرية), written in Arabic script"], ["fusha", "فصحى", "Modern Standard Arabic (فصحى)"]]
+        };
+        function setupAltRow(input, translation, src, tgt) {
+            const row = document.getElementById("alt-row");
+            if (!row) return;
+            const family = String(tgt).startsWith("en") ? "en" : String(tgt).startsWith("ar") ? "ar" : null;
+            if (!family || !translation) { row.classList.add("hidden"); altCtx = null; return; }
+            const ctxKey = [input, translation, src, tgt].join("|");
+            if (altCtx && altCtx.key === ctxKey) { row.classList.remove("hidden"); return; }
+            altCtx = { key: ctxKey, input, translation, src, tgt, family };
+            const box = document.getElementById("alt-buttons");
+            box.innerHTML = "";
+            document.getElementById("alt-result").classList.add("hidden");
+            ALT_VARIANTS[family].forEach(([id, label]) => {
+                const b = document.createElement("button");
+                b.type = "button";
+                b.id = "alt-btn-" + id;
+                b.dataset.variant = id;
+                b.className = "px-3 py-1.5 rounded-full text-xs font-bold border border-blue-200 bg-white text-blue-700 hover:bg-blue-600 hover:text-white transition-colors";
+                b.textContent = label;
+                b.onclick = () => requestAlternative(id);
+                box.appendChild(b);
+            });
+            row.classList.remove("hidden");
+        }
+        async function requestAlternative(variantId) {
+            const ctx = altCtx;
+            if (!ctx) return;
+            const variant = ALT_VARIANTS[ctx.family].find(v => v[0] === variantId);
+            const out = document.getElementById("alt-result");
+            document.querySelectorAll("#alt-buttons button").forEach(b => {
+                const on = b.dataset.variant === variantId;
+                b.classList.toggle("bg-blue-600", on); b.classList.toggle("text-white", on); b.classList.toggle("bg-white", !on); b.classList.toggle("text-blue-700", !on);
+            });
+            out.classList.remove("hidden");
+            out.dir = getLangObj(ctx.tgt).dir;
+            const key = ctx.key + "|" + variantId;
+            if (altCache.has(key)) { out.textContent = altCache.get(key); return; }
+            out.textContent = "...";
+            const prompt = `Rewrite the translation in ${variant[2]}. Keep the meaning exactly.\nSOURCE: ${JSON.stringify(ctx.input)}\nCURRENT: ${JSON.stringify(ctx.translation)}\nReturn JSON only: {"text":""}`;
+            try {
+                const controller = new AbortController();
+                let res;
+                if (isConfiguredWorkerUrl(state.workerUrl)) {
+                    try { res = await callWorkerGroqStream(prompt, controller.signal, null, null); }
+                    catch (_) { res = await callWorkerGeminiStream(prompt, controller.signal, null); }
+                } else if (state.groqKey.trim()) res = await callDirectGroqAPI(prompt, controller.signal, null, null);
+                else res = await callDirectGeminiAPI(prompt, controller.signal, null);
+                const text = String(res?.data?.text || "").trim();
+                if (!text) throw new Error("empty");
+                altCache.set(key, text);
+                if (altCtx && altCtx.key === ctx.key) out.textContent = text;
+            } catch (e) {
+                out.textContent = "تعذر جلب البديل، يرجى المحاولة مرة أخرى.";
+            }
+        }
+
+        // ---- Tone selector ----
+        function toggleSettingsPanel() {
+            const panel = document.getElementById("settings-panel");
+            const btn = document.getElementById("settings-gear-btn");
+            const open = panel.classList.contains("hidden");
+            panel.classList.toggle("hidden", !open);
+            btn.setAttribute("aria-expanded", open ? "true" : "false");
+            btn.classList.toggle("text-blue-600", open);
+        }
+
+        function onToneChange(value) {
+            localStorage.setItem("smart_trans_tone", value);
         }
 
         function toggleSmartInsightsPanel() {
@@ -2396,7 +2612,7 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
                 card.className = "rounded-xl border border-slate-200 bg-slate-50 p-3";
                 const label = document.createElement("div");
                 label.className = "text-[10px] font-bold text-blue-700 mb-1";
-                label.textContent = item.label || `Alternative ${i + 1}`;
+                label.textContent = item.label || `بديل ${i + 1}`;
                 const text = document.createElement("p");
                 text.className = "text-sm font-semibold leading-relaxed";
                 text.dir = getLangObj(targetLang).dir;
@@ -2478,7 +2694,7 @@ ${extras ? extras + "\n" : ""}SOURCE TEXT: ${JSON.stringify(text)}`;
             const natural = data.naturalness || {};
             const badge = document.getElementById("naturalness-badge");
             if (natural.label) {
-                badge.textContent = "Naturalness: " + natural.label + (natural.reason ? " · " + natural.reason : "");
+                badge.textContent = "الطبيعية: " + natural.label + (natural.reason ? " · " + natural.reason : "");
                 badge.className = "text-[10px] font-bold rounded-full px-2.5 py-1 border bg-emerald-50 text-emerald-700 border-emerald-200";
                 badge.classList.remove("hidden");
             } else {
