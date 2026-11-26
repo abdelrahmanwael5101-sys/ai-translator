@@ -2116,7 +2116,7 @@
         }
         function setUILanguage(lang) { applyUILanguage(lang); }
 
-        const KEY_VERSION = "v20_token_opt_v2_2";
+        const KEY_VERSION = "v22_combo_proofread";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -3044,6 +3044,7 @@ let prebuiltCache = null;
             // Key order matters: the UI renders each key as soon as it finishes streaming.
             // Essentials first (translation, meaning, examples, synonyms, antonyms), advanced last.
             const schema = {
+                plain_meaning: "",
                 translation: "",
                 inferred_style: implicitCtx.inferredRegister,
                 part_of_speech: "",
@@ -3070,7 +3071,7 @@ let prebuiltCache = null;
 
             const mode = isEnToEn
                 ? "English-English dictionary: keep the headword in translation; give a concise original definition."
-                : `Translate the intended meaning naturally (register: ${implicitCtx.inferredRegister}${implicitCtx.isEgyptianArabic ? "; Egyptian Arabic" : ""}), keeping nuance, slang and technical terms. Proverbs, sayings, idioms and phrasal verbs: recognize fixed expressions like "piece of cake" or "pick up" as one unit and translate the intended meaning naturally (the real equivalent in the target language, or one natural sentence giving the meaning), never word-for-word, even when the expression sits inside a longer sentence. Translate word-for-word only when the words report a real, literal event ("He broke a leg yesterday" means his leg really broke). Put any literal wording only in context_note, and only when such an expression is present. Everyday feelings and states: use the phrase a native speaker really says, never a stiff literal copy (for example "I don't feel well" becomes "لست على ما يرام" in standard Arabic). Ambiguous words: put the most likely sense first and mention other senses in context_note. Never add filler or remarks that are not in the source.`;
+                : `Translate the intended meaning naturally (register: ${implicitCtx.inferredRegister}${implicitCtx.isEgyptianArabic ? "; Egyptian Arabic" : ""}), keeping nuance, slang and technical terms. Idioms, proverbs, phrasal verbs and figurative phrases (e.g. "spill the beans", "pick up"): never translate their words or image. In plain_meaning restate the whole source in plain literal English with every figurative phrase resolved; then translate from plain_meaning, using the target language's genuine equivalent expression or natural words with the same meaning. Literal only for a real literal event ("He broke a leg yesterday"). Put any literal wording only in context_note. Everyday feelings: say what a native says ("I don't feel well" becomes "لست على ما يرام" in standard Arabic). Ambiguous words: give the most precise equivalent first and mention other senses in context_note. Never add filler or remarks not in the source. Proofread the translation once for spelling and grammar.`;
 
             const extras = [
                 getToneInstruction(),
@@ -3080,7 +3081,7 @@ let prebuiltCache = null;
             ].filter(Boolean).join("\n");
 
             return `${sourceName}(${effectiveSrcLang}) to ${targetName}(${effectiveTgtLang}). ${mode}
-Return one JSON object only, using exactly these keys in this order (fill every one; list sizes as shown; part_of_speech in English, or "idiom" when the source is an idiom, proverb or fixed expression; idiom.has_idiom true only for a real idiom). Be concise. First decide cefr_level, then write definition, examples, idiom.meaning and context_note in vocabulary at or below that level: an A1-A2 word must be explained in simple A1-A2 words, never harder than the word itself; a C1 word gets a richer, precise explanation.
+Return one JSON object only, using exactly these keys in this order (fill every one; list sizes as shown; part_of_speech in English, or "idiom" when the source is an idiom, proverb or fixed expression; idiom.has_idiom true only for a real idiom). Be concise. Write definition, examples, idiom.meaning and context_note in vocabulary at or below cefr_level: simple words get simple explanations, never harder than the word itself.
 SCHEMA: ${JSON.stringify(schema)}
 ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
         }
@@ -4220,3 +4221,4 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
     </script>
 </body>
 </html>
+
