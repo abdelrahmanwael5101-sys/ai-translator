@@ -810,7 +810,25 @@ let GEMINI_MODELS = [
             setLoading(false);
             if (showMessage) showAlert("تم إلغاء عملية الترجمة.");
         }
-
+let prebuiltCache = null;
+        function prebuiltKey(text) {
+            return normalizeLookupText(text).replace(/[.!?؟،,;:]+$/, "");
+        }
+        async function getPrebuiltTranslation(text, src, tgt) {
+            if ((localStorage.getItem("smart_trans_tone") || "auto") !== "auto") return null;
+            const s = String(src), t = String(tgt);
+            const dir = s.startsWith("en") && t.startsWith("ar") ? "EN>AR"
+                      : s.startsWith("ar") && t.startsWith("en") ? "AR>EN" : null;
+            if (!dir) return null;
+            try {
+                if (!prebuiltCache) {
+                    const res = await fetch("common_cache.json");
+                    prebuiltCache = res.ok ? ((await res.json()).entries || {}) : {};
+                }
+            } catch (_) { prebuiltCache = {}; }
+            const hit = prebuiltCache[dir + "|" + prebuiltKey(text)];
+            return hit ? { data: JSON.parse(JSON.stringify(hit)), source: "Prebuilt cache" } : null;
+        }
         function cacheKey(text, src, tgt) { return [src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::"); }
         function openTranslatorDB() {
             if (!('indexedDB' in window)) return Promise.resolve(null);
@@ -2076,7 +2094,8 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             hideAlert();
             document.getElementById("diagnostic-box").classList.add("hidden");
 
-            const cached = await getCachedTranslation(cacheId);
+          let cached = await getCachedTranslation(cacheId);
+            if (!cached) cached = await getPrebuiltTranslation(inputText, effectiveSrcLang, effectiveTgtLang);
             if (requestId !== activeTranslationId) return;
             if (cached) {
                 updateEngineBadge("Cache (instant)", false);
