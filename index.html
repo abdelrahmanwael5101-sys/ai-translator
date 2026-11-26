@@ -264,19 +264,20 @@
             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
                 <svg class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 shadow-sm rounded-xl" viewBox="0 0 512 512" role="img" aria-label="المترجم الذكي"><defs><linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#gA)"/><path d="M216.40723981900453 410.40723981900453Q161.65610859728508 410.40723981900453 133.82805429864254 385.5203619909502Q106.0 360.6334841628959 106.0 314.02714932126696Q106.0 294.57013574660635 114.5972850678733 264.25339366515834H134.95927601809956Q134.50678733031674 266.0633484162896 134.05429864253392 274.2081447963801Q133.60180995475113 282.3529411764706 133.60180995475113 286.8778280542987Q133.60180995475113 313.1221719457014 143.78280542986425 327.3755656108598Q153.96380090497738 341.6289592760181 175.68325791855204 349.3212669683258Q186.54298642533936 352.4886877828054 201.02262443438914 354.52488687782807Q215.50226244343892 356.56108597285066 233.14932126696831 356.56108597285066Q272.5158371040724 356.56108597285066 310.52488687782807 349.32126696832574Q348.53393665158376 342.0814479638009 379.75565610859724 328.0542986425339Q375.2307692307693 317.6470588235294 368.21719457013575 304.75113122171945Q361.2036199095022 291.8552036199095 357.131221719457 284.61538461538464Q352.60633484162895 275.5656108597285 349.43891402714934 268.552036199095Q346.2714932126697 261.53846153846155 346.2714932126697 255.65610859728508Q346.2714932126697 244.79638009049773 358.48868778280547 231.67420814479638Q370.7058823529412 218.55203619909503 387.447963800905 209.9547511312217Q394.68778280542983 243.89140271493213 398.5339366515837 265.158371040724Q402.38009049773757 286.42533936651586 404.1900452488688 297.96380090497735Q406.0 309.5022624434389 406.0 314.9321266968326Q406.0 325.3393665158371 400.79638009049773 340.95022624434387Q395.59276018099547 356.56108597285066 388.3529411764706 369.68325791855204Q368.4434389140272 381.9004524886878 340.61538461538464 390.95022624434387Q312.7873303167421 400.0 280.8868778280543 405.20361990950227Q248.98642533936652 410.40723981900453 216.40723981900453 410.40723981900453ZM268.89592760180994 249.32126696832577Q259.39366515837105 241.6289592760181 251.70135746606337 234.84162895927602Q244.00904977375566 228.05429864253392 237.6742081447964 221.26696832579185Q254.4162895927602 205.88235294117646 267.99095022624437 189.59276018099547Q272.0633484162896 194.1176470588235 279.3031674208145 200.90497737556558Q286.54298642533934 207.69230769230768 296.4977375565611 217.6470588235294Q284.28054298642536 234.3891402714932 268.89592760180994 249.32126696832577ZM208.26244343891403 256.10859728506784Q188.8054298642534 240.27149321266967 177.04072398190047 227.6018099547511Q184.73303167420815 219.90950226244343 192.42533936651586 211.9909502262443Q200.11764705882354 204.07239819004522 207.80995475113122 196.38009049773754Q215.9547511312217 205.88235294117646 235.86425339366517 224.4343891402715Q224.55203619909503 240.7239819004525 208.26244343891403 256.10859728506784Z" fill="#fff"/><path d="M392 92l14 38 38 14-38 14-14 38-14-38-38-14 38-14z" fill="#fde68a"/></svg>
                 <div class="min-w-0">
-                    <h1 class="text-base sm:text-xl font-bold text-slate-900 truncate leading-tight">المترجم الذكي</h1>
-                    <p class="text-[11px] text-slate-500 hidden sm:block truncate">ترجمة تفهم مقصدك لا كلماتك فقط</p>
+                    <h1 data-i18n="appTitle" class="text-base sm:text-xl font-bold text-slate-900 truncate leading-tight">المترجم الذكي</h1>
+                    <p data-i18n="tagline" class="text-[11px] text-slate-500 hidden sm:block truncate">ترجمة تفهم مقصدك لا كلماتك فقط</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+                <select id="ui-lang-select" onchange="setUILanguage(this.value)" data-i18n-aria="uiLangLabel" aria-label="لغة الواجهة" class="h-9 max-w-[92px] sm:max-w-none rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 text-slate-600 text-xs font-semibold px-1.5 sm:px-2 cursor-pointer transition-colors"></select>
                 <button id="theme-toggle" type="button" onclick="toggleTheme()" class="w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 text-slate-600 flex items-center justify-center transition-colors" title="تبديل الوضع الفاتح والداكن" aria-label="تبديل الوضع">
                     <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4"></i>
                 </button>
                 <button id="focus-toggle" type="button" onclick="toggleFocusMode()" class="w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 text-slate-600 flex items-center justify-center transition-colors" title="تفعيل وضع التركيز" aria-label="وضع التركيز" aria-pressed="false">
                     <i id="focus-toggle-icon" data-lucide="scan-eye" class="w-4 h-4"></i>
                 </button>
-                <div id="engine-badge" onclick="toggleDiagnosticBanner()" class="cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all" title="اضغط لعرض أو إخفاء تفاصيل الاتصال">
+                <div id="engine-badge" onclick="toggleDiagnosticBanner()" class="cursor-pointer flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all" data-i18n-title="engineBadgeTitle" title="اضغط لعرض أو إخفاء تفاصيل الاتصال">
                     <span id="engine-dot" class="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
                     <span id="engine-status-text" class="ltr-text truncate max-w-[160px] sm:max-w-none">Cloudflare Worker</span>
                 </div>
@@ -288,10 +289,10 @@
 
         <section class="mb-5 sm:mb-7 text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[11px] sm:text-xs font-bold mb-3">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>ترجمة ذكية بالذكاء الاصطناعي</span>
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span data-i18n="heroBadge">ترجمة ذكية بالذكاء الاصطناعي</span>
             </div>
-            <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">اكتب كما تتحدث.. ونحن نتولى الترجمة</h2>
-            <p class="mt-2 text-xs sm:text-sm text-slate-500">يفهم العامية المصرية والفرانكو وحتى الأخطاء الإملائية، ويقدّم لك الترجمة والمعنى والأمثلة في ثوانٍ</p>
+            <h2 data-i18n="heroTitle" class="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900">اكتب كما تتحدث.. ونحن نتولى الترجمة</h2>
+            <p data-i18n="heroSub" class="mt-2 text-xs sm:text-sm text-slate-500">يفهم العامية المصرية والفرانكو وحتى الأخطاء الإملائية، ويقدّم لك الترجمة والمعنى والأمثلة في ثوانٍ</p>
         </section>
 
         <div class="relative flex flex-col lg:grid lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-8 items-stretch">
@@ -306,38 +307,38 @@
 
                     <div id="box1-detected-display" aria-readonly="true" class="pointer-events-none select-none px-3 py-2 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-400 text-[11px] sm:text-xs font-semibold shrink-0 flex items-center gap-1.5 min-w-[115px] sm:min-w-[135px] justify-center transition-all">
                         <i data-lucide="scan-text" class="w-3.5 h-3.5 shrink-0 opacity-70"></i>
-                        <span id="box1-detected-text" class="truncate">تحديد تلقائي</span>
+                        <span id="box1-detected-text" class="truncate" data-i18n="autoDetect">تحديد تلقائي</span>
                     </div>
                 </div>
 
                 <div class="relative flex-1 flex flex-col p-3.5 sm:p-4 pb-16 min-h-[190px] sm:min-h-[240px]">
-                    <textarea id="box1-text" onfocus="setActiveBox(1)" placeholder="اكتب النص أو الكلمة هنا وسيتم ترجمتها تلقائياً..." class="w-full flex-1 resize-none border-0 focus:ring-0 focus:outline-none text-base sm:text-xl text-slate-800 placeholder-slate-400 leading-relaxed bg-transparent"></textarea>
+                    <textarea id="box1-text" onfocus="setActiveBox(1)" data-i18n-placeholder="inputPlaceholder" placeholder="اكتب النص أو الكلمة هنا وسيتم ترجمتها تلقائياً..." class="w-full flex-1 resize-none border-0 focus:ring-0 focus:outline-none text-base sm:text-xl text-slate-800 placeholder-slate-400 leading-relaxed bg-transparent"></textarea>
                     <div id="box1-phonetics-row" class="hidden ltr-text flex flex-wrap items-center gap-2 mt-1">
                         <span id="box1-transcription" class="text-xs text-slate-400 font-medium"></span>
                         <span id="box1-ipa-inline" class="text-xs font-mono font-semibold text-blue-600 bg-blue-50/80 border border-blue-100 px-2 py-0.5 rounded-md"></span>
                     </div>
 
-                    <button id="box1-clear-btn" type="button" onclick="clearBox(1)" class="hidden absolute top-2.5 left-2.5 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors" title="مسح النص">
+                    <button id="box1-clear-btn" type="button" onclick="clearBox(1)" class="hidden absolute top-2.5 left-2.5 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors" data-i18n-title="clearText" title="مسح النص">
                         <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </button>
 
                     <span id="box1-char-count" class="absolute bottom-3.5 right-3.5 text-[11px] text-slate-400 font-en">0 / 2000</span>
 
                     <div class="absolute bottom-2.5 left-3 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-2">
-                        <button type="button" onclick="speakBoxText(1, this)" class="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95" title="استمع للنص">
+                        <button type="button" onclick="speakBoxText(1, this)" class="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95" data-i18n-title="listenSource" title="استمع للنص">
                             <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
-                            <span>استمع</span>
+                            <span data-i18n="listen">استمع</span>
                         </button>
                         <button type="button" onclick="copyBoxText('box1-text', this)" class="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95">
                             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>نسخ</span>
+                            <span data-i18n="copy">نسخ</span>
                         </button>
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-center items-center lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 z-20 -my-1.5 lg:my-0">
-                <button type="button" onclick="swapBoxes()" class="w-11 h-11 rounded-full bg-white hover:bg-blue-600 text-blue-600 hover:text-white border-2 border-blue-100 hover:border-blue-600 shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-200 active:scale-90 group" title="تبديل اللغتين والنصوص">
+                <button type="button" onclick="swapBoxes()" class="w-11 h-11 rounded-full bg-white hover:bg-blue-600 text-blue-600 hover:text-white border-2 border-blue-100 hover:border-blue-600 shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-200 active:scale-90 group" data-i18n-title="swapTitle" title="تبديل اللغتين والنصوص">
                     <i data-lucide="arrow-left-right" class="w-5 h-5 rotate-90 lg:rotate-0 transition-transform duration-300 group-hover:scale-110"></i>
                 </button>
             </div>
@@ -352,34 +353,34 @@
 
                     <div id="box2-detected-display" aria-readonly="true" class="pointer-events-none select-none px-3 py-2 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-400 text-[11px] sm:text-xs font-semibold shrink-0 flex items-center gap-1.5 min-w-[115px] sm:min-w-[135px] justify-center transition-all">
                         <i data-lucide="scan-text" class="w-3.5 h-3.5 shrink-0 opacity-70"></i>
-                        <span id="box2-detected-text" class="truncate">تحديد تلقائي</span>
+                        <span id="box2-detected-text" class="truncate" data-i18n="autoDetect">تحديد تلقائي</span>
                     </div>
                 </div>
 
                 <div class="relative flex-1 flex flex-col p-3.5 sm:p-4 pb-16 min-h-[190px] sm:min-h-[240px] bg-blue-50/15">
                     <div id="loading-overlay" class="hidden absolute inset-0 bg-white/85 backdrop-blur-[1px] flex flex-col items-center justify-center z-10 gap-2">
                         <div class="w-8 h-8 border-[3px] border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                        <span id="loading-status" class="text-xs font-semibold text-blue-700">جاري تجهيز الترجمة...</span>
+                        <span id="loading-status" class="text-xs font-semibold text-blue-700" data-i18n="loadingDefault">جاري تجهيز الترجمة...</span>
                     </div>
 
-                    <textarea id="box2-text" onfocus="setActiveBox(2)" placeholder="الترجمة تظهر تلقائياً هنا (أو اكتب هنا للترجمة للصندوق الآخر)..." class="w-full flex-1 resize-none border-0 focus:ring-0 focus:outline-none text-base sm:text-xl text-slate-800 placeholder-slate-400 leading-relaxed bg-transparent"></textarea>
+                    <textarea id="box2-text" onfocus="setActiveBox(2)" data-i18n-placeholder="outputPlaceholder" placeholder="الترجمة تظهر تلقائياً هنا (أو اكتب هنا للترجمة للصندوق الآخر)..." class="w-full flex-1 resize-none border-0 focus:ring-0 focus:outline-none text-base sm:text-xl text-slate-800 placeholder-slate-400 leading-relaxed bg-transparent"></textarea>
                     <div id="box2-phonetics-row" class="hidden ltr-text flex flex-wrap items-center gap-2 mt-1">
                         <span id="box2-transcription" class="text-xs text-slate-400 font-medium"></span>
                         <span id="box2-ipa-inline" class="text-xs font-mono font-semibold text-blue-600 bg-blue-50/80 border border-blue-100 px-2 py-0.5 rounded-md"></span>
                     </div>
 
-                    <button id="box2-clear-btn" type="button" onclick="clearBox(2)" class="hidden absolute top-2.5 left-2.5 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors" title="مسح النص">
+                    <button id="box2-clear-btn" type="button" onclick="clearBox(2)" class="hidden absolute top-2.5 left-2.5 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors" data-i18n-title="clearText" title="مسح النص">
                         <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </button>
 
                     <div class="absolute bottom-2.5 left-3 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-2">
-                        <button type="button" onclick="speakBoxText(2, this)" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95" title="استمع للترجمة">
+                        <button type="button" onclick="speakBoxText(2, this)" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95" data-i18n-title="listenTarget" title="استمع للترجمة">
                             <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
-                            <span>استمع</span>
+                            <span data-i18n="listen">استمع</span>
                         </button>
                         <button type="button" onclick="copyBoxText('box2-text', this)" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs active:scale-95">
                             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>نسخ</span>
+                            <span data-i18n="copy">نسخ</span>
                         </button>
                     </div>
                 </div>
@@ -389,43 +390,43 @@
         <div class="mt-5 sm:mt-6 flex flex-col items-center justify-center">
             <button id="submit-btn" type="button" onclick="executeTranslation({ manualTrigger: true })" class="w-full sm:w-auto sm:min-w-[260px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg shadow-blue-200/80 hover:shadow-blue-300 transition-all duration-200 flex items-center justify-center gap-2.5 active:scale-[0.98]">
                 <i data-lucide="sparkles" class="w-5 h-5"></i>
-                <span>ترجم وحلل</span>
+                <span data-i18n="submitBtn">ترجم وحلل</span>
             </button>
-            <span id="auto-translate-hint" class="text-[11px] text-teal-700 font-semibold mt-2">الترجمة التلقائية مفعّلة عند التوقف عن الكتابة · اضغط الزر لعرض التحليل المتدرج</span>
-            <span class="hidden sm:inline-block text-[11px] text-slate-400 mt-1">اختصارات: <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Enter</kbd> للترجمة · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Esc</kbd> للإلغاء · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Shift + H</kbd> للسجل</span>
+            <span id="auto-translate-hint" class="text-[11px] text-teal-700 font-semibold mt-2" data-i18n="autoHint">الترجمة التلقائية مفعّلة عند التوقف عن الكتابة · اضغط الزر لعرض التحليل المتدرج</span>
+            <span class="hidden sm:inline-block text-[11px] text-slate-400 mt-1"><span data-i18n="shortcuts">اختصارات:</span> <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Enter</kbd> <span data-i18n="shortcutTranslate">للترجمة</span> · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Esc</kbd> <span data-i18n="shortcutCancel">للإلغاء</span> · <kbd class="px-1.5 py-0.5 bg-slate-200/70 rounded text-slate-600 font-en">Ctrl + Shift + H</kbd> <span data-i18n="shortcutHistory">للسجل</span></span>
         </div>
 
         <div class="mt-3 flex justify-center">
-            <button id="settings-gear-btn" type="button" onclick="toggleSettingsPanel()" aria-expanded="false" aria-controls="settings-panel" title="الإعدادات" aria-label="الإعدادات" class="w-10 h-10 rounded-full border border-slate-200 bg-white text-slate-500 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center transition-colors">
+            <button id="settings-gear-btn" type="button" onclick="toggleSettingsPanel()" aria-expanded="false" aria-controls="settings-panel" data-i18n-title="settings" data-i18n-aria="settings" title="الإعدادات" aria-label="الإعدادات" class="w-10 h-10 rounded-full border border-slate-200 bg-white text-slate-500 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center transition-colors">
                 <i data-lucide="settings" class="w-5 h-5"></i>
             </button>
         </div>
         <div id="settings-panel" class="hidden mt-3 mx-auto max-w-md bg-white border border-slate-200 rounded-2xl shadow-xs p-3 sm:p-4 flex flex-col items-center justify-center gap-3 text-xs animate-fade-in">
-            <label class="flex items-center gap-2 text-slate-500">الأسلوب
-                <select id="tone-select" onchange="onToneChange(this.value)" class="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-slate-700" aria-label="أسلوب الترجمة"><option value="auto">تلقائي</option><option value="egy">مصري</option><option value="msa">فصحى</option><option value="formal">رسمي</option><option value="casual">عادي</option></select>
+            <label class="flex items-center gap-2 text-slate-500"><span data-i18n="styleLabel">الأسلوب</span>
+                <select id="tone-select" onchange="onToneChange(this.value)" class="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-slate-700" data-i18n-aria="styleLabel" aria-label="أسلوب الترجمة"><option value="auto" data-i18n="toneAuto">تلقائي</option><option value="egy" data-i18n="toneEgy">مصري</option><option value="msa" data-i18n="toneMsa">فصحى</option><option value="formal" data-i18n="toneFormal">رسمي</option><option value="casual" data-i18n="toneCasual">عادي</option></select>
             </label>
-            <label class="flex items-center gap-2 text-slate-500">الصوت
-                <select id="speech-voice" class="max-w-[190px] rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-slate-700" aria-label="اختيار صوت النطق"><option value="">تلقائي حسب اللغة</option></select>
+            <label class="flex items-center gap-2 text-slate-500"><span data-i18n="voiceLabel">الصوت</span>
+                <select id="speech-voice" class="max-w-[190px] rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-slate-700" data-i18n-aria="voiceLabel" aria-label="اختيار صوت النطق"><option value="" data-i18n="voiceAuto">تلقائي حسب اللغة</option></select>
             </label>
-            <label class="flex items-center gap-2 text-slate-500">سرعة النطق
+            <label class="flex items-center gap-2 text-slate-500"><span data-i18n="rateLabel">سرعة النطق</span>
                 <input id="speech-rate" type="range" min="0.75" max="1.35" step="0.05" value="1.08" class="w-24" />
                 <span id="speech-rate-value" class="font-en">1.08x</span>
             </label>
-            <button type="button" onclick="toggleHistory()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سجل الترجمات <span id="history-count" class="font-en">0</span></button>
-            <button type="button" onclick="togglePerformance()" class="perf-toggle-btn px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors">سرعة الموقع</button>
+            <button type="button" onclick="toggleHistory()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors"><span data-i18n="historyBtn">سجل الترجمات</span> <span id="history-count" class="font-en">0</span></button>
+            <button type="button" onclick="togglePerformance()" class="perf-toggle-btn px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-blue-50 transition-colors" data-i18n="perfBtn">سرعة الموقع</button>
         </div>
         <section id="performance-panel" class="hidden mt-3 bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 animate-fade-in">
-            <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm">مراقبة الأداء</h3><span id="perf-route" class="text-[11px] text-slate-500">لم تبدأ عملية بعد</span></div>
+            <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm" data-i18n="perfTitle">مراقبة الأداء</h3><span id="perf-route" class="text-[11px] text-slate-500" data-i18n="perfIdle">لم تبدأ عملية بعد</span></div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <div class="rounded-xl bg-slate-50 p-3"><div class="text-[10px] text-slate-500">إجمالي الوقت</div><strong id="perf-total" class="text-lg">—</strong></div>
-                <div class="rounded-xl bg-slate-50 p-3"><div class="text-[10px] text-slate-500">استرجاع المعرفة</div><strong id="perf-knowledge" class="text-lg">—</strong></div>
-                <div class="rounded-xl bg-slate-50 p-3"><div class="text-[10px] text-slate-500">استجابة AI</div><strong id="perf-ai" class="text-lg">—</strong></div>
-                <div class="rounded-xl bg-slate-50 p-3"><div class="text-[10px] text-slate-500">مصدر النتيجة</div><strong id="perf-cache" class="text-sm">—</strong></div>
+                <div class="rounded-xl bg-slate-50 p-3"><div class="text-[10px] text-slate-500" data-i18n="perfTotal">إجمالي الوقت</div><strong id="perf-total" class="text-lg">—</strong></div>
+                <div class="rounded-xl bg-slate-50 p-3"><div class="text-[10px] text-slate-500" data-i18n="perfKnowledge">استرجاع المعرفة</div><strong id="perf-knowledge" class="text-lg">—</strong></div>
+                <div class="rounded-xl bg-slate-50 p-3"><div class="text-[10px] text-slate-500" data-i18n="perfAi">استجابة AI</div><strong id="perf-ai" class="text-lg">—</strong></div>
+                <div class="rounded-xl bg-slate-50 p-3"><div class="text-[10px] text-slate-500" data-i18n="perfSource">مصدر النتيجة</div><strong id="perf-cache" class="text-sm">—</strong></div>
             </div>
-            <p class="smart-muted mt-2">الأوقات تقاس على جهازك واتصالك الحالي، وقد تختلف من طلب لآخر.</p>
+            <p class="smart-muted mt-2" data-i18n="perfNote">الأوقات تقاس على جهازك واتصالك الحالي، وقد تختلف من طلب لآخر.</p>
         </section>
         <section id="history-panel" class="hidden mt-4 bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 animate-fade-in">
-            <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm">آخر الترجمات</h3><button type="button" onclick="clearHistory()" class="text-xs text-red-500 hover:text-red-700">مسح السجل</button></div>
+            <div class="flex items-center justify-between gap-2 mb-3"><h3 class="font-bold text-sm" data-i18n="historyTitle">آخر الترجمات</h3><button type="button" onclick="clearHistory()" class="text-xs text-red-500 hover:text-red-700" data-i18n="clearHistory">مسح السجل</button></div>
             <div id="history-list" class="space-y-2"></div>
         </section>
 
@@ -450,7 +451,7 @@
                     <div class="flex flex-col gap-1">
                         <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
                             <h2 id="dict-word" class="text-xl sm:text-3xl font-extrabold text-blue-700 break-words"></h2>
-                            <button id="dict-speak-btn" type="button" onclick="speakDictionaryWord(this)" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100 hover:bg-blue-600 text-blue-700 hover:text-white flex items-center justify-center transition-all shadow-2xs active:scale-90 shrink-0" title="انطق الكلمة">
+                            <button id="dict-speak-btn" type="button" onclick="speakDictionaryWord(this)" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100 hover:bg-blue-600 text-blue-700 hover:text-white flex items-center justify-center transition-all shadow-2xs active:scale-90 shrink-0" data-i18n-title="speakWord" title="انطق الكلمة">
                                 <i data-lucide="volume-2" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                             </button>
                             <span id="dict-pos" class="ltr-text px-3 py-1 rounded-full text-xs sm:text-sm font-bold bg-blue-600 text-white shadow-2xs tracking-wide"></span>
@@ -459,22 +460,22 @@
                             <span id="dict-source-badge" class="text-[10px] sm:text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">Cloudflare Worker + AI</span>
                             <button id="toggle-smart-insights-btn" type="button" onclick="toggleSmartInsightsPanel()" class="hidden text-[11px] font-sans font-semibold text-blue-700 hover:text-blue-900 bg-blue-50/90 hover:bg-blue-100 border border-blue-200/80 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1">
                                 <i data-lucide="sparkles" class="w-3 h-3"></i>
-                                <span id="toggle-smart-insights-label">بدائل وسياق المعنى</span>
+                                <span id="toggle-smart-insights-label" data-i18n="insightsToggle">بدائل وسياق المعنى</span>
                             </button>
                         </div>
                         <div id="dict-phonetics-row" class="hidden ltr-text flex flex-wrap items-center gap-2 mt-0.5">
                             <span id="dict-transcription" class="text-xs sm:text-sm text-slate-400 font-medium"></span>
                             <span id="dict-ipa-inline" class="text-xs sm:text-sm font-mono font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-lg"></span>
-                            <button type="button" onclick="toggleIpaChart()" class="text-[11px] font-sans font-semibold text-slate-500 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 px-2 py-0.5 rounded-md transition-colors flex items-center gap-1" title="عرض دليل الرموز الصوتية الكاملة">
+                            <button type="button" onclick="toggleIpaChart()" class="text-[11px] font-sans font-semibold text-slate-500 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 px-2 py-0.5 rounded-md transition-colors flex items-center gap-1" data-i18n-title="ipaChartTitle" title="عرض دليل الرموز الصوتية الكاملة">
                                 <i data-lucide="help-circle" class="w-3 h-3"></i>
-                                <span>دليل الرموز الصوتية</span>
+                                <span data-i18n="ipaChartBtn">دليل الرموز الصوتية</span>
                             </button>
                         </div>
                         <div id="ipa-reference-panel" class="hidden mt-2 p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3">
                             <div class="flex items-center justify-between border-b border-slate-200 pb-2">
                                 <span class="font-bold text-slate-800 flex items-center gap-1.5">
                                     <i data-lucide="audio-waveform" class="w-4 h-4 text-blue-600"></i>
-                                    <span>الدليل الكامل للرموز الصوتية الإنجليزية (IPA)</span>
+                                    <span data-i18n="ipaChartHeading">الدليل الكامل للرموز الصوتية الإنجليزية (IPA)</span>
                                 </span>
                                 <button type="button" onclick="toggleIpaChart()" class="text-slate-400 hover:text-slate-700 p-1">
                                     <i data-lucide="x" class="w-4 h-4"></i>
@@ -482,7 +483,7 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <div class="bg-white p-2.5 rounded-xl border border-slate-200/80">
-                                    <div class="font-bold text-blue-700 mb-1.5 text-[11px]">1. الحركات القصيرة (Short Vowels)</div>
+                                    <div class="font-bold text-blue-700 mb-1.5 text-[11px]" data-i18n="ipaGroup1">1. الحركات القصيرة (Short Vowels)</div>
                                     <div class="ltr-text grid grid-cols-2 gap-1 text-[11px] font-mono text-slate-700">
                                         <span><strong class="text-blue-600">/ɪ/</strong> kit</span>
                                         <span><strong class="text-blue-600">/e/</strong> dress</span>
@@ -495,7 +496,7 @@
                                     </div>
                                 </div>
                                 <div class="bg-white p-2.5 rounded-xl border border-slate-200/80">
-                                    <div class="font-bold text-blue-700 mb-1.5 text-[11px]">2. الحركات الطويلة والمزدوجة (Long & Diphthongs)</div>
+                                    <div class="font-bold text-blue-700 mb-1.5 text-[11px]" data-i18n="ipaGroup2">2. الحركات الطويلة والمزدوجة (Long & Diphthongs)</div>
                                     <div class="ltr-text grid grid-cols-2 gap-1 text-[11px] font-mono text-slate-700">
                                         <span><strong class="text-blue-600">/iː/</strong> fleece</span>
                                         <span><strong class="text-blue-600">/ɑː/</strong> palm</span>
@@ -513,7 +514,7 @@
                                     </div>
                                 </div>
                                 <div class="bg-white p-2.5 rounded-xl border border-slate-200/80">
-                                    <div class="font-bold text-blue-700 mb-1.5 text-[11px]">3. السواكن الخاصة (Consonants)</div>
+                                    <div class="font-bold text-blue-700 mb-1.5 text-[11px]" data-i18n="ipaGroup3">3. السواكن الخاصة (Consonants)</div>
                                     <div class="ltr-text grid grid-cols-2 gap-1 text-[11px] font-mono text-slate-700">
                                         <span><strong class="text-blue-600">/θ/</strong> think</span>
                                         <span><strong class="text-blue-600">/ð/</strong> this</span>
@@ -535,29 +536,29 @@
                 <div class="p-4 sm:p-6 space-y-5 sm:space-y-6">
                     <div id="alt-row" class="hidden -mb-2">
                         <div class="flex flex-wrap items-center gap-2">
-                            <span class="text-xs font-bold text-slate-500">بدائل الترجمة:</span>
+                            <span class="text-xs font-bold text-slate-500" data-i18n="altTranslations">بدائل الترجمة:</span>
                             <div id="alt-buttons" class="flex flex-wrap gap-2"></div>
                         </div>
                         <p id="alt-result" class="hidden mt-2 text-base font-semibold text-slate-800 bg-blue-50/60 border border-blue-100 rounded-xl px-3 py-2 break-words"></p>
                     </div>
 
                     <section id="smart-insights" data-stagger-item class="hidden space-y-3">
-                        <div class="flex items-center justify-between gap-2"><h3 class="text-xs font-bold text-slate-500">تفاصيل إضافية لفهم السياق والبدائل</h3><span id="naturalness-badge" class="hidden text-[10px] font-bold rounded-full px-2.5 py-1 border"></span></div>
+                        <div class="flex items-center justify-between gap-2"><h3 class="text-xs font-bold text-slate-500" data-i18n="insightsTitle">تفاصيل إضافية لفهم السياق والبدائل</h3><span id="naturalness-badge" class="hidden text-[10px] font-bold rounded-full px-2.5 py-1 border"></span></div>
                         <div id="alternatives-card" class="smart-insight-card hidden">
-                            <div class="smart-insight-title"><span>بدائل طبيعية للترجمة</span></div>
+                            <div class="smart-insight-title"><span data-i18n="altCardTitle">بدائل طبيعية للترجمة</span></div>
                             <div id="alternatives-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div id="breakdown-card" class="smart-insight-card hidden">
-                                <div class="smart-insight-title">تحليل الجملة</div><div id="breakdown-list" class="space-y-2"></div>
+                                <div class="smart-insight-title" data-i18n="breakdownTitle">تحليل الجملة</div><div id="breakdown-list" class="space-y-2"></div>
                             </div>
                             <div id="quality-card" class="smart-insight-card hidden">
-                                <div class="smart-insight-title">مراجعة جودة الترجمة</div><div id="quality-content" class="space-y-2"></div>
+                                <div class="smart-insight-title" data-i18n="qualityTitle">مراجعة جودة الترجمة</div><div id="quality-content" class="space-y-2"></div>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div id="context-card" class="smart-insight-card hidden"><div class="smart-insight-title">المعنى حسب السياق</div><p id="context-content" class="text-sm leading-relaxed text-slate-700"></p></div>
-                            <div id="regional-card" class="smart-insight-card hidden"><div class="smart-insight-title">بريطاني مقابل أمريكي</div><div id="regional-content" class="space-y-2"></div></div>
+                            <div id="context-card" class="smart-insight-card hidden"><div class="smart-insight-title" data-i18n="contextTitle">المعنى حسب السياق</div><p id="context-content" class="text-sm leading-relaxed text-slate-700"></p></div>
+                            <div id="regional-card" class="smart-insight-card hidden"><div class="smart-insight-title" data-i18n="regionalTitle">بريطاني مقابل أمريكي</div><div id="regional-content" class="space-y-2"></div></div>
                         </div>
                     </section>
 
@@ -565,9 +566,9 @@
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-700">
                                 <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
-                                <span id="dict-def-header">المعنى والتعريف</span>
+                                <span id="dict-def-header" data-i18n="defHeader">المعنى والتعريف</span>
                             </div>
-                            <button type="button" onclick="speakDefinitionText(this)" class="p-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200 transition-all active:scale-90" title="استمع للتعريف">
+                            <button type="button" onclick="speakDefinitionText(this)" class="p-1.5 rounded-full bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200 transition-all active:scale-90" data-i18n-title="listenDef" title="استمع للتعريف">
                                 <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
@@ -577,7 +578,7 @@
                     <div id="dict-examples-block" data-stagger-item>
                         <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-700 mb-3">
                             <i data-lucide="quote" class="w-4 h-4 shrink-0"></i>
-                            <span id="dict-ex-header">أمثلة في سياقات مختلفة</span>
+                            <span id="dict-ex-header" data-i18n="examplesHeader">أمثلة في سياقات مختلفة</span>
                         </div>
                         <div id="dict-examples" class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         </div>
@@ -588,10 +589,10 @@
                             <div class="flex items-center gap-2">
                                 <span class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white text-[11px] sm:text-xs font-bold flex items-center gap-1.5">
                                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                    <span>مصطلح / تعبير شائع</span>
+                                    <span data-i18n="idiomBadge">مصطلح / تعبير شائع</span>
                                 </span>
                                 <h3 id="idiom-phrase" class="text-base sm:text-xl font-extrabold text-indigo-900 break-words"></h3>
-                                <button type="button" onclick="speakIdiomPhrase(this)" class="w-8 h-8 rounded-full bg-white hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 flex items-center justify-center transition-all active:scale-90 shrink-0" title="استمع للمصطلح">
+                                <button type="button" onclick="speakIdiomPhrase(this)" class="w-8 h-8 rounded-full bg-white hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 flex items-center justify-center transition-all active:scale-90 shrink-0" data-i18n-title="listenIdiom" title="استمع للمصطلح">
                                     <i data-lucide="volume-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -602,7 +603,7 @@
                         <div>
                             <div class="text-[11px] sm:text-xs font-bold text-indigo-700 mb-2.5 flex items-center gap-1.5">
                                 <i data-lucide="message-square-quote" class="w-3.5 h-3.5"></i>
-                                <span>أمثلة على المصطلح</span>
+                                <span data-i18n="idiomExamples">أمثلة على المصطلح</span>
                             </div>
                             <div id="idiom-examples" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             </div>
@@ -614,7 +615,7 @@
                             <div class="flex items-center justify-between mb-3">
                                 <span class="ltr-text text-xs sm:text-sm font-bold text-blue-800 flex items-center gap-1.5">
                                     <i data-lucide="layers" class="w-4 h-4 text-blue-600"></i>
-                                    المرادفات
+                                    <span data-i18n="synonyms">المرادفات</span>
                                 </span>
                             </div>
                             <div id="dict-synonyms" class="flex flex-wrap gap-2">
@@ -625,7 +626,7 @@
                             <div class="flex items-center justify-between mb-3">
                                 <span class="ltr-text text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
                                     <i data-lucide="contrast" class="w-4 h-4 text-blue-600"></i>
-                                    المتضادات
+                                    <span data-i18n="antonyms">المتضادات</span>
                                 </span>
                             </div>
                             <div id="dict-antonyms" class="flex flex-wrap gap-2">
@@ -637,10 +638,10 @@
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700">
                                 <i data-lucide="book-open-check" class="w-4 h-4 text-blue-600"></i>
-                                <span>تفاصيل التحليل اللغوي المتقدم</span>
-                                <span id="details-loading-hint" class="hidden text-[11px] font-medium text-slate-400">جارٍ التحميل...</span>
+                                <span data-i18n="advancedTitle">تفاصيل التحليل اللغوي المتقدم</span>
+                                <span id="details-loading-hint" class="hidden text-[11px] font-medium text-slate-400" data-i18n="loadingHint">جارٍ التحميل...</span>
                             </div>
-                            <button id="details-toggle-btn" type="button" aria-expanded="false" onclick="toggleDetails()" class="px-3 py-1.5 rounded-full text-xs font-bold border border-blue-200 bg-white text-blue-700 hover:bg-blue-600 hover:text-white transition-colors"><span id="details-toggle-label">إظهار التفاصيل</span></button>
+                            <button id="details-toggle-btn" type="button" aria-expanded="false" onclick="toggleDetails()" class="px-3 py-1.5 rounded-full text-xs font-bold border border-blue-200 bg-white text-blue-700 hover:bg-blue-600 hover:text-white transition-colors"><span id="details-toggle-label" data-i18n="showDetails">إظهار التفاصيل</span></button>
                         </div>
 
                         <div id="advanced-wrap" class="hidden grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
@@ -648,7 +649,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-ipa')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="audio-waveform" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>الرموز الصوتية <span class="ltr-text text-blue-600 font-semibold">(IPA)</span></span>
+                                        <span><span data-i18n="accIpa">الرموز الصوتية</span> <span class="ltr-text text-blue-600 font-semibold">(IPA)</span></span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -659,7 +660,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-collocations')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="link-2" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>الكلمات المصاحبة</span>
+                                        <span data-i18n="accCollocations">الكلمات المصاحبة</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -670,7 +671,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-word-family')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="network" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>عائلة الكلمة</span>
+                                        <span data-i18n="accWordFamily">عائلة الكلمة</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -681,7 +682,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-grammar')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="braces" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>التراكيب النحوية</span>
+                                        <span data-i18n="accGrammar">التراكيب النحوية</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -692,7 +693,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-frequency')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>مدى شيوعها</span>
+                                        <span data-i18n="accFrequency">مدى شيوعها</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -703,7 +704,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-register')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="scale" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>رسمي أو غير رسمي</span>
+                                        <span data-i18n="accRegister">رسمي أو غير رسمي</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -714,7 +715,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-related')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="git-fork" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>الكلمات المرتبطة</span>
+                                        <span data-i18n="accRelated">الكلمات المرتبطة</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -725,7 +726,7 @@
                                 <button type="button" onclick="toggleAccordion('acc-etymology')" class="w-full px-4 py-3 flex items-center justify-between text-right hover:bg-blue-50/70 transition-colors">
                                     <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
                                         <i data-lucide="scroll-text" class="w-4 h-4 text-blue-600 shrink-0"></i>
-                                        <span>أصل الكلمة</span>
+                                        <span data-i18n="accEtymology">أصل الكلمة</span>
                                     </span>
                                     <i data-lucide="chevron-down" class="accordion-arrow w-4 h-4 text-slate-500 shrink-0"></i>
                                 </button>
@@ -741,7 +742,7 @@
 
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 sm:mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-right text-[11px] sm:text-xs text-slate-500">
-            <p>المترجم الذكي والقاموس التفاعلي · v7.4</p>
+            <p data-i18n="footer">المترجم الذكي والقاموس التفاعلي · v7.4</p>
         </div>
     </footer>
 
@@ -749,6 +750,1371 @@
         const DEFAULT_WORKER_URL = "https://smart-translator-api.abdelrahmanwael5101.workers.dev";
         const DEFAULT_GEMINI_KEY = "";
         const DEFAULT_GROQ_KEY = "";
+
+
+        // ---- Interface language (i18n): static strings, no AI calls ----
+        const UI_LANGS = [["ar", "العربية"], ["en", "English"], ["es", "Español"], ["fr", "Français"], ["de", "Deutsch"], ["pt", "Português"], ["ru", "Русский"], ["zh", "中文"], ["hi", "हिन्दी"], ["ja", "日本語"]];
+        const UI_STRINGS = {
+ "ar": {
+  "appTitle": "المترجم الذكي",
+  "pageTitle": "المترجم الذكي | ترجمة سهلة وفورية، معنى كلمة وشرح تعبير بالانجليزي Translate",
+  "tagline": "ترجمة تفهم مقصدك لا كلماتك فقط",
+  "uiLangLabel": "لغة الواجهة",
+  "lightMode": "تفعيل الوضع الفاتح",
+  "darkMode": "تفعيل الوضع الداكن",
+  "focusOn": "تفعيل وضع التركيز",
+  "focusOff": "إيقاف وضع التركيز",
+  "engineBadgeTitle": "اضغط لعرض أو إخفاء تفاصيل الاتصال",
+  "heroBadge": "ترجمة ذكية بالذكاء الاصطناعي",
+  "heroTitle": "اكتب كما تتحدث.. ونحن نتولى الترجمة",
+  "heroSub": "يفهم العامية المصرية والفرانكو وحتى الأخطاء الإملائية، ويقدّم لك الترجمة والمعنى والأمثلة في ثوانٍ",
+  "autoDetect": "تحديد تلقائي",
+  "detected": "مكتشفة",
+  "inputPlaceholder": "اكتب النص أو الكلمة هنا وسيتم ترجمتها تلقائياً...",
+  "outputPlaceholder": "الترجمة تظهر تلقائياً هنا (أو اكتب هنا للترجمة للصندوق الآخر)...",
+  "clearText": "مسح النص",
+  "listen": "استمع",
+  "copy": "نسخ",
+  "copied": "تم النسخ",
+  "listenSource": "استمع للنص",
+  "listenTarget": "استمع للترجمة",
+  "swapTitle": "تبديل اللغتين والنصوص",
+  "loadingDefault": "جاري تجهيز الترجمة...",
+  "loadingPrep": "جاري تجهيز الترجمة والعرض المتدرج...",
+  "stageAuto": "فهم السياق والترجمة التلقائية...",
+  "stageManual": "تحليل صياغة الكلام وتجهيز الترجمة الطبيعية...",
+  "submitBtn": "ترجم وحلل",
+  "autoHint": "الترجمة التلقائية مفعّلة عند التوقف عن الكتابة · اضغط الزر لعرض التحليل المتدرج",
+  "shortcuts": "اختصارات:",
+  "shortcutTranslate": "للترجمة",
+  "shortcutCancel": "للإلغاء",
+  "shortcutHistory": "للسجل",
+  "settings": "الإعدادات",
+  "styleLabel": "الأسلوب",
+  "toneAuto": "تلقائي",
+  "toneEgy": "مصري",
+  "toneMsa": "فصحى",
+  "toneFormal": "رسمي",
+  "toneCasual": "عادي",
+  "voiceLabel": "الصوت",
+  "voiceAuto": "تلقائي حسب اللغة",
+  "rateLabel": "سرعة النطق",
+  "historyBtn": "سجل الترجمات",
+  "perfBtn": "سرعة الموقع",
+  "perfTitle": "مراقبة الأداء",
+  "perfIdle": "لم تبدأ عملية بعد",
+  "perfTotal": "إجمالي الوقت",
+  "perfKnowledge": "استرجاع المعرفة",
+  "perfAi": "استجابة AI",
+  "perfSource": "مصدر النتيجة",
+  "perfNote": "الأوقات تقاس على جهازك واتصالك الحالي، وقد تختلف من طلب لآخر.",
+  "historyTitle": "آخر الترجمات",
+  "clearHistory": "مسح السجل",
+  "historyEmpty": "لا توجد ترجمات محفوظة حتى الآن.",
+  "speakWord": "انطق الكلمة",
+  "insightsToggle": "بدائل وسياق المعنى",
+  "hideInsights": "إخفاء البدائل والسياق",
+  "ipaChartTitle": "عرض دليل الرموز الصوتية الكاملة",
+  "ipaChartBtn": "دليل الرموز الصوتية",
+  "ipaChartHeading": "الدليل الكامل للرموز الصوتية الإنجليزية (IPA)",
+  "ipaGroup1": "1. الحركات القصيرة (Short Vowels)",
+  "ipaGroup2": "2. الحركات الطويلة والمزدوجة (Long & Diphthongs)",
+  "ipaGroup3": "3. السواكن الخاصة (Consonants)",
+  "altTranslations": "بدائل الترجمة:",
+  "insightsTitle": "تفاصيل إضافية لفهم السياق والبدائل",
+  "altCardTitle": "بدائل طبيعية للترجمة",
+  "altN": "بديل",
+  "altFetchFailed": "تعذر جلب البديل، يرجى المحاولة مرة أخرى.",
+  "breakdownTitle": "تحليل الجملة",
+  "qualityTitle": "مراجعة جودة الترجمة",
+  "contextTitle": "المعنى حسب السياق",
+  "regionalTitle": "بريطاني مقابل أمريكي",
+  "defHeader": "المعنى والتعريف",
+  "listenDef": "استمع للتعريف",
+  "examplesHeader": "أمثلة في سياقات مختلفة",
+  "listenSentence": "استمع للجملة",
+  "idiomBadge": "مصطلح / تعبير شائع",
+  "listenIdiom": "استمع للمصطلح",
+  "idiomExamples": "أمثلة على المصطلح",
+  "synonyms": "المرادفات",
+  "antonyms": "المتضادات",
+  "advancedTitle": "تفاصيل التحليل اللغوي المتقدم",
+  "loadingHint": "جارٍ التحميل...",
+  "showDetails": "إظهار التفاصيل",
+  "hideDetails": "إخفاء التفاصيل",
+  "accIpa": "الرموز الصوتية",
+  "accCollocations": "الكلمات المصاحبة",
+  "accWordFamily": "عائلة الكلمة",
+  "accGrammar": "التراكيب النحوية",
+  "accFrequency": "مدى شيوعها",
+  "accRegister": "رسمي أو غير رسمي",
+  "accRelated": "الكلمات المرتبطة",
+  "accEtymology": "أصل الكلمة",
+  "footer": "المترجم الذكي والقاموس التفاعلي · v7.4",
+  "cancelled": "تم إلغاء عملية الترجمة.",
+  "errEmpty": "يرجى كتابة كلمة أو جملة في أحد المستطيلين أولاً.",
+  "errUnavailable": "الخدمة غير متاحة حالياً، يرجى المحاولة بعد قليل.",
+  "errFailed": "تعذر إتمام الترجمة حالياً، يرجى المحاولة مرة أخرى بعد قليل.",
+  "errWorkerUrl": "يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL.",
+  "notSet": "غير مضبوط",
+  "lastError": "آخر خطأ",
+  "connReady": "حالة الاتصال: جاهز",
+  "noDataWord": "لا توجد بيانات متاحة لهذه الكلمة",
+  "noData": "لا توجد بيانات متاحة",
+  "notAvailable": "غير متوفر",
+  "freqDefault": "متوسط الاستخدام",
+  "noEtymology": "لا تتوفر معلومات تأثيلية مسجلة.",
+  "naturalness": "الطبيعية",
+  "chipSearch": "اضغط للبحث عن هذه الكلمة",
+  "enToEn": "إنجليزي ← إنجليزي",
+  "langLabel": "اللغة",
+  "posIdiom": "idiom",
+  "posTerm": "Term",
+  "topLangs": "★ الأكثر استخداماً (Top 10 Languages)",
+  "allLangs": "— جميع لغات العالم (مرتبة أبجدياً) —",
+  "varAmerican": "أمريكي",
+  "varBritish": "بريطاني",
+  "varEgyptian": "مصري",
+  "varFusha": "فصحى",
+  "styleEgy": "عامية مصرية",
+  "styleConv": "محادثة طبيعية",
+  "styleNat": "طبيعي حسب السياق",
+  "styleTech": "تقني دقيق",
+  "styleFormal": "رسمي / أكاديمي",
+  "styleBiz": "أعمال / مهني"
+ },
+ "en": {
+  "appTitle": "Smart Translator",
+  "pageTitle": "Smart Translator | Easy instant translation, word meanings and idiom explanations",
+  "tagline": "Translation that understands your meaning, not just your words",
+  "uiLangLabel": "Interface language",
+  "lightMode": "Switch to light mode",
+  "darkMode": "Switch to dark mode",
+  "focusOn": "Enable focus mode",
+  "focusOff": "Disable focus mode",
+  "engineBadgeTitle": "Tap to show or hide connection details",
+  "heroBadge": "Smart AI translation",
+  "heroTitle": "Write as you speak.. we handle the translation",
+  "heroSub": "Understands Egyptian dialect, Franco-Arab and even spelling mistakes, and gives you the translation, meaning and examples in seconds",
+  "autoDetect": "Auto detect",
+  "detected": "Detected",
+  "inputPlaceholder": "Type text or a word here and it will be translated automatically...",
+  "outputPlaceholder": "The translation appears here automatically (or type here to translate the other way)...",
+  "clearText": "Clear text",
+  "listen": "Listen",
+  "copy": "Copy",
+  "copied": "Copied",
+  "listenSource": "Listen to the text",
+  "listenTarget": "Listen to the translation",
+  "swapTitle": "Swap languages and texts",
+  "loadingDefault": "Preparing the translation...",
+  "loadingPrep": "Preparing the translation and staged view...",
+  "stageAuto": "Understanding context and auto-translating...",
+  "stageManual": "Analyzing the phrasing and preparing a natural translation...",
+  "submitBtn": "Translate & analyze",
+  "autoHint": "Auto-translate runs when you stop typing · press the button for the staged analysis",
+  "shortcuts": "Shortcuts:",
+  "shortcutTranslate": "to translate",
+  "shortcutCancel": "to cancel",
+  "shortcutHistory": "for history",
+  "settings": "Settings",
+  "styleLabel": "Tone",
+  "toneAuto": "Auto",
+  "toneEgy": "Egyptian",
+  "toneMsa": "Standard",
+  "toneFormal": "Formal",
+  "toneCasual": "Casual",
+  "voiceLabel": "Voice",
+  "voiceAuto": "Auto by language",
+  "rateLabel": "Speech rate",
+  "historyBtn": "History",
+  "perfBtn": "Site speed",
+  "perfTitle": "Performance monitor",
+  "perfIdle": "No request yet",
+  "perfTotal": "Total time",
+  "perfKnowledge": "Knowledge lookup",
+  "perfAi": "AI response",
+  "perfSource": "Result source",
+  "perfNote": "Timings are measured on your device and current connection, and may vary per request.",
+  "historyTitle": "Recent translations",
+  "clearHistory": "Clear history",
+  "historyEmpty": "No saved translations yet.",
+  "speakWord": "Pronounce the word",
+  "insightsToggle": "Meaning alternatives & context",
+  "hideInsights": "Hide alternatives & context",
+  "ipaChartTitle": "Show the full phonetic symbols guide",
+  "ipaChartBtn": "Phonetic symbols guide",
+  "ipaChartHeading": "Full guide to English phonetic symbols (IPA)",
+  "ipaGroup1": "1. Short vowels",
+  "ipaGroup2": "2. Long vowels & diphthongs",
+  "ipaGroup3": "3. Consonants",
+  "altTranslations": "Translation alternatives:",
+  "insightsTitle": "Extra details for context and alternatives",
+  "altCardTitle": "Natural translation alternatives",
+  "altN": "Option",
+  "altFetchFailed": "Couldn't fetch the alternative, please try again.",
+  "breakdownTitle": "Sentence analysis",
+  "qualityTitle": "Translation quality check",
+  "contextTitle": "Meaning by context",
+  "regionalTitle": "British vs American",
+  "defHeader": "Meaning & definition",
+  "listenDef": "Listen to the definition",
+  "examplesHeader": "Examples in different contexts",
+  "listenSentence": "Listen to the sentence",
+  "idiomBadge": "Idiom / common expression",
+  "listenIdiom": "Listen to the expression",
+  "idiomExamples": "Examples of the expression",
+  "synonyms": "Synonyms",
+  "antonyms": "Antonyms",
+  "advancedTitle": "Advanced linguistic analysis",
+  "loadingHint": "Loading...",
+  "showDetails": "Show details",
+  "hideDetails": "Hide details",
+  "accIpa": "Phonetic symbols",
+  "accCollocations": "Collocations",
+  "accWordFamily": "Word family",
+  "accGrammar": "Grammar patterns",
+  "accFrequency": "Frequency",
+  "accRegister": "Register",
+  "accRelated": "Related words",
+  "accEtymology": "Etymology",
+  "footer": "Smart Translator & interactive dictionary · v7.4",
+  "cancelled": "Translation cancelled.",
+  "errEmpty": "Please type a word or sentence in one of the boxes first.",
+  "errUnavailable": "The service is unavailable right now, please try again shortly.",
+  "errFailed": "Couldn't complete the translation right now, please try again shortly.",
+  "errWorkerUrl": "Please set the real Cloudflare Worker URL in DEFAULT_WORKER_URL.",
+  "notSet": "not set",
+  "lastError": "last error",
+  "connReady": "Connection: ready",
+  "noDataWord": "No data available for this word",
+  "noData": "No data available",
+  "notAvailable": "Not available",
+  "freqDefault": "Average usage",
+  "noEtymology": "No recorded etymology available.",
+  "naturalness": "Naturalness",
+  "chipSearch": "Tap to look up this word",
+  "enToEn": "English ← English",
+  "langLabel": "Language",
+  "posIdiom": "idiom",
+  "posTerm": "Term",
+  "topLangs": "★ Most used (Top 10 Languages)",
+  "allLangs": "— All world languages (alphabetical) —",
+  "varAmerican": "American",
+  "varBritish": "British",
+  "varEgyptian": "Egyptian",
+  "varFusha": "Standard Arabic",
+  "styleEgy": "Egyptian colloquial",
+  "styleConv": "Natural conversation",
+  "styleNat": "Natural by context",
+  "styleTech": "Precise technical",
+  "styleFormal": "Formal / academic",
+  "styleBiz": "Business / professional"
+ },
+ "fr": {
+  "appTitle": "Traducteur intelligent",
+  "pageTitle": "Traducteur intelligent | Traduction simple et instantanée, sens des mots et explication des expressions",
+  "tagline": "Une traduction qui comprend votre intention, pas seulement vos mots",
+  "uiLangLabel": "Langue de l'interface",
+  "lightMode": "Passer en mode clair",
+  "darkMode": "Passer en mode sombre",
+  "focusOn": "Activer le mode concentration",
+  "focusOff": "Désactiver le mode concentration",
+  "engineBadgeTitle": "Appuyez pour afficher ou masquer les détails de connexion",
+  "heroBadge": "Traduction intelligente par IA",
+  "heroTitle": "Écrivez comme vous parlez.. nous nous occupons de la traduction",
+  "heroSub": "Il comprend le dialecte égyptien, le franco-arabe et même les fautes d'orthographe, et vous donne la traduction, le sens et des exemples en quelques secondes",
+  "autoDetect": "Détection auto",
+  "detected": "Détectée",
+  "inputPlaceholder": "Tapez un texte ou un mot ici, il sera traduit automatiquement...",
+  "outputPlaceholder": "La traduction apparaît ici automatiquement (ou tapez ici pour traduire dans l'autre champ)...",
+  "clearText": "Effacer le texte",
+  "listen": "Écouter",
+  "copy": "Copier",
+  "copied": "Copié",
+  "listenSource": "Écouter le texte",
+  "listenTarget": "Écouter la traduction",
+  "swapTitle": "Intervertir les langues et les textes",
+  "loadingDefault": "Préparation de la traduction...",
+  "loadingPrep": "Préparation de la traduction et de l'affichage progressif...",
+  "stageAuto": "Compréhension du contexte et traduction automatique...",
+  "stageManual": "Analyse de la formulation et préparation d'une traduction naturelle...",
+  "submitBtn": "Traduire et analyser",
+  "autoHint": "La traduction automatique se lance quand vous arrêtez d'écrire · appuyez sur le bouton pour l'analyse progressive",
+  "shortcuts": "Raccourcis :",
+  "shortcutTranslate": "pour traduire",
+  "shortcutCancel": "pour annuler",
+  "shortcutHistory": "pour l'historique",
+  "settings": "Paramètres",
+  "styleLabel": "Style",
+  "toneAuto": "Auto",
+  "toneEgy": "Égyptien",
+  "toneMsa": "Standard",
+  "toneFormal": "Formel",
+  "toneCasual": "Familier",
+  "voiceLabel": "Voix",
+  "voiceAuto": "Auto selon la langue",
+  "rateLabel": "Vitesse de parole",
+  "historyBtn": "Historique",
+  "perfBtn": "Vitesse du site",
+  "perfTitle": "Suivi des performances",
+  "perfIdle": "Aucune requête pour le moment",
+  "perfTotal": "Temps total",
+  "perfKnowledge": "Recherche de connaissances",
+  "perfAi": "Réponse IA",
+  "perfSource": "Source du résultat",
+  "perfNote": "Les temps sont mesurés sur votre appareil et votre connexion actuelle, et peuvent varier d'une requête à l'autre.",
+  "historyTitle": "Traductions récentes",
+  "clearHistory": "Effacer l'historique",
+  "historyEmpty": "Aucune traduction enregistrée pour le moment.",
+  "speakWord": "Prononcer le mot",
+  "insightsToggle": "Alternatives de sens et contexte",
+  "hideInsights": "Masquer les alternatives et le contexte",
+  "ipaChartTitle": "Afficher le guide complet des symboles phonétiques",
+  "ipaChartBtn": "Guide des symboles phonétiques",
+  "ipaChartHeading": "Guide complet des symboles phonétiques anglais (API)",
+  "ipaGroup1": "1. Voyelles courtes",
+  "ipaGroup2": "2. Voyelles longues et diphtongues",
+  "ipaGroup3": "3. Consonnes",
+  "altTranslations": "Alternatives de traduction :",
+  "insightsTitle": "Détails supplémentaires pour le contexte et les alternatives",
+  "altCardTitle": "Alternatives de traduction naturelles",
+  "altN": "Option",
+  "altFetchFailed": "Impossible de récupérer l'alternative, veuillez réessayer.",
+  "breakdownTitle": "Analyse de la phrase",
+  "qualityTitle": "Contrôle qualité de la traduction",
+  "contextTitle": "Sens selon le contexte",
+  "regionalTitle": "Britannique vs américain",
+  "defHeader": "Sens et définition",
+  "listenDef": "Écouter la définition",
+  "examplesHeader": "Exemples dans différents contextes",
+  "listenSentence": "Écouter la phrase",
+  "idiomBadge": "Idiome / expression courante",
+  "listenIdiom": "Écouter l'expression",
+  "idiomExamples": "Exemples de l'expression",
+  "synonyms": "Synonymes",
+  "antonyms": "Antonymes",
+  "advancedTitle": "Analyse linguistique avancée",
+  "loadingHint": "Chargement...",
+  "showDetails": "Afficher les détails",
+  "hideDetails": "Masquer les détails",
+  "accIpa": "Symboles phonétiques",
+  "accCollocations": "Collocations",
+  "accWordFamily": "Famille du mot",
+  "accGrammar": "Structures grammaticales",
+  "accFrequency": "Fréquence d'usage",
+  "accRegister": "Registre",
+  "accRelated": "Mots liés",
+  "accEtymology": "Étymologie",
+  "footer": "Traducteur intelligent et dictionnaire interactif · v7.4",
+  "cancelled": "Traduction annulée.",
+  "errEmpty": "Veuillez d'abord taper un mot ou une phrase dans l'un des champs.",
+  "errUnavailable": "Le service est indisponible pour le moment, veuillez réessayer dans un instant.",
+  "errFailed": "Impossible de terminer la traduction pour le moment, veuillez réessayer dans un instant.",
+  "errWorkerUrl": "Veuillez définir l'URL réelle du Cloudflare Worker dans DEFAULT_WORKER_URL.",
+  "notSet": "non défini",
+  "lastError": "dernière erreur",
+  "connReady": "Connexion : prête",
+  "noDataWord": "Aucune donnée disponible pour ce mot",
+  "noData": "Aucune donnée disponible",
+  "notAvailable": "Indisponible",
+  "freqDefault": "Usage moyen",
+  "noEtymology": "Aucune étymologie enregistrée disponible.",
+  "naturalness": "Naturel",
+  "chipSearch": "Appuyez pour rechercher ce mot",
+  "enToEn": "Anglais ← Anglais",
+  "langLabel": "Langue",
+  "posIdiom": "idiome",
+  "posTerm": "Terme",
+  "topLangs": "★ Les plus utilisées (Top 10)",
+  "allLangs": "— Toutes les langues du monde (ordre alphabétique) —",
+  "varAmerican": "Américain",
+  "varBritish": "Britannique",
+  "varEgyptian": "Égyptien",
+  "varFusha": "Arabe standard",
+  "styleEgy": "Dialecte égyptien",
+  "styleConv": "Conversation naturelle",
+  "styleNat": "Naturel selon le contexte",
+  "styleTech": "Technique précis",
+  "styleFormal": "Formel / académique",
+  "styleBiz": "Professionnel"
+ },
+ "de": {
+  "appTitle": "Smarter Übersetzer",
+  "pageTitle": "Smarter Übersetzer | Einfache Sofortübersetzung, Wortbedeutungen und Redewendungen erklärt",
+  "tagline": "Übersetzung, die Ihren Sinn versteht, nicht nur Ihre Wörter",
+  "uiLangLabel": "Sprache der Oberfläche",
+  "lightMode": "Zum hellen Modus wechseln",
+  "darkMode": "Zum dunklen Modus wechseln",
+  "focusOn": "Fokusmodus aktivieren",
+  "focusOff": "Fokusmodus deaktivieren",
+  "engineBadgeTitle": "Tippen, um Verbindungsdetails ein- oder auszublenden",
+  "heroBadge": "Intelligente KI-Übersetzung",
+  "heroTitle": "Schreiben Sie, wie Sie sprechen.. wir übernehmen die Übersetzung",
+  "heroSub": "Versteht ägyptischen Dialekt, Franko-Arabisch und sogar Rechtschreibfehler und liefert Übersetzung, Bedeutung und Beispiele in Sekunden",
+  "autoDetect": "Automatisch erkennen",
+  "detected": "Erkannt",
+  "inputPlaceholder": "Text oder Wort hier eingeben, die Übersetzung erfolgt automatisch...",
+  "outputPlaceholder": "Die Übersetzung erscheint hier automatisch (oder hier tippen, um in das andere Feld zu übersetzen)...",
+  "clearText": "Text löschen",
+  "listen": "Anhören",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "listenSource": "Text anhören",
+  "listenTarget": "Übersetzung anhören",
+  "swapTitle": "Sprachen und Texte tauschen",
+  "loadingDefault": "Übersetzung wird vorbereitet...",
+  "loadingPrep": "Übersetzung und schrittweise Anzeige werden vorbereitet...",
+  "stageAuto": "Kontext wird verstanden und automatisch übersetzt...",
+  "stageManual": "Formulierung wird analysiert und eine natürliche Übersetzung vorbereitet...",
+  "submitBtn": "Übersetzen & analysieren",
+  "autoHint": "Automatische Übersetzung läuft, wenn Sie aufhören zu tippen · Taste drücken für die schrittweise Analyse",
+  "shortcuts": "Tastenkürzel:",
+  "shortcutTranslate": "zum Übersetzen",
+  "shortcutCancel": "zum Abbrechen",
+  "shortcutHistory": "für den Verlauf",
+  "settings": "Einstellungen",
+  "styleLabel": "Stil",
+  "toneAuto": "Automatisch",
+  "toneEgy": "Ägyptisch",
+  "toneMsa": "Hocharabisch",
+  "toneFormal": "Formell",
+  "toneCasual": "Locker",
+  "voiceLabel": "Stimme",
+  "voiceAuto": "Automatisch nach Sprache",
+  "rateLabel": "Sprechtempo",
+  "historyBtn": "Verlauf",
+  "perfBtn": "Geschwindigkeit",
+  "perfTitle": "Leistungsmonitor",
+  "perfIdle": "Noch keine Anfrage",
+  "perfTotal": "Gesamtzeit",
+  "perfKnowledge": "Wissensabruf",
+  "perfAi": "KI-Antwort",
+  "perfSource": "Ergebnisquelle",
+  "perfNote": "Zeiten werden auf Ihrem Gerät und Ihrer aktuellen Verbindung gemessen und können je nach Anfrage variieren.",
+  "historyTitle": "Letzte Übersetzungen",
+  "clearHistory": "Verlauf löschen",
+  "historyEmpty": "Noch keine gespeicherten Übersetzungen.",
+  "speakWord": "Wort aussprechen",
+  "insightsToggle": "Bedeutungsalternativen & Kontext",
+  "hideInsights": "Alternativen & Kontext ausblenden",
+  "ipaChartTitle": "Vollständige Lautschrift-Übersicht anzeigen",
+  "ipaChartBtn": "Lautschrift-Guide",
+  "ipaChartHeading": "Vollständiger Guide zu den englischen Lautschriftzeichen (IPA)",
+  "ipaGroup1": "1. Kurze Vokale",
+  "ipaGroup2": "2. Lange Vokale & Diphthonge",
+  "ipaGroup3": "3. Konsonanten",
+  "altTranslations": "Übersetzungsalternativen:",
+  "insightsTitle": "Zusätzliche Details für Kontext und Alternativen",
+  "altCardTitle": "Natürliche Übersetzungsalternativen",
+  "altN": "Variante",
+  "altFetchFailed": "Alternative konnte nicht geladen werden, bitte erneut versuchen.",
+  "breakdownTitle": "Satzanalyse",
+  "qualityTitle": "Qualitätsprüfung der Übersetzung",
+  "contextTitle": "Bedeutung nach Kontext",
+  "regionalTitle": "Britisch vs. amerikanisch",
+  "defHeader": "Bedeutung & Definition",
+  "listenDef": "Definition anhören",
+  "examplesHeader": "Beispiele in verschiedenen Kontexten",
+  "listenSentence": "Satz anhören",
+  "idiomBadge": "Redewendung / idiomatischer Ausdruck",
+  "listenIdiom": "Ausdruck anhören",
+  "idiomExamples": "Beispiele für den Ausdruck",
+  "synonyms": "Synonyme",
+  "antonyms": "Antonyme",
+  "advancedTitle": "Erweiterte linguistische Analyse",
+  "loadingHint": "Wird geladen...",
+  "showDetails": "Details anzeigen",
+  "hideDetails": "Details ausblenden",
+  "accIpa": "Lautschrift",
+  "accCollocations": "Kollokationen",
+  "accWordFamily": "Wortfamilie",
+  "accGrammar": "Grammatikmuster",
+  "accFrequency": "Häufigkeit",
+  "accRegister": "Register",
+  "accRelated": "Verwandte Wörter",
+  "accEtymology": "Etymologie",
+  "footer": "Smarter Übersetzer & interaktives Wörterbuch · v7.4",
+  "cancelled": "Übersetzung abgebrochen.",
+  "errEmpty": "Bitte zuerst ein Wort oder einen Satz in eines der Felder eingeben.",
+  "errUnavailable": "Der Dienst ist derzeit nicht verfügbar, bitte versuchen Sie es gleich erneut.",
+  "errFailed": "Übersetzung konnte derzeit nicht abgeschlossen werden, bitte gleich erneut versuchen.",
+  "errWorkerUrl": "Bitte die echte Cloudflare-Worker-URL in DEFAULT_WORKER_URL eintragen.",
+  "notSet": "nicht gesetzt",
+  "lastError": "letzter Fehler",
+  "connReady": "Verbindung: bereit",
+  "noDataWord": "Keine Daten für dieses Wort verfügbar",
+  "noData": "Keine Daten verfügbar",
+  "notAvailable": "Nicht verfügbar",
+  "freqDefault": "Durchschnittliche Verwendung",
+  "noEtymology": "Keine Etymologie verfügbar.",
+  "naturalness": "Natürlichkeit",
+  "chipSearch": "Tippen, um dieses Wort nachzuschlagen",
+  "enToEn": "Englisch ← Englisch",
+  "langLabel": "Sprache",
+  "posIdiom": "Redewendung",
+  "posTerm": "Begriff",
+  "topLangs": "★ Meistgenutzt (Top 10)",
+  "allLangs": "— Alle Sprachen der Welt (alphabetisch) —",
+  "varAmerican": "Amerikanisch",
+  "varBritish": "Britisch",
+  "varEgyptian": "Ägyptisch",
+  "varFusha": "Hocharabisch",
+  "styleEgy": "Ägyptische Umgangssprache",
+  "styleConv": "Natürliche Konversation",
+  "styleNat": "Natürlich nach Kontext",
+  "styleTech": "Präzise technisch",
+  "styleFormal": "Formell / akademisch",
+  "styleBiz": "Geschäftlich / professionell"
+ },
+ "es": {
+  "appTitle": "Traductor inteligente",
+  "pageTitle": "Traductor inteligente | Traducción fácil e instantánea, significados de palabras y explicación de expresiones",
+  "tagline": "Una traducción que entiende tu intención, no solo tus palabras",
+  "uiLangLabel": "Idioma de la interfaz",
+  "lightMode": "Activar modo claro",
+  "darkMode": "Activar modo oscuro",
+  "focusOn": "Activar modo de concentración",
+  "focusOff": "Desactivar modo de concentración",
+  "engineBadgeTitle": "Toca para mostrar u ocultar los detalles de conexión",
+  "heroBadge": "Traducción inteligente con IA",
+  "heroTitle": "Escribe como hablas.. nosotros nos encargamos de la traducción",
+  "heroSub": "Entiende el dialecto egipcio, el franco-árabe e incluso las faltas de ortografía, y te da la traducción, el significado y ejemplos en segundos",
+  "autoDetect": "Detección automática",
+  "detected": "Detectado",
+  "inputPlaceholder": "Escribe un texto o una palabra aquí y se traducirá automáticamente...",
+  "outputPlaceholder": "La traducción aparece aquí automáticamente (o escribe aquí para traducir al otro cuadro)...",
+  "clearText": "Borrar texto",
+  "listen": "Escuchar",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "listenSource": "Escuchar el texto",
+  "listenTarget": "Escuchar la traducción",
+  "swapTitle": "Intercambiar idiomas y textos",
+  "loadingDefault": "Preparando la traducción...",
+  "loadingPrep": "Preparando la traducción y la vista por etapas...",
+  "stageAuto": "Entendiendo el contexto y traduciendo automáticamente...",
+  "stageManual": "Analizando la redacción y preparando una traducción natural...",
+  "submitBtn": "Traducir y analizar",
+  "autoHint": "La traducción automática se activa cuando dejas de escribir · pulsa el botón para ver el análisis por etapas",
+  "shortcuts": "Atajos:",
+  "shortcutTranslate": "para traducir",
+  "shortcutCancel": "para cancelar",
+  "shortcutHistory": "para el historial",
+  "settings": "Ajustes",
+  "styleLabel": "Estilo",
+  "toneAuto": "Automático",
+  "toneEgy": "Egipcio",
+  "toneMsa": "Estándar",
+  "toneFormal": "Formal",
+  "toneCasual": "Informal",
+  "voiceLabel": "Voz",
+  "voiceAuto": "Automática según el idioma",
+  "rateLabel": "Velocidad de voz",
+  "historyBtn": "Historial",
+  "perfBtn": "Velocidad del sitio",
+  "perfTitle": "Monitor de rendimiento",
+  "perfIdle": "Aún no hay ninguna solicitud",
+  "perfTotal": "Tiempo total",
+  "perfKnowledge": "Búsqueda de conocimiento",
+  "perfAi": "Respuesta de IA",
+  "perfSource": "Fuente del resultado",
+  "perfNote": "Los tiempos se miden en tu dispositivo y tu conexión actual, y pueden variar de una solicitud a otra.",
+  "historyTitle": "Traducciones recientes",
+  "clearHistory": "Borrar historial",
+  "historyEmpty": "Aún no hay traducciones guardadas.",
+  "speakWord": "Pronunciar la palabra",
+  "insightsToggle": "Alternativas de significado y contexto",
+  "hideInsights": "Ocultar alternativas y contexto",
+  "ipaChartTitle": "Mostrar la guía completa de símbolos fonéticos",
+  "ipaChartBtn": "Guía de símbolos fonéticos",
+  "ipaChartHeading": "Guía completa de los símbolos fonéticos del inglés (IPA)",
+  "ipaGroup1": "1. Vocales cortas",
+  "ipaGroup2": "2. Vocales largas y diptongos",
+  "ipaGroup3": "3. Consonantes",
+  "altTranslations": "Alternativas de traducción:",
+  "insightsTitle": "Detalles adicionales para el contexto y las alternativas",
+  "altCardTitle": "Alternativas de traducción naturales",
+  "altN": "Opción",
+  "altFetchFailed": "No se pudo obtener la alternativa, inténtalo de nuevo.",
+  "breakdownTitle": "Análisis de la oración",
+  "qualityTitle": "Revisión de calidad de la traducción",
+  "contextTitle": "Significado según el contexto",
+  "regionalTitle": "Británico vs americano",
+  "defHeader": "Significado y definición",
+  "listenDef": "Escuchar la definición",
+  "examplesHeader": "Ejemplos en distintos contextos",
+  "listenSentence": "Escuchar la oración",
+  "idiomBadge": "Modismo / expresión común",
+  "listenIdiom": "Escuchar la expresión",
+  "idiomExamples": "Ejemplos de la expresión",
+  "synonyms": "Sinónimos",
+  "antonyms": "Antónimos",
+  "advancedTitle": "Análisis lingüístico avanzado",
+  "loadingHint": "Cargando...",
+  "showDetails": "Mostrar detalles",
+  "hideDetails": "Ocultar detalles",
+  "accIpa": "Símbolos fonéticos",
+  "accCollocations": "Colocaciones",
+  "accWordFamily": "Familia de la palabra",
+  "accGrammar": "Estructuras gramaticales",
+  "accFrequency": "Frecuencia de uso",
+  "accRegister": "Registro",
+  "accRelated": "Palabras relacionadas",
+  "accEtymology": "Etimología",
+  "footer": "Traductor inteligente y diccionario interactivo · v7.4",
+  "cancelled": "Traducción cancelada.",
+  "errEmpty": "Escribe primero una palabra o frase en uno de los cuadros.",
+  "errUnavailable": "El servicio no está disponible ahora mismo, inténtalo de nuevo en un momento.",
+  "errFailed": "No se pudo completar la traducción ahora mismo, inténtalo de nuevo en un momento.",
+  "errWorkerUrl": "Configura la URL real del Cloudflare Worker en DEFAULT_WORKER_URL.",
+  "notSet": "sin configurar",
+  "lastError": "último error",
+  "connReady": "Conexión: lista",
+  "noDataWord": "No hay datos disponibles para esta palabra",
+  "noData": "No hay datos disponibles",
+  "notAvailable": "No disponible",
+  "freqDefault": "Uso medio",
+  "noEtymology": "No hay información etimológica registrada.",
+  "naturalness": "Naturalidad",
+  "chipSearch": "Toca para buscar esta palabra",
+  "enToEn": "Inglés ← Inglés",
+  "langLabel": "Idioma",
+  "posIdiom": "modismo",
+  "posTerm": "Término",
+  "topLangs": "★ Más usados (Top 10)",
+  "allLangs": "— Todos los idiomas del mundo (orden alfabético) —",
+  "varAmerican": "Americano",
+  "varBritish": "Británico",
+  "varEgyptian": "Egipcio",
+  "varFusha": "Árabe estándar",
+  "styleEgy": "Coloquial egipcio",
+  "styleConv": "Conversación natural",
+  "styleNat": "Natural según el contexto",
+  "styleTech": "Técnico preciso",
+  "styleFormal": "Formal / académico",
+  "styleBiz": "Negocios / profesional"
+ },
+ "pt": {
+  "appTitle": "Tradutor inteligente",
+  "pageTitle": "Tradutor inteligente | Tradução fácil e instantânea, significados de palavras e explicação de expressões",
+  "tagline": "Uma tradução que entende a sua intenção, não apenas as suas palavras",
+  "uiLangLabel": "Idioma da interface",
+  "lightMode": "Ativar modo claro",
+  "darkMode": "Ativar modo escuro",
+  "focusOn": "Ativar modo de foco",
+  "focusOff": "Desativar modo de foco",
+  "engineBadgeTitle": "Toque para mostrar ou ocultar os detalhes da conexão",
+  "heroBadge": "Tradução inteligente com IA",
+  "heroTitle": "Escreva como você fala.. nós cuidamos da tradução",
+  "heroSub": "Entende o dialeto egípcio, o franco-árabe e até erros de ortografia, e dá a tradução, o significado e exemplos em segundos",
+  "autoDetect": "Detecção automática",
+  "detected": "Detectado",
+  "inputPlaceholder": "Digite um texto ou uma palavra aqui e será traduzido automaticamente...",
+  "outputPlaceholder": "A tradução aparece aqui automaticamente (ou digite aqui para traduzir para a outra caixa)...",
+  "clearText": "Limpar texto",
+  "listen": "Ouvir",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "listenSource": "Ouvir o texto",
+  "listenTarget": "Ouvir a tradução",
+  "swapTitle": "Trocar idiomas e textos",
+  "loadingDefault": "Preparando a tradução...",
+  "loadingPrep": "Preparando a tradução e a exibição em etapas...",
+  "stageAuto": "Entendendo o contexto e traduzindo automaticamente...",
+  "stageManual": "Analisando a formulação e preparando uma tradução natural...",
+  "submitBtn": "Traduzir e analisar",
+  "autoHint": "A tradução automática roda quando você para de digitar · aperte o botão para ver a análise em etapas",
+  "shortcuts": "Atalhos:",
+  "shortcutTranslate": "para traduzir",
+  "shortcutCancel": "para cancelar",
+  "shortcutHistory": "para o histórico",
+  "settings": "Configurações",
+  "styleLabel": "Estilo",
+  "toneAuto": "Automático",
+  "toneEgy": "Egípcio",
+  "toneMsa": "Padrão",
+  "toneFormal": "Formal",
+  "toneCasual": "Informal",
+  "voiceLabel": "Voz",
+  "voiceAuto": "Automática pelo idioma",
+  "rateLabel": "Velocidade da fala",
+  "historyBtn": "Histórico",
+  "perfBtn": "Velocidade do site",
+  "perfTitle": "Monitor de desempenho",
+  "perfIdle": "Nenhuma solicitação ainda",
+  "perfTotal": "Tempo total",
+  "perfKnowledge": "Busca de conhecimento",
+  "perfAi": "Resposta da IA",
+  "perfSource": "Fonte do resultado",
+  "perfNote": "Os tempos são medidos no seu dispositivo e na sua conexão atual e podem variar a cada solicitação.",
+  "historyTitle": "Traduções recentes",
+  "clearHistory": "Limpar histórico",
+  "historyEmpty": "Ainda não há traduções salvas.",
+  "speakWord": "Pronunciar a palavra",
+  "insightsToggle": "Alternativas de significado e contexto",
+  "hideInsights": "Ocultar alternativas e contexto",
+  "ipaChartTitle": "Mostrar o guia completo de símbolos fonéticos",
+  "ipaChartBtn": "Guia de símbolos fonéticos",
+  "ipaChartHeading": "Guia completo dos símbolos fonéticos do inglês (IPA)",
+  "ipaGroup1": "1. Vogais curtas",
+  "ipaGroup2": "2. Vogais longas e ditongos",
+  "ipaGroup3": "3. Consoantes",
+  "altTranslations": "Alternativas de tradução:",
+  "insightsTitle": "Detalhes extras para o contexto e as alternativas",
+  "altCardTitle": "Alternativas de tradução naturais",
+  "altN": "Opção",
+  "altFetchFailed": "Não foi possível obter a alternativa, tente novamente.",
+  "breakdownTitle": "Análise da frase",
+  "qualityTitle": "Revisão de qualidade da tradução",
+  "contextTitle": "Significado pelo contexto",
+  "regionalTitle": "Britânico vs americano",
+  "defHeader": "Significado e definição",
+  "listenDef": "Ouvir a definição",
+  "examplesHeader": "Exemplos em diferentes contextos",
+  "listenSentence": "Ouvir a frase",
+  "idiomBadge": "Expressão idiomática / comum",
+  "listenIdiom": "Ouvir a expressão",
+  "idiomExamples": "Exemplos da expressão",
+  "synonyms": "Sinônimos",
+  "antonyms": "Antônimos",
+  "advancedTitle": "Análise linguística avançada",
+  "loadingHint": "Carregando...",
+  "showDetails": "Mostrar detalhes",
+  "hideDetails": "Ocultar detalhes",
+  "accIpa": "Símbolos fonéticos",
+  "accCollocations": "Colocações",
+  "accWordFamily": "Família da palavra",
+  "accGrammar": "Padrões gramaticais",
+  "accFrequency": "Frequência de uso",
+  "accRegister": "Registro",
+  "accRelated": "Palavras relacionadas",
+  "accEtymology": "Etimologia",
+  "footer": "Tradutor inteligente e dicionário interativo · v7.4",
+  "cancelled": "Tradução cancelada.",
+  "errEmpty": "Digite primeiro uma palavra ou frase em uma das caixas.",
+  "errUnavailable": "O serviço está indisponível no momento, tente novamente em instantes.",
+  "errFailed": "Não foi possível concluir a tradução agora, tente novamente em instantes.",
+  "errWorkerUrl": "Defina a URL real do Cloudflare Worker em DEFAULT_WORKER_URL.",
+  "notSet": "não definido",
+  "lastError": "último erro",
+  "connReady": "Conexão: pronta",
+  "noDataWord": "Nenhum dado disponível para esta palavra",
+  "noData": "Nenhum dado disponível",
+  "notAvailable": "Indisponível",
+  "freqDefault": "Uso médio",
+  "noEtymology": "Nenhuma informação etimológica registrada.",
+  "naturalness": "Naturalidade",
+  "chipSearch": "Toque para pesquisar esta palavra",
+  "enToEn": "Inglês ← Inglês",
+  "langLabel": "Idioma",
+  "posIdiom": "expressão idiomática",
+  "posTerm": "Termo",
+  "topLangs": "★ Mais usados (Top 10)",
+  "allLangs": "— Todos os idiomas do mundo (ordem alfabética) —",
+  "varAmerican": "Americano",
+  "varBritish": "Britânico",
+  "varEgyptian": "Egípcio",
+  "varFusha": "Árabe padrão",
+  "styleEgy": "Coloquial egípcio",
+  "styleConv": "Conversa natural",
+  "styleNat": "Natural pelo contexto",
+  "styleTech": "Técnico preciso",
+  "styleFormal": "Formal / acadêmico",
+  "styleBiz": "Negócios / profissional"
+ },
+ "ru": {
+  "appTitle": "Умный переводчик",
+  "pageTitle": "Умный переводчик | Простой мгновенный перевод, значения слов и объяснение выражений",
+  "tagline": "Перевод, который понимает ваш смысл, а не только слова",
+  "uiLangLabel": "Язык интерфейса",
+  "lightMode": "Включить светлый режим",
+  "darkMode": "Включить тёмный режим",
+  "focusOn": "Включить режим фокуса",
+  "focusOff": "Выключить режим фокуса",
+  "engineBadgeTitle": "Нажмите, чтобы показать или скрыть детали подключения",
+  "heroBadge": "Умный перевод с ИИ",
+  "heroTitle": "Пишите так, как говорите.. перевод мы берём на себя",
+  "heroSub": "Понимает египетский диалект, франко-арабский и даже орфографические ошибки и даёт перевод, значение и примеры за секунды",
+  "autoDetect": "Автоопределение",
+  "detected": "Определён",
+  "inputPlaceholder": "Введите текст или слово здесь, и оно будет переведено автоматически...",
+  "outputPlaceholder": "Перевод появится здесь автоматически (или введите здесь, чтобы перевести в другое поле)...",
+  "clearText": "Очистить текст",
+  "listen": "Слушать",
+  "copy": "Копировать",
+  "copied": "Скопировано",
+  "listenSource": "Прослушать текст",
+  "listenTarget": "Прослушать перевод",
+  "swapTitle": "Поменять языки и тексты местами",
+  "loadingDefault": "Подготовка перевода...",
+  "loadingPrep": "Подготовка перевода и поэтапного отображения...",
+  "stageAuto": "Понимание контекста и автоматический перевод...",
+  "stageManual": "Анализ формулировки и подготовка естественного перевода...",
+  "submitBtn": "Перевести и разобрать",
+  "autoHint": "Автоперевод запускается, когда вы перестаёте печатать · нажмите кнопку для поэтапного анализа",
+  "shortcuts": "Горячие клавиши:",
+  "shortcutTranslate": "перевести",
+  "shortcutCancel": "отменить",
+  "shortcutHistory": "история",
+  "settings": "Настройки",
+  "styleLabel": "Стиль",
+  "toneAuto": "Авто",
+  "toneEgy": "Египетский",
+  "toneMsa": "Стандартный",
+  "toneFormal": "Официальный",
+  "toneCasual": "Разговорный",
+  "voiceLabel": "Голос",
+  "voiceAuto": "Авто по языку",
+  "rateLabel": "Скорость речи",
+  "historyBtn": "История",
+  "perfBtn": "Скорость сайта",
+  "perfTitle": "Монитор производительности",
+  "perfIdle": "Запросов пока не было",
+  "perfTotal": "Общее время",
+  "perfKnowledge": "Поиск знаний",
+  "perfAi": "Ответ ИИ",
+  "perfSource": "Источник результата",
+  "perfNote": "Время измеряется на вашем устройстве и текущем соединении и может меняться от запроса к запросу.",
+  "historyTitle": "Последние переводы",
+  "clearHistory": "Очистить историю",
+  "historyEmpty": "Сохранённых переводов пока нет.",
+  "speakWord": "Произнести слово",
+  "insightsToggle": "Варианты значения и контекст",
+  "hideInsights": "Скрыть варианты и контекст",
+  "ipaChartTitle": "Показать полный справочник фонетических символов",
+  "ipaChartBtn": "Справочник фонетических символов",
+  "ipaChartHeading": "Полный справочник английских фонетических символов (МФА)",
+  "ipaGroup1": "1. Краткие гласные",
+  "ipaGroup2": "2. Долгие гласные и дифтонги",
+  "ipaGroup3": "3. Согласные",
+  "altTranslations": "Варианты перевода:",
+  "insightsTitle": "Дополнительные детали для контекста и вариантов",
+  "altCardTitle": "Естественные варианты перевода",
+  "altN": "Вариант",
+  "altFetchFailed": "Не удалось получить вариант, попробуйте ещё раз.",
+  "breakdownTitle": "Разбор предложения",
+  "qualityTitle": "Проверка качества перевода",
+  "contextTitle": "Значение по контексту",
+  "regionalTitle": "Британский vs американский",
+  "defHeader": "Значение и определение",
+  "listenDef": "Прослушать определение",
+  "examplesHeader": "Примеры в разных контекстах",
+  "listenSentence": "Прослушать предложение",
+  "idiomBadge": "Идиома / устойчивое выражение",
+  "listenIdiom": "Прослушать выражение",
+  "idiomExamples": "Примеры выражения",
+  "synonyms": "Синонимы",
+  "antonyms": "Антонимы",
+  "advancedTitle": "Расширенный лингвистический анализ",
+  "loadingHint": "Загрузка...",
+  "showDetails": "Показать детали",
+  "hideDetails": "Скрыть детали",
+  "accIpa": "Фонетические символы",
+  "accCollocations": "Словосочетания",
+  "accWordFamily": "Семья слова",
+  "accGrammar": "Грамматические конструкции",
+  "accFrequency": "Частотность",
+  "accRegister": "Регистр",
+  "accRelated": "Связанные слова",
+  "accEtymology": "Этимология",
+  "footer": "Умный переводчик и интерактивный словарь · v7.4",
+  "cancelled": "Перевод отменён.",
+  "errEmpty": "Сначала введите слово или предложение в одно из полей.",
+  "errUnavailable": "Сервис сейчас недоступен, попробуйте чуть позже.",
+  "errFailed": "Не удалось выполнить перевод сейчас, попробуйте ещё раз чуть позже.",
+  "errWorkerUrl": "Укажите реальный URL Cloudflare Worker в DEFAULT_WORKER_URL.",
+  "notSet": "не задано",
+  "lastError": "последняя ошибка",
+  "connReady": "Соединение: готово",
+  "noDataWord": "Нет данных для этого слова",
+  "noData": "Нет доступных данных",
+  "notAvailable": "Недоступно",
+  "freqDefault": "Средняя частотность",
+  "noEtymology": "Этимологические сведения отсутствуют.",
+  "naturalness": "Естественность",
+  "chipSearch": "Нажмите, чтобы найти это слово",
+  "enToEn": "Английский ← Английский",
+  "langLabel": "Язык",
+  "posIdiom": "идиома",
+  "posTerm": "Термин",
+  "topLangs": "★ Самые используемые (Топ 10)",
+  "allLangs": "— Все языки мира (по алфавиту) —",
+  "varAmerican": "Американский",
+  "varBritish": "Британский",
+  "varEgyptian": "Египетский",
+  "varFusha": "Стандартный арабский",
+  "styleEgy": "Египетский разговорный",
+  "styleConv": "Естественный разговор",
+  "styleNat": "Естественно по контексту",
+  "styleTech": "Точный технический",
+  "styleFormal": "Официальный / академический",
+  "styleBiz": "Деловой / профессиональный"
+ },
+ "zh": {
+  "appTitle": "智能翻译器",
+  "pageTitle": "智能翻译器 | 简单即时翻译、单词释义和惯用语讲解",
+  "tagline": "理解你的意思，而不只是字面",
+  "uiLangLabel": "界面语言",
+  "lightMode": "切换到浅色模式",
+  "darkMode": "切换到深色模式",
+  "focusOn": "开启专注模式",
+  "focusOff": "关闭专注模式",
+  "engineBadgeTitle": "点击显示或隐藏连接详情",
+  "heroBadge": "AI 智能翻译",
+  "heroTitle": "像说话一样输入..翻译交给我们",
+  "heroSub": "能听懂埃及方言、阿拉伯拼音甚至拼写错误，几秒内给出翻译、释义和例句",
+  "autoDetect": "自动检测",
+  "detected": "已检测",
+  "inputPlaceholder": "在此输入文字或单词，将自动翻译...",
+  "outputPlaceholder": "翻译会自动显示在这里（也可以在这里输入，反向翻译）...",
+  "clearText": "清除文本",
+  "listen": "朗读",
+  "copy": "复制",
+  "copied": "已复制",
+  "listenSource": "朗读原文",
+  "listenTarget": "朗读译文",
+  "swapTitle": "互换语言和文本",
+  "loadingDefault": "正在准备翻译...",
+  "loadingPrep": "正在准备翻译和逐步展示...",
+  "stageAuto": "正在理解语境并自动翻译...",
+  "stageManual": "正在分析措辞并准备自然的译文...",
+  "submitBtn": "翻译并解析",
+  "autoHint": "停止输入后自动翻译 · 点击按钮查看逐步分析",
+  "shortcuts": "快捷键：",
+  "shortcutTranslate": "翻译",
+  "shortcutCancel": "取消",
+  "shortcutHistory": "历史记录",
+  "settings": "设置",
+  "styleLabel": "风格",
+  "toneAuto": "自动",
+  "toneEgy": "埃及方言",
+  "toneMsa": "标准语",
+  "toneFormal": "正式",
+  "toneCasual": "随意",
+  "voiceLabel": "语音",
+  "voiceAuto": "按语言自动选择",
+  "rateLabel": "语速",
+  "historyBtn": "历史记录",
+  "perfBtn": "网站速度",
+  "perfTitle": "性能监控",
+  "perfIdle": "还没有请求",
+  "perfTotal": "总耗时",
+  "perfKnowledge": "知识检索",
+  "perfAi": "AI 响应",
+  "perfSource": "结果来源",
+  "perfNote": "耗时在你的设备和当前网络下测量，每次请求可能不同。",
+  "historyTitle": "最近翻译",
+  "clearHistory": "清除记录",
+  "historyEmpty": "还没有保存的翻译。",
+  "speakWord": "朗读单词",
+  "insightsToggle": "释义备选与语境",
+  "hideInsights": "隐藏备选与语境",
+  "ipaChartTitle": "查看完整音标表",
+  "ipaChartBtn": "音标表",
+  "ipaChartHeading": "英语音标（IPA）完整对照表",
+  "ipaGroup1": "1. 短元音",
+  "ipaGroup2": "2. 长元音与双元音",
+  "ipaGroup3": "3. 辅音",
+  "altTranslations": "翻译备选：",
+  "insightsTitle": "语境与备选补充说明",
+  "altCardTitle": "更自然的翻译备选",
+  "altN": "备选",
+  "altFetchFailed": "无法获取备选译文，请重试。",
+  "breakdownTitle": "句子分析",
+  "qualityTitle": "翻译质量检查",
+  "contextTitle": "语境释义",
+  "regionalTitle": "英式与美式对比",
+  "defHeader": "释义与定义",
+  "listenDef": "朗读释义",
+  "examplesHeader": "不同语境下的例句",
+  "listenSentence": "朗读例句",
+  "idiomBadge": "惯用语 / 常用表达",
+  "listenIdiom": "朗读该表达",
+  "idiomExamples": "该表达的例句",
+  "synonyms": "近义词",
+  "antonyms": "反义词",
+  "advancedTitle": "高级语言分析",
+  "loadingHint": "加载中...",
+  "showDetails": "显示详情",
+  "hideDetails": "隐藏详情",
+  "accIpa": "音标",
+  "accCollocations": "常用搭配",
+  "accWordFamily": "词族",
+  "accGrammar": "语法结构",
+  "accFrequency": "使用频率",
+  "accRegister": "语体",
+  "accRelated": "相关词",
+  "accEtymology": "词源",
+  "footer": "智能翻译器与互动词典 · v7.4",
+  "cancelled": "翻译已取消。",
+  "errEmpty": "请先在任意一个输入框中输入单词或句子。",
+  "errUnavailable": "服务暂时不可用，请稍后再试。",
+  "errFailed": "暂时无法完成翻译，请稍后再试。",
+  "errWorkerUrl": "请在 DEFAULT_WORKER_URL 中填写真实的 Cloudflare Worker 地址。",
+  "notSet": "未设置",
+  "lastError": "最近错误",
+  "connReady": "连接状态：就绪",
+  "noDataWord": "该单词暂无可用数据",
+  "noData": "暂无可用数据",
+  "notAvailable": "不可用",
+  "freqDefault": "使用频率中等",
+  "noEtymology": "暂无词源信息。",
+  "naturalness": "自然度",
+  "chipSearch": "点击查询该词",
+  "enToEn": "英语 ← 英语",
+  "langLabel": "语言",
+  "posIdiom": "idiom（惯用语）",
+  "posTerm": "词条",
+  "topLangs": "★ 最常用（前 10 种语言）",
+  "allLangs": "— 世界所有语言（按字母排序）—",
+  "varAmerican": "美式",
+  "varBritish": "英式",
+  "varEgyptian": "埃及方言",
+  "varFusha": "标准阿拉伯语",
+  "styleEgy": "埃及口语",
+  "styleConv": "自然对话",
+  "styleNat": "依语境自然表达",
+  "styleTech": "精准技术用语",
+  "styleFormal": "正式 / 学术",
+  "styleBiz": "商务 / 职业"
+ },
+ "hi": {
+  "appTitle": "स्मार्ट अनुवादक",
+  "pageTitle": "स्मार्ट अनुवादक | आसान त्वरित अनुवाद, शब्दार्थ और मुहावरों की व्याख्या",
+  "tagline": "अनुवाद जो सिर्फ शब्द नहीं, आपका मतलब समझता है",
+  "uiLangLabel": "इंटरफ़ेस की भाषा",
+  "lightMode": "लाइट मोड चालू करें",
+  "darkMode": "डार्क मोड चालू करें",
+  "focusOn": "फ़ोकस मोड चालू करें",
+  "focusOff": "फ़ोकस मोड बंद करें",
+  "engineBadgeTitle": "कनेक्शन विवरण दिखाने या छिपाने के लिए टैप करें",
+  "heroBadge": "AI स्मार्ट अनुवाद",
+  "heroTitle": "जैसे बोलते हैं वैसे लिखिए.. अनुवाद हम संभालेंगे",
+  "heroSub": "मिस्र की बोली, फ्रैंको-अरबी और वर्तनी की गलतियाँ तक समझता है और सेकंडों में अनुवाद, अर्थ और उदाहरण देता है",
+  "autoDetect": "स्वतः पहचान",
+  "detected": "पहचानी गई",
+  "inputPlaceholder": "यहाँ टेक्स्ट या शब्द लिखें, अनुवाद अपने आप हो जाएगा...",
+  "outputPlaceholder": "अनुवाद यहाँ अपने आप दिखेगा (या दूसरे बॉक्स के लिए यहाँ लिखें)...",
+  "clearText": "टेक्स्ट साफ़ करें",
+  "listen": "सुनें",
+  "copy": "कॉपी",
+  "copied": "कॉपी हो गया",
+  "listenSource": "टेक्स्ट सुनें",
+  "listenTarget": "अनुवाद सुनें",
+  "swapTitle": "भाषाएँ और टेक्स्ट बदलें",
+  "loadingDefault": "अनुवाद तैयार हो रहा है...",
+  "loadingPrep": "अनुवाद और चरणबद्ध प्रदर्शन तैयार हो रहा है...",
+  "stageAuto": "संदर्भ समझकर अपने आप अनुवाद हो रहा है...",
+  "stageManual": "वाक्यांश का विश्लेषण कर स्वाभाविक अनुवाद तैयार हो रहा है...",
+  "submitBtn": "अनुवाद करें और विश्लेषण देखें",
+  "autoHint": "लिखना रुकते ही अपने आप अनुवाद होता है · चरणबद्ध विश्लेषण के लिए बटन दबाएँ",
+  "shortcuts": "शॉर्टकट:",
+  "shortcutTranslate": "अनुवाद के लिए",
+  "shortcutCancel": "रद्द करने के लिए",
+  "shortcutHistory": "इतिहास के लिए",
+  "settings": "सेटिंग्स",
+  "styleLabel": "शैली",
+  "toneAuto": "स्वतः",
+  "toneEgy": "मिस्री",
+  "toneMsa": "मानक",
+  "toneFormal": "औपचारिक",
+  "toneCasual": "अनौपचारिक",
+  "voiceLabel": "आवाज़",
+  "voiceAuto": "भाषा के अनुसार स्वतः",
+  "rateLabel": "बोलने की गति",
+  "historyBtn": "इतिहास",
+  "perfBtn": "साइट की गति",
+  "perfTitle": "प्रदर्शन मॉनिटर",
+  "perfIdle": "अभी कोई अनुरोध नहीं",
+  "perfTotal": "कुल समय",
+  "perfKnowledge": "ज्ञान खोज",
+  "perfAi": "AI प्रतिक्रिया",
+  "perfSource": "परिणाम स्रोत",
+  "perfNote": "समय आपके डिवाइस और मौजूदा कनेक्शन पर मापा जाता है और हर अनुरोध में बदल सकता है।",
+  "historyTitle": "हाल के अनुवाद",
+  "clearHistory": "इतिहास साफ़ करें",
+  "historyEmpty": "अभी तक कोई सहेजा हुआ अनुवाद नहीं है।",
+  "speakWord": "शब्द बोलें",
+  "insightsToggle": "अर्थ के विकल्प और संदर्भ",
+  "hideInsights": "विकल्प और संदर्भ छिपाएँ",
+  "ipaChartTitle": "पूरा ध्वन्यात्मक चिह्न मार्गदर्शिका देखें",
+  "ipaChartBtn": "ध्वन्यात्मक चिह्न मार्गदर्शिका",
+  "ipaChartHeading": "अंग्रेज़ी ध्वन्यात्मक चिह्नों (IPA) की पूरी मार्गदर्शिका",
+  "ipaGroup1": "1. ह्रस्व स्वर",
+  "ipaGroup2": "2. दीर्घ स्वर और द्विस्वर",
+  "ipaGroup3": "3. व्यंजन",
+  "altTranslations": "अनुवाद के विकल्प:",
+  "insightsTitle": "संदर्भ और विकल्पों के लिए अतिरिक्त विवरण",
+  "altCardTitle": "स्वाभाविक अनुवाद विकल्प",
+  "altN": "विकल्प",
+  "altFetchFailed": "विकल्प नहीं मिल सका, कृपया फिर कोशिश करें।",
+  "breakdownTitle": "वाक्य विश्लेषण",
+  "qualityTitle": "अनुवाद गुणवत्ता जाँच",
+  "contextTitle": "संदर्भ के अनुसार अर्थ",
+  "regionalTitle": "ब्रिटिश बनाम अमेरिकी",
+  "defHeader": "अर्थ और परिभाषा",
+  "listenDef": "परिभाषा सुनें",
+  "examplesHeader": "अलग-अलग संदर्भों में उदाहरण",
+  "listenSentence": "वाक्य सुनें",
+  "idiomBadge": "मुहावरा / प्रचलित अभिव्यक्ति",
+  "listenIdiom": "अभिव्यक्ति सुनें",
+  "idiomExamples": "अभिव्यक्ति के उदाहरण",
+  "synonyms": "पर्यायवाची",
+  "antonyms": "विलोम",
+  "advancedTitle": "उन्नत भाषाई विश्लेषण",
+  "loadingHint": "लोड हो रहा है...",
+  "showDetails": "विवरण दिखाएँ",
+  "hideDetails": "विवरण छिपाएँ",
+  "accIpa": "ध्वन्यात्मक चिह्न",
+  "accCollocations": "सहचर शब्द",
+  "accWordFamily": "शब्द परिवार",
+  "accGrammar": "व्याकरणिक संरचनाएँ",
+  "accFrequency": "उपयोग की आवृत्ति",
+  "accRegister": "रजिस्टर",
+  "accRelated": "संबंधित शब्द",
+  "accEtymology": "शब्द-उत्पत्ति",
+  "footer": "स्मार्ट अनुवादक और इंटरैक्टिव शब्दकोश · v7.4",
+  "cancelled": "अनुवाद रद्द कर दिया गया।",
+  "errEmpty": "पहले किसी एक बॉक्स में शब्द या वाक्य लिखें।",
+  "errUnavailable": "सेवा अभी उपलब्ध नहीं है, कृपया थोड़ी देर बाद कोशिश करें।",
+  "errFailed": "अभी अनुवाद पूरा नहीं हो सका, कृपया थोड़ी देर बाद फिर कोशिश करें।",
+  "errWorkerUrl": "कृपया DEFAULT_WORKER_URL में असली Cloudflare Worker URL डालें।",
+  "notSet": "सेट नहीं है",
+  "lastError": "अंतिम त्रुटि",
+  "connReady": "कनेक्शन: तैयार",
+  "noDataWord": "इस शब्द के लिए कोई डेटा उपलब्ध नहीं",
+  "noData": "कोई डेटा उपलब्ध नहीं",
+  "notAvailable": "उपलब्ध नहीं",
+  "freqDefault": "औसत उपयोग",
+  "noEtymology": "कोई दर्ज शब्द-उत्पत्ति जानकारी उपलब्ध नहीं।",
+  "naturalness": "स्वाभाविकता",
+  "chipSearch": "इस शब्द को खोजने के लिए टैप करें",
+  "enToEn": "अंग्रेज़ी ← अंग्रेज़ी",
+  "langLabel": "भाषा",
+  "posIdiom": "मुहावरा",
+  "posTerm": "पद",
+  "topLangs": "★ सबसे अधिक उपयोग (टॉप 10 भाषाएँ)",
+  "allLangs": "— दुनिया की सभी भाषाएँ (वर्णानुक्रम) —",
+  "varAmerican": "अमेरिकी",
+  "varBritish": "ब्रिटिश",
+  "varEgyptian": "मिस्री",
+  "varFusha": "मानक अरबी",
+  "styleEgy": "मिस्री बोलचाल",
+  "styleConv": "स्वाभाविक बातचीत",
+  "styleNat": "संदर्भ के अनुसार स्वाभाविक",
+  "styleTech": "सटीक तकनीकी",
+  "styleFormal": "औपचारिक / शैक्षणिक",
+  "styleBiz": "व्यावसायिक / पेशेवर"
+ },
+ "ja": {
+  "appTitle": "スマート翻訳",
+  "pageTitle": "スマート翻訳 | かんたん即時翻訳、単語の意味と慣用句の解説",
+  "tagline": "言葉だけでなく、意図を理解する翻訳",
+  "uiLangLabel": "表示言語",
+  "lightMode": "ライトモードに切り替え",
+  "darkMode": "ダークモードに切り替え",
+  "focusOn": "集中モードをオン",
+  "focusOff": "集中モードをオフ",
+  "engineBadgeTitle": "タップで接続詳細の表示・非表示を切り替え",
+  "heroBadge": "AI スマート翻訳",
+  "heroTitle": "話すように書くだけ..翻訳はお任せください",
+  "heroSub": "エジプト方言やフランコアラブ、スペルミスまで理解し、翻訳・意味・例文を数秒で表示します",
+  "autoDetect": "自動検出",
+  "detected": "検出結果",
+  "inputPlaceholder": "ここにテキストや単語を入力すると自動で翻訳されます...",
+  "outputPlaceholder": "翻訳はここに自動表示されます（ここに入力して逆方向にも翻訳できます）...",
+  "clearText": "テキストを消去",
+  "listen": "聞く",
+  "copy": "コピー",
+  "copied": "コピーしました",
+  "listenSource": "テキストを聞く",
+  "listenTarget": "翻訳を聞く",
+  "swapTitle": "言語とテキストを入れ替え",
+  "loadingDefault": "翻訳を準備しています...",
+  "loadingPrep": "翻訳と段階表示を準備しています...",
+  "stageAuto": "文脈を理解して自動翻訳しています...",
+  "stageManual": "言い回しを分析して自然な翻訳を準備しています...",
+  "submitBtn": "翻訳して分析",
+  "autoHint": "入力を止めると自動翻訳されます · ボタンで段階的な分析を表示",
+  "shortcuts": "ショートカット:",
+  "shortcutTranslate": "翻訳",
+  "shortcutCancel": "キャンセル",
+  "shortcutHistory": "履歴",
+  "settings": "設定",
+  "styleLabel": "スタイル",
+  "toneAuto": "自動",
+  "toneEgy": "エジプト方言",
+  "toneMsa": "標準語",
+  "toneFormal": "フォーマル",
+  "toneCasual": "カジュアル",
+  "voiceLabel": "音声",
+  "voiceAuto": "言語に応じて自動",
+  "rateLabel": "読み上げ速度",
+  "historyBtn": "履歴",
+  "perfBtn": "サイト速度",
+  "perfTitle": "パフォーマンスモニター",
+  "perfIdle": "まだリクエストはありません",
+  "perfTotal": "合計時間",
+  "perfKnowledge": "知識検索",
+  "perfAi": "AI 応答",
+  "perfSource": "結果のソース",
+  "perfNote": "時間はお使いの端末と現在の接続で計測され、リクエストごとに変わることがあります。",
+  "historyTitle": "最近の翻訳",
+  "clearHistory": "履歴を消去",
+  "historyEmpty": "保存された翻訳はまだありません。",
+  "speakWord": "単語を発音",
+  "insightsToggle": "意味の代替と文脈",
+  "hideInsights": "代替と文脈を隠す",
+  "ipaChartTitle": "音声記号ガイドをすべて表示",
+  "ipaChartBtn": "音声記号ガイド",
+  "ipaChartHeading": "英語の音声記号（IPA）完全ガイド",
+  "ipaGroup1": "1. 短母音",
+  "ipaGroup2": "2. 長母音と二重母音",
+  "ipaGroup3": "3. 子音",
+  "altTranslations": "翻訳の候補：",
+  "insightsTitle": "文脈と候補を理解するための補足",
+  "altCardTitle": "自然な翻訳の候補",
+  "altN": "候補",
+  "altFetchFailed": "候補を取得できませんでした。もう一度お試しください。",
+  "breakdownTitle": "文の分析",
+  "qualityTitle": "翻訳品質チェック",
+  "contextTitle": "文脈による意味",
+  "regionalTitle": "イギリス英語 vs アメリカ英語",
+  "defHeader": "意味と定義",
+  "listenDef": "定義を聞く",
+  "examplesHeader": "さまざまな文脈での例文",
+  "listenSentence": "例文を聞く",
+  "idiomBadge": "慣用句 / よく使う表現",
+  "listenIdiom": "表現を聞く",
+  "idiomExamples": "表現の例文",
+  "synonyms": "類義語",
+  "antonyms": "対義語",
+  "advancedTitle": "高度な言語分析",
+  "loadingHint": "読み込み中...",
+  "showDetails": "詳細を表示",
+  "hideDetails": "詳細を隠す",
+  "accIpa": "音声記号",
+  "accCollocations": "コロケーション",
+  "accWordFamily": "語族",
+  "accGrammar": "文法パターン",
+  "accFrequency": "使用頻度",
+  "accRegister": "レジスター",
+  "accRelated": "関連語",
+  "accEtymology": "語源",
+  "footer": "スマート翻訳 & インタラクティブ辞書 · v7.4",
+  "cancelled": "翻訳をキャンセルしました。",
+  "errEmpty": "まずどちらかのボックスに単語か文を入力してください。",
+  "errUnavailable": "現在サービスを利用できません。しばらくしてからお試しください。",
+  "errFailed": "現在翻訳を完了できません。しばらくしてからもう一度お試しください。",
+  "errWorkerUrl": "DEFAULT_WORKER_URL に実際の Cloudflare Worker の URL を設定してください。",
+  "notSet": "未設定",
+  "lastError": "最新のエラー",
+  "connReady": "接続状態：準備完了",
+  "noDataWord": "この単語のデータはありません",
+  "noData": "データがありません",
+  "notAvailable": "利用できません",
+  "freqDefault": "中程度の使用頻度",
+  "noEtymology": "語源情報はありません。",
+  "naturalness": "自然さ",
+  "chipSearch": "タップしてこの単語を検索",
+  "enToEn": "英語 ← 英語",
+  "langLabel": "言語",
+  "posIdiom": "慣用句",
+  "posTerm": "見出し語",
+  "topLangs": "★ よく使われる言語（トップ10）",
+  "allLangs": "— 世界のすべての言語（五十音・アルファベット順）—",
+  "varAmerican": "アメリカ英語",
+  "varBritish": "イギリス英語",
+  "varEgyptian": "エジプト方言",
+  "varFusha": "標準アラビア語",
+  "styleEgy": "エジプト口語",
+  "styleConv": "自然な会話",
+  "styleNat": "文脈に応じた自然さ",
+  "styleTech": "正確な技術表現",
+  "styleFormal": "フォーマル / 学術",
+  "styleBiz": "ビジネス / 専門的"
+ }
+};
+        let lastRenderCtx = null;
+        function getUILanguage() {
+            const saved = localStorage.getItem("smart_trans_ui_lang");
+            return (saved && UI_STRINGS[saved]) ? saved : "ar";
+        }
+        let currentUILang = getUILanguage();
+        function t(key) {
+            const pack = UI_STRINGS[currentUILang] || UI_STRINGS.ar;
+            return pack[key] || UI_STRINGS.en[key] || UI_STRINGS.ar[key] || key;
+        }
+        function styleLabels() {
+            return {
+                "Egyptian Colloquial / Natural": t("styleEgy"),
+                "Conversational / Idiomatic": t("styleConv"),
+                "Natural Contextual": t("styleNat"),
+                "Technical / Domain-Accurate": t("styleTech"),
+                "Formal / Academic": t("styleFormal"),
+                "Business / Professional": t("styleBiz")
+            };
+        }
+        function langDisplayName(lang) {
+            if (!lang) return "";
+            if (currentUILang === "ar") return lang.name;
+            const name = String(lang.name || "");
+            const parts = name.split(" — ");
+            const afterDash = parts[parts.length - 1].trim();
+            if (parts.length > 1 && /[A-Za-z]/.test(afterDash)) return afterDash;
+            const paren = name.match(/\(([^()]*[A-Za-z][^()]*)\)\s*$/);
+            if (paren) return paren[1].trim();
+            const ascii = name.match(/[A-Za-z][A-Za-z ().&'()-]*$/);
+            return ascii ? ascii[0].trim() : (lang.shortName || name || lang.code);
+        }
+        function applyUILanguage(lang) {
+            if (!UI_STRINGS[lang]) lang = "ar";
+            currentUILang = lang;
+            localStorage.setItem("smart_trans_ui_lang", lang);
+            const root = document.documentElement;
+            root.lang = lang;
+            root.dir = lang === "ar" ? "rtl" : "ltr";
+            document.title = t("pageTitle");
+            document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+            document.querySelectorAll("[data-i18n-title]").forEach(el => { el.title = t(el.getAttribute("data-i18n-title")); });
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(el => { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-placeholder"))); });
+            document.querySelectorAll("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria"))); });
+            const sel = document.getElementById("ui-lang-select");
+            if (sel) {
+                if (!sel.options.length) UI_LANGS.forEach(([code, nativeName]) => {
+                    const o = document.createElement("option");
+                    o.value = code;
+                    o.textContent = nativeName;
+                    sel.appendChild(o);
+                });
+                sel.value = lang;
+            }
+            updateThemeButton(document.body.classList.contains("dark"));
+            updateFocusButton(document.body.classList.contains("focus-mode"));
+            if (typeof state !== "undefined") {
+                populateLanguageSelect("box1-lang-select", state.box1.selectedLang);
+                populateLanguageSelect("box2-lang-select", state.box2.selectedLang);
+                [1, 2].forEach(boxNum => {
+                    const boxState = boxNum === 1 ? state.box1 : state.box2;
+                    const el = document.getElementById(`box${boxNum}-detected-text`);
+                    if (!el) return;
+                    el.textContent = boxState.detectedLang
+                        ? `${t("detected")}: ${langDisplayName(getLangObj(boxState.detectedLang))}`
+                        : t("autoDetect");
+                });
+            }
+            if (typeof cachedVoices !== "undefined") populateVoiceSelector();
+            if (typeof translationHistory !== "undefined") renderHistory();
+            const advWrap = document.getElementById("advanced-wrap");
+            const detLabel = document.getElementById("details-toggle-label");
+            if (advWrap && detLabel && !advWrap.classList.contains("hidden")) detLabel.textContent = t("hideDetails");
+            const insights = document.getElementById("smart-insights");
+            const insLabel = document.getElementById("toggle-smart-insights-label");
+            if (insights && insLabel && !insights.classList.contains("hidden")) insLabel.textContent = t("hideInsights");
+            if (lastRenderCtx) renderResults(lastRenderCtx.data, lastRenderCtx.originalInput, lastRenderCtx.effectiveSrcLang, lastRenderCtx.effectiveTgtLang, lastRenderCtx.tgtNum, { animateStagger: false, reveal: true, keepDetails: true });
+        }
+        function setUILanguage(lang) { applyUILanguage(lang); }
 
         const KEY_VERSION = "v20_token_opt_v2_2";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
@@ -809,7 +2175,7 @@ let GEMINI_MODELS = [
             activeStreamOwner = null;
             isRevealingStagger = false;
             setLoading(false);
-            if (showMessage) showAlert("تم إلغاء عملية الترجمة.");
+            if (showMessage) showAlert(t("cancelled"));
         }
 let prebuiltCache = null;
         function prebuiltKey(text) {
@@ -1055,14 +2421,14 @@ let prebuiltCache = null;
             if (!list || !count) return;
             count.textContent = translationHistory.length;
             list.innerHTML = "";
-            if (!translationHistory.length) { list.innerHTML = '<p class="text-xs text-slate-400 py-2">لا توجد ترجمات محفوظة حتى الآن.</p>'; return; }
+            if (!translationHistory.length) { list.innerHTML = '<p class="text-xs text-slate-400 py-2">' + t("historyEmpty") + '</p>'; return; }
             translationHistory.forEach((item) => {
                 const row = document.createElement("div"); row.className = "history-item flex items-center gap-2 p-2.5 rounded-xl border border-slate-100 bg-slate-50";
                 const body = document.createElement("button"); body.type="button"; body.className="min-w-0 flex-1 text-right";
                 const a=document.createElement("span"); a.className="block text-xs font-bold text-slate-700 truncate"; a.textContent=item.input;
                 const b=document.createElement("span"); b.className="block text-xs text-slate-500 truncate mt-1"; b.textContent=item.translation;
                 body.append(a,b); body.onclick=()=>{ document.getElementById("box1-text").value=item.input; onBoxInput(1, false); document.getElementById("box2-text").value=item.translation; onBoxInput(2, false); state.activeInputBox=1; };
-                const copy=document.createElement("button"); copy.type="button"; copy.className="text-xs text-blue-600 px-2"; copy.textContent="نسخ"; copy.onclick=()=>navigator.clipboard?.writeText(item.translation);
+                const copy=document.createElement("button"); copy.type="button"; copy.className="text-xs text-blue-600 px-2"; copy.textContent=t("copy"); copy.onclick=()=>navigator.clipboard?.writeText(item.translation);
                 row.append(body,copy); list.appendChild(row);
             });
         }
@@ -1071,7 +2437,7 @@ let prebuiltCache = null;
         function populateVoiceSelector() {
             const select=document.getElementById("speech-voice"); if(!select) return;
             const chosen=localStorage.getItem("smart_trans_voice") || "";
-            select.innerHTML='<option value="">تلقائي حسب اللغة</option>';
+            select.innerHTML='<option value="">' + t("voiceAuto") + '</option>';
             cachedVoices.forEach(v=>{ const o=document.createElement("option"); o.value=`${v.name}||${v.lang}`; o.textContent=`${v.name} (${v.lang})`; select.appendChild(o); });
             select.value=chosen;
         }
@@ -1164,6 +2530,7 @@ let prebuiltCache = null;
             lucide.createIcons();
             applySavedTheme();
             applySavedFocusMode();
+            applyUILanguage(getUILanguage());
             localStorage.removeItem("smart_trans_style");
             { const t = localStorage.getItem("smart_trans_tone") || "auto"; const sel = document.getElementById("tone-select"); if (sel) sel.value = t; }
             if (window.matchMedia && window.matchMedia("(pointer: fine)").matches) document.getElementById("box1-text")?.focus();
@@ -1215,21 +2582,21 @@ let prebuiltCache = null;
             select.innerHTML = "";
 
             const topGroup = document.createElement("optgroup");
-            topGroup.label = "★ الأكثر استخداماً (Top 10 Languages)";
+            topGroup.label = t("topLangs");
             TOP_10_LANGUAGES.forEach(lang => {
                 const opt = document.createElement("option");
                 opt.value = lang.code;
-                opt.textContent = lang.name;
+                opt.textContent = langDisplayName(lang);
                 topGroup.appendChild(opt);
             });
             select.appendChild(topGroup);
 
             const allGroup = document.createElement("optgroup");
-            allGroup.label = "— جميع لغات العالم (مرتبة أبجدياً) —";
+            allGroup.label = t("allLangs");
             OTHER_WORLD_LANGUAGES.forEach(lang => {
                 const opt = document.createElement("option");
                 opt.value = lang.code;
-                opt.textContent = lang.name;
+                opt.textContent = langDisplayName(lang);
                 allGroup.appendChild(opt);
             });
             select.appendChild(allGroup);
@@ -1420,7 +2787,7 @@ let prebuiltCache = null;
             const displayBox = document.getElementById(`box${boxNum}-detected-display`);
             const displayText = document.getElementById(`box${boxNum}-detected-text`);
             displayBox.className = "pointer-events-none select-none px-3 py-2 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-400 text-[11px] sm:text-xs font-semibold shrink-0 flex items-center gap-1.5 min-w-[115px] sm:min-w-[135px] justify-center transition-all";
-            displayText.textContent = "تحديد تلقائي";
+            displayText.textContent = t("autoDetect");
         }
 
         function updateDetectedDisplay(boxNum, detectedCode) {
@@ -1443,7 +2810,7 @@ let prebuiltCache = null;
             boxState.detectedLang = detectedCode;
             const langInfo = getLangObj(detectedCode);
             displayBox.className = "pointer-events-none select-none px-3 py-2 rounded-xl bg-blue-50 border border-blue-300 text-blue-700 text-[11px] sm:text-xs font-bold shrink-0 flex items-center gap-1.5 min-w-[115px] sm:min-w-[135px] justify-center transition-all shadow-2xs";
-            displayText.textContent = `مكتشفة: ${langInfo.shortName}`;
+            displayText.textContent = `${t("detected")}: ${langDisplayName(langInfo)}`;
             textarea.dir = langInfo.dir;
         }
 
@@ -1641,7 +3008,7 @@ let prebuiltCache = null;
             try {
                 document.execCommand("copy");
                 const originalHTML = btnElement.innerHTML;
-                btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">تم النسخ</span>`;
+                btnElement.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-600">${t("copied")}</span>`;
                 btnElement.classList.add("border-emerald-300", "bg-emerald-50");
                 lucide.createIcons();
 
@@ -1712,7 +3079,7 @@ let prebuiltCache = null;
             ].filter(Boolean).join("\n");
 
             return `${sourceName}(${effectiveSrcLang}) to ${targetName}(${effectiveTgtLang}). ${mode}
-Return one JSON object only, using exactly these keys in this order (fill every one; list sizes as shown; part_of_speech in English; idiom.has_idiom true only for a real idiom). Be concise.
+Return one JSON object only, using exactly these keys in this order (fill every one; list sizes as shown; part_of_speech in English, or "idiom" when the source is an idiom, proverb or fixed expression; idiom.has_idiom true only for a real idiom). Be concise. First decide cefr_level, then write definition, examples, idiom.meaning and context_note in vocabulary at or below that level: an A1-A2 word must be explained in simple A1-A2 words, never harder than the word itself; a C1 word gets a richer, precise explanation.
 SCHEMA: ${JSON.stringify(schema)}
 ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
         }
@@ -1727,7 +3094,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
         function getWorkerBaseUrl() {
             const raw = normalizeWorkerUrl(state.workerUrl || DEFAULT_WORKER_URL);
             if (!raw) {
-                throw new Error("يرجى ضبط رابط Cloudflare Worker الفعلي في DEFAULT_WORKER_URL.");
+                throw new Error(t("errWorkerUrl"));
             }
             return raw;
         }
@@ -2053,7 +3420,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                     srcTextarea = other;
                     inputText = srcTextarea.value.trim();
                 } else {
-                    if (manualTrigger) showAlert("يرجى كتابة كلمة أو جملة في أحد المستطيلين أولاً.");
+                    if (manualTrigger) showAlert(t("errEmpty"));
                     return;
                 }
             }
@@ -2068,7 +3435,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const cacheId = signature + "::token-opt-v3::" + (localStorage.getItem("smart_trans_tone") || "auto");
 
             if (activeRequestSignature === signature && activeControllers.length) {
-                if (manualTrigger) setLoadingStage("جاري تجهيز الترجمة والعرض المتدرج...");
+                if (manualTrigger) setLoadingStage(t("loadingPrep"));
                 return;
             }
 
@@ -2115,12 +3482,12 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             if (!hasWorker && !hasLocalKeys) {
                 activeRequestSignature = "";
                 setLoading(false);
-                if (manualTrigger) showAlert("الخدمة غير متاحة حالياً، يرجى المحاولة بعد قليل.");
+                if (manualTrigger) showAlert(t("errUnavailable"));
                 return;
             }
 
             setLoading(true);
-            setLoadingStage(autoTriggered ? "فهم السياق والترجمة التلقائية..." : "تحليل صياغة الكلام وتجهيز الترجمة الطبيعية...");
+            setLoadingStage(autoTriggered ? t("stageAuto") : t("stageManual"));
             const knowledgeStart = performance.now();
             const lexicalHints = buildLexicalHints(inputText, effectiveSrcLang, effectiveTgtLang);
             const knowledgeContext = await retrieveKnowledgeContext(inputText, effectiveSrcLang, effectiveTgtLang, requestId, lexicalHints);
@@ -2210,7 +3577,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                 setLoading(false);
                 if (err.name === "AbortError") return;
                 lastGeminiError = err.message;
-                if (manualTrigger) { console.error("translation error:", err.message); showAlert("تعذر إتمام الترجمة حالياً، يرجى المحاولة مرة أخرى بعد قليل."); };
+                if (manualTrigger) { console.error("translation error:", err.message); showAlert(t("errFailed")); };
             } finally {
                 if (requestId === activeTranslationId && !activeControllers.length) {
                     setLoading(false);
@@ -2225,10 +3592,10 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                 diagBox.classList.add("hidden");
                 return;
             }
-            const workerState = normalizeWorkerUrl(state.workerUrl) || "غير مضبوط";
+            const workerState = normalizeWorkerUrl(state.workerUrl) || t("notSet");
             diagMsg.textContent = lastGeminiError
-                ? `Worker: ${workerState} | آخر خطأ: (${lastGeminiError})`
-                : `Worker: ${workerState} | حالة الاتصال: جاهز`;
+                ? `Worker: ${workerState} | ${t("lastError")}: (${lastGeminiError})`
+                : `Worker: ${workerState} | ${t("connReady")}`;
             diagBox.classList.remove("hidden");
             lucide.createIcons();
         }
@@ -2250,7 +3617,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const speakExBtn = document.createElement("button");
             speakExBtn.type = "button";
             speakExBtn.className = "p-1.5 rounded-full bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200 shrink-0 transition-all active:scale-90";
-            speakExBtn.title = "استمع للجملة";
+            speakExBtn.title = t("listenSentence");
             speakExBtn.innerHTML = `<i data-lucide="volume-2" class="w-3.5 h-3.5"></i>`;
             speakExBtn.onclick = () => speakText(ex.sentence || "", effectiveTgtLang, speakExBtn);
 
@@ -2273,7 +3640,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const list = Array.isArray(itemsArray) ? itemsArray.filter(i => i && String(i).trim()) : [];
 
             if (list.length === 0) {
-                container.innerHTML = `<span class="text-xs text-slate-400">لا توجد بيانات متاحة لهذه الكلمة</span>`;
+                container.innerHTML = `<span class="text-xs text-slate-400">${t("noDataWord")}</span>`;
                 return;
             }
 
@@ -2333,6 +3700,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
 
         function renderResults(data, originalInput, effectiveSrcLang, effectiveTgtLang, tgtNum, options = {}) {
             const partial = options.partial === true;
+            if (!partial) lastRenderCtx = { data, originalInput, effectiveSrcLang, effectiveTgtLang, tgtNum };
             const animateStagger = !partial && options.animateStagger !== false;
             const tgtTextarea = document.getElementById(`box${tgtNum}-text`);
             const tgtClearBtn = document.getElementById(`box${tgtNum}-clear-btn`);
@@ -2374,7 +3742,8 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             }
 
             document.getElementById("dict-word").textContent = finalTranslation;
-            document.getElementById("dict-pos").textContent = data.part_of_speech || "Term";
+            const posIsIdiom = Boolean(data.idiom && data.idiom.has_idiom) || /^idiom$/i.test(String(data.part_of_speech || "").trim());
+            document.getElementById("dict-pos").textContent = posIsIdiom ? t("posIdiom") : (data.part_of_speech || t("posTerm"));
 
             const cefrEl = document.getElementById("dict-cefr");
             const cefrVal = (data.cefr_level || "").trim().toUpperCase();
@@ -2400,12 +3769,12 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             }
 
             const detectedLabel = document.getElementById("dict-detected-info");
-            const styleAr = { "Egyptian Colloquial / Natural": "عامية مصرية", "Conversational / Idiomatic": "محادثة طبيعية", "Natural Contextual": "طبيعي حسب السياق", "Technical / Domain-Accurate": "تقني دقيق", "Formal / Academic": "رسمي / أكاديمي", "Business / Professional": "أعمال / مهني" };
+            const styleAr = styleLabels();
             const styleLabel = data.inferred_style ? (styleAr[data.inferred_style] || data.inferred_style) : "";
             const inferredStyleTag = styleLabel ? ` · ${styleLabel}` : "";
             detectedLabel.textContent = isEnToEn
-                ? `إنجليزي ← إنجليزي${inferredStyleTag}`
-                : `اللغة: ${getLangObj(effectiveSrcLang).name}${inferredStyleTag}`;
+                ? `${t("enToEn")}${inferredStyleTag}`
+                : `${t("langLabel")}: ${langDisplayName(getLangObj(effectiveSrcLang))}${inferredStyleTag}`;
             detectedLabel.classList.remove("hidden");
 
             const sourceBadge = document.getElementById("dict-source-badge");
@@ -2475,14 +3844,14 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const symbolsHtml = symbolsList.length > 0
                 ? `<div class="mt-2.5 pt-2 border-t border-slate-100 flex flex-wrap gap-1.5 ltr-text">${symbolsList.map(s => `<span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 border border-blue-200 font-mono text-xs"><strong>${escapeHTML(s.symbol || "")}</strong> <span class="text-slate-500 font-sans">(${escapeHTML(s.example || "")})</span></span>`).join("")}</div>`
                 : "";
-            ipaEl.innerHTML = `<span class="ltr-text font-mono text-sm font-semibold text-blue-700 block">${escapeHTML(data.ipa || transcriptionText || "غير متوفر")}</span>${symbolsHtml}`;
+            ipaEl.innerHTML = `<span class="ltr-text font-mono text-sm font-semibold text-blue-700 block">${escapeHTML(data.ipa || transcriptionText || t("notAvailable"))}</span>${symbolsHtml}`;
 
             renderBadgeList("content-collocations", data.collocations, targetObj.dir, false);
             renderBadgeList("content-word-family", data.word_family, targetObj.dir, false);
             renderBadgeList("content-grammar", data.grammar_patterns, "ltr", false);
 
             const freqEl = document.getElementById("content-frequency");
-            freqEl.innerHTML = `<p dir="auto" class="font-medium text-slate-700 leading-relaxed">${escapeHTML(data.frequency || "متوسط الاستخدام")}</p>`;
+            freqEl.innerHTML = `<p dir="auto" class="font-medium text-slate-700 leading-relaxed">${escapeHTML(data.frequency || t("freqDefault"))}</p>`;
 
             const regEl = document.getElementById("content-register");
             regEl.innerHTML = `<span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 ltr-text">${escapeHTML(data.register || data.inferred_style || "Natural Contextual")}</span>`;
@@ -2490,7 +3859,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             renderBadgeList("content-related", data.related_words, targetObj.dir, true);
 
             const etymEl = document.getElementById("content-etymology");
-            etymEl.innerHTML = `<p dir="auto" class="text-slate-700 leading-relaxed">${escapeHTML(data.etymology || "لا تتوفر معلومات تأثيلية مسجلة.")}</p>`;
+            etymEl.innerHTML = `<p dir="auto" class="text-slate-700 leading-relaxed">${escapeHTML(data.etymology || t("noEtymology"))}</p>`;
 
             scheduleSmartInsights(data, effectiveSrcLang, effectiveTgtLang);
             setupAltRow(originalInput, finalTranslation, effectiveSrcLang, effectiveTgtLang);
@@ -2511,7 +3880,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const label = document.getElementById("details-toggle-label");
             if (!wrap) return;
             wrap.classList.toggle("hidden", !show);
-            if (label) label.textContent = show ? "إخفاء التفاصيل" : "إظهار التفاصيل";
+            if (label) label.textContent = show ? t("hideDetails") : t("showDetails");
             const btn = document.getElementById("details-toggle-btn");
             if (btn) btn.setAttribute("aria-expanded", show ? "true" : "false");
         }
@@ -2529,8 +3898,8 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
         const altCache = new Map();
         let altCtx = null;
         const ALT_VARIANTS = {
-            en: [["american", "أمريكي", "American English (US spelling and vocabulary)"], ["british", "بريطاني", "British English (UK spelling and vocabulary)"]],
-            ar: [["egyptian", "مصري", "Egyptian colloquial Arabic (عامية مصرية), written in Arabic script"], ["fusha", "فصحى", "Modern Standard Arabic (فصحى)"]]
+            en: [["american", "varAmerican", "American English (US spelling and vocabulary)"], ["british", "varBritish", "British English (UK spelling and vocabulary)"]],
+            ar: [["egyptian", "varEgyptian", "Egyptian colloquial Arabic (عامية مصرية), written in Arabic script"], ["fusha", "varFusha", "Modern Standard Arabic (فصحى)"]]
         };
         function setupAltRow(input, translation, src, tgt) {
             const row = document.getElementById("alt-row");
@@ -2549,7 +3918,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                 b.id = "alt-btn-" + id;
                 b.dataset.variant = id;
                 b.className = "px-3 py-1.5 rounded-full text-xs font-bold border border-blue-200 bg-white text-blue-700 hover:bg-blue-600 hover:text-white transition-colors";
-                b.textContent = label;
+                b.textContent = t(label);
                 b.onclick = () => requestAlternative(id);
                 box.appendChild(b);
             });
@@ -2583,7 +3952,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                 altCache.set(key, text);
                 if (altCtx && altCtx.key === ctx.key) out.textContent = text;
             } catch (e) {
-                out.textContent = "تعذر جلب البديل، يرجى المحاولة مرة أخرى.";
+                out.textContent = t("altFetchFailed");
             }
         }
 
@@ -2607,7 +3976,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             if (!section) return;
             const willShow = section.classList.contains("hidden");
             section.classList.toggle("hidden", !willShow);
-            if (label) label.textContent = willShow ? "إخفاء البدائل والسياق" : "بدائل وسياق المعنى";
+            if (label) label.textContent = willShow ? t("hideInsights") : t("insightsToggle");
         }
 
         function scheduleSmartInsights(data, sourceLang, targetLang) {
@@ -2619,7 +3988,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const hasAnyInsight = ["alternatives-card","breakdown-card","quality-card","context-card","regional-card"]
                 .some(id => !document.getElementById(id)?.classList.contains("hidden"));
             section.classList.add("hidden");
-            if (label) label.textContent = "بدائل وسياق المعنى";
+            if (label) label.textContent = t("insightsToggle");
             btn.classList.toggle("hidden", !hasAnyInsight);
         }
 
@@ -2633,7 +4002,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                 card.className = "rounded-xl border border-slate-200 bg-slate-50 p-3";
                 const label = document.createElement("div");
                 label.className = "text-[10px] font-bold text-blue-700 mb-1";
-                label.textContent = item.label || `بديل ${i + 1}`;
+                label.textContent = item.label || `${t("altN")} ${i + 1}`;
                 const text = document.createElement("p");
                 text.className = "text-sm font-semibold leading-relaxed";
                 text.dir = getLangObj(targetLang).dir;
@@ -2715,7 +4084,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const natural = data.naturalness || {};
             const badge = document.getElementById("naturalness-badge");
             if (natural.label) {
-                badge.textContent = "الطبيعية: " + natural.label + (natural.reason ? " · " + natural.reason : "");
+                badge.textContent = t("naturalness") + ": " + natural.label + (natural.reason ? " · " + natural.reason : "");
                 badge.className = "text-[10px] font-bold rounded-full px-2.5 py-1 border bg-emerald-50 text-emerald-700 border-emerald-200";
                 badge.classList.remove("hidden");
             } else {
@@ -2729,7 +4098,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const list = Array.isArray(wordsArray) ? wordsArray : [];
 
             if (list.length === 0) {
-                container.innerHTML = `<span class="text-xs text-slate-400">لا توجد بيانات متاحة</span>`;
+                container.innerHTML = `<span class="text-xs text-slate-400">${t("noData")}</span>`;
                 return;
             }
 
@@ -2739,7 +4108,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                 chip.dir = dir;
                 chip.className = `px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border transition-all cursor-pointer shadow-2xs active:scale-95 ${colorClasses}`;
                 chip.textContent = word;
-                chip.title = "اضغط للبحث عن هذه الكلمة";
+                chip.title = t("chipSearch");
                 chip.onclick = () => {
                     state.activeInputBox = 1;
                     const box1Area = document.getElementById("box1-text");
@@ -2810,43 +4179,4 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
         function updateThemeButton(isDark) {
             const icon = document.getElementById("theme-toggle-icon");
             const btn = document.getElementById("theme-toggle");
-            if (!icon || !btn) return;
-            icon.setAttribute("data-lucide", isDark ? "sun" : "moon");
-            btn.title = isDark ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن";
-            btn.setAttribute("aria-label", btn.title);
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function toggleTheme() {
-            const isDark = !document.body.classList.contains("dark");
-            document.body.classList.toggle("dark", isDark);
-            localStorage.setItem("smart_trans_theme", isDark ? "dark" : "light");
-            updateThemeButton(isDark);
-        }
-
-        function applySavedFocusMode() {
-            const enabled = localStorage.getItem("smart_trans_focus_mode") === "on";
-            document.body.classList.toggle("focus-mode", enabled);
-            updateFocusButton(enabled);
-        }
-
-        function updateFocusButton(enabled) {
-            const btn = document.getElementById("focus-toggle");
-            const icon = document.getElementById("focus-toggle-icon");
-            if (!btn || !icon) return;
-            icon.setAttribute("data-lucide", enabled ? "scan" : "scan-eye");
-            btn.title = enabled ? "إيقاف وضع التركيز" : "تفعيل وضع التركيز";
-            btn.setAttribute("aria-label", btn.title);
-            btn.setAttribute("aria-pressed", String(enabled));
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function toggleFocusMode() {
-            const enabled = !document.body.classList.contains("focus-mode");
-            document.body.classList.toggle("focus-mode", enabled);
-            localStorage.setItem("smart_trans_focus_mode", enabled ? "on" : "off");
-            updateFocusButton(enabled);
-        }
-    </script>
-</body>
-</html>
+            if (!ic
