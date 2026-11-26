@@ -4179,4 +4179,43 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
         function updateThemeButton(isDark) {
             const icon = document.getElementById("theme-toggle-icon");
             const btn = document.getElementById("theme-toggle");
-            if (!ic
+            if (!icon || !btn) return;
+            icon.setAttribute("data-lucide", isDark ? "sun" : "moon");
+            btn.title = isDark ? t("lightMode") : t("darkMode");
+            btn.setAttribute("aria-label", btn.title);
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function toggleTheme() {
+            const isDark = !document.body.classList.contains("dark");
+            document.body.classList.toggle("dark", isDark);
+            localStorage.setItem("smart_trans_theme", isDark ? "dark" : "light");
+            updateThemeButton(isDark);
+        }
+
+        function applySavedFocusMode() {
+            const enabled = localStorage.getItem("smart_trans_focus_mode") === "on";
+            document.body.classList.toggle("focus-mode", enabled);
+            updateFocusButton(enabled);
+        }
+
+        function updateFocusButton(enabled) {
+            const btn = document.getElementById("focus-toggle");
+            const icon = document.getElementById("focus-toggle-icon");
+            if (!btn || !icon) return;
+            icon.setAttribute("data-lucide", enabled ? "scan" : "scan-eye");
+            btn.title = enabled ? t("focusOff") : t("focusOn");
+            btn.setAttribute("aria-label", btn.title);
+            btn.setAttribute("aria-pressed", String(enabled));
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function toggleFocusMode() {
+            const enabled = !document.body.classList.contains("focus-mode");
+            document.body.classList.toggle("focus-mode", enabled);
+            localStorage.setItem("smart_trans_focus_mode", enabled ? "on" : "off");
+            updateFocusButton(enabled);
+        }
+    </script>
+</body>
+</html>
