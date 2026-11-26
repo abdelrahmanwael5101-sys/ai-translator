@@ -3027,6 +3027,7 @@ let prebuiltCache = null;
         function getToneInstruction() {
             const tone = localStorage.getItem("smart_trans_tone") || "auto";
             return ({
+                auto: "STYLE: if the target is Arabic use Modern Standard Arabic (فصحى), not colloquial dialect.",
                 egy: "STYLE: if the target is Arabic use natural Egyptian colloquial (عامية مصرية).",
                 msa: "STYLE: if the target is Arabic use Modern Standard Arabic (فصحى).",
                 formal: "STYLE: formal, polite register.",
@@ -3069,7 +3070,7 @@ let prebuiltCache = null;
 
             const mode = isEnToEn
                 ? "English-English dictionary: keep the headword in translation; give a concise original definition."
-                : `Translate the intended meaning naturally (register: ${implicitCtx.inferredRegister}${implicitCtx.isEgyptianArabic ? "; Egyptian Arabic" : ""}), keeping nuance, slang and technical terms. Proverbs and idioms: give the equivalent expression in the target language, never word-for-word. Ambiguous words: put the most likely sense first and mention other senses in context_note. Never add filler or remarks that are not in the source.`;
+                : `Translate the intended meaning naturally (register: ${implicitCtx.inferredRegister}${implicitCtx.isEgyptianArabic ? "; Egyptian Arabic" : ""}), keeping nuance, slang and technical terms. Proverbs, sayings, idioms and phrasal verbs: recognize fixed expressions like "piece of cake" or "pick up" as one unit and translate the intended meaning naturally (the real equivalent in the target language, or one natural sentence giving the meaning), never word-for-word, even when the expression sits inside a longer sentence. Translate word-for-word only when the words report a real, literal event ("He broke a leg yesterday" means his leg really broke). Put any literal wording only in context_note, and only when such an expression is present. Everyday feelings and states: use the phrase a native speaker really says, never a stiff literal copy (for example "I don't feel well" becomes "لست على ما يرام" in standard Arabic). Ambiguous words: put the most likely sense first and mention other senses in context_note. Never add filler or remarks that are not in the source.`;
 
             const extras = [
                 getToneInstruction(),
@@ -3432,7 +3433,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const effectiveSrcLang = srcState.manualOverride ? srcState.selectedLang : (srcState.detectedLang || srcState.selectedLang);
             const effectiveTgtLang = tgtState.selectedLang;
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
-            const cacheId = signature + "::token-opt-v3::" + (localStorage.getItem("smart_trans_tone") || "auto");
+            const cacheId = signature + "::token-opt-v5-msa-pv::" + (localStorage.getItem("smart_trans_tone") || "auto");
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage(t("loadingPrep"));
