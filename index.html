@@ -2182,6 +2182,30 @@ let GEMINI_MODELS = [
             if (showMessage) showAlert(t("cancelled"));
         }
 let prebuiltCache = null;
+let ipaData = null; // ipa.json: { symbols, ipa } from CMU dictionary (American English)
+function loadIpaData() {
+    if (ipaData) return;
+    ipaData = { ipa: {}, symbols: {} };
+    fetch("ipa.json").then(r => r.ok ? r.json() : null).then(j => { if (j && j.ipa) ipaData = j; }).catch(() => {});
+}
+function lookupIpa(text) {
+    if (!ipaData) loadIpaData();
+    const w = String(text || "").toLowerCase().replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "").replace(/\s+/g, " ").trim();
+    return (ipaData && ipaData.ipa && ipaData.ipa[w]) || "";
+}
+function ipaToSymbols(ipa) {
+    const table = (ipaData && ipaData.symbols) || {};
+    const keys = Object.keys(table).sort((a, b) => b.length - a.length);
+    const out = [], seen = new Set();
+    const body = String(ipa).replace(/[\/ˈˌ\s]/g, "");
+    for (let i = 0; i < body.length;) {
+        const k = keys.find(x => body.startsWith(x, i));
+        if (!k) { i++; continue; }
+        if (!seen.has(k)) { seen.add(k); out.push({ symbol: k, example: table[k] }); }
+        i += k.length;
+    }
+    return out;
+}
 let prebuiltAliases = {};
 let prebuiltLoose = null;       // "EN>AR|looseword" -> Set of entry keys, built once when the cache loads
 let englishWordRank = null;     // optional english_words.txt: word -> frequency rank (used only to avoid wrong suggestions)
@@ -2260,6 +2284,7 @@ async function getPrebuiltTranslation(text, src, tgt, allowSuggest = true) {
     if (!dir) return null;
     try {
         if (!prebuiltCache) {
+            loadIpaData();
             const res = await fetch("common_cache.json");
             const json = res.ok ? await res.json() : {};
             prebuiltCache = json.entries || {};
@@ -4047,11 +4072,12 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             if (!options.keepDetails) closeAllAccordions();
 
             const ipaEl = document.getElementById("content-ipa");
-            const symbolsList = Array.isArray(data.ipa_symbols) ? data.ipa_symbols : [];
+            const cachedIpa = data.ipa || (effectiveSrcLang.startsWith("en") ? lookupIpa(originalInput) : "");
+            const symbolsList = Array.isArray(data.ipa_symbols) && data.ipa_symbols.length ? data.ipa_symbols : (cachedIpa ? ipaToSymbols(cachedIpa) : []);
             const symbolsHtml = symbolsList.length > 0
                 ? `<div class="mt-2.5 pt-2 border-t border-slate-100 flex flex-wrap gap-1.5 ltr-text">${symbolsList.map(s => `<span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 border border-blue-200 font-mono text-xs"><strong>${escapeHTML(s.symbol || "")}</strong> <span class="text-slate-500 font-sans">(${escapeHTML(s.example || "")})</span></span>`).join("")}</div>`
                 : "";
-            ipaEl.innerHTML = `<span class="ltr-text font-mono text-sm font-semibold text-blue-700 block">${escapeHTML(data.ipa || transcriptionText || t("notAvailable"))}</span>${symbolsHtml}`;
+            ipaEl.innerHTML = `<span class="ltr-text font-mono text-sm font-semibold text-blue-700 block">${escapeHTML(cachedIpa || transcriptionText || t("notAvailable"))}</span>${symbolsHtml}`;
 
             renderBadgeList("content-collocations", data.collocations, targetObj.dir, false);
             renderBadgeList("content-word-family", data.word_family, targetObj.dir, false);
