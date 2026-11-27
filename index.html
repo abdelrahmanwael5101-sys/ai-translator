@@ -387,6 +387,8 @@
             </div>
         </div>
 
+        <div id="did-you-mean" class="hidden"></div>
+
         <div class="mt-5 sm:mt-6 flex flex-col items-center justify-center">
             <button id="submit-btn" type="button" onclick="executeTranslation({ manualTrigger: true })" class="w-full sm:w-auto sm:min-w-[260px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg shadow-blue-200/80 hover:shadow-blue-300 transition-all duration-200 flex items-center justify-center gap-2.5 active:scale-[0.98]">
                 <i data-lucide="sparkles" class="w-5 h-5"></i>
@@ -589,7 +591,7 @@
                             <div class="flex items-center gap-2">
                                 <span class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white text-[11px] sm:text-xs font-bold flex items-center gap-1.5">
                                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                    <span data-i18n="idiomBadge">مصطلح / تعبير شائع</span>
+                                    <span id="idiom-badge-text" data-i18n="idiomBadge">مصطلح / تعبير شائع</span>
                                 </span>
                                 <h3 id="idiom-phrase" class="text-base sm:text-xl font-extrabold text-indigo-900 break-words"></h3>
                                 <button type="button" onclick="speakIdiomPhrase(this)" class="w-8 h-8 rounded-full bg-white hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 flex items-center justify-center transition-all active:scale-90 shrink-0" data-i18n-title="listenIdiom" title="استمع للمصطلح">
@@ -600,7 +602,7 @@
 
                         <p id="idiom-meaning" class="text-xs sm:text-base text-slate-700 font-medium leading-relaxed"></p>
 
-                        <div>
+                        <div id="idiom-examples-wrap">
                             <div class="text-[11px] sm:text-xs font-bold text-indigo-700 mb-2.5 flex items-center gap-1.5">
                                 <i data-lucide="message-square-quote" class="w-3.5 h-3.5"></i>
                                 <span data-i18n="idiomExamples">أمثلة على المصطلح</span>
@@ -834,6 +836,7 @@
   "examplesHeader": "أمثلة في سياقات مختلفة",
   "listenSentence": "استمع للجملة",
   "idiomBadge": "مصطلح / تعبير شائع",
+  "idiomSimilarBadge": "تعبير مشابه تقدر تقوله",
   "listenIdiom": "استمع للمصطلح",
   "idiomExamples": "أمثلة على المصطلح",
   "synonyms": "المرادفات",
@@ -962,6 +965,7 @@
   "examplesHeader": "Examples in different contexts",
   "listenSentence": "Listen to the sentence",
   "idiomBadge": "Idiom / common expression",
+  "idiomSimilarBadge": "A similar expression you could say",
   "listenIdiom": "Listen to the expression",
   "idiomExamples": "Examples of the expression",
   "synonyms": "Synonyms",
@@ -2179,11 +2183,80 @@ let GEMINI_MODELS = [
         }
 let prebuiltCache = null;
 let prebuiltAliases = {};
-async function getPrebuiltTranslation(text, src, tgt) {
+let prebuiltLoose = null;       // "EN>AR|looseword" -> Set of entry keys, built once when the cache loads
+let englishWordRank = null;     // optional english_words.txt: word -> frequency rank (used only to avoid wrong suggestions)
+let englishWordsLoading = null;
+// Loose form: same letters merged (hamza/alef, ya/alef maqsura, ta marbuta/ha), no hyphen/apostrophe/punctuation, lower case.
+function looseKey(text) {
+    // ignores every symbol, punctuation mark and emoji (start, middle, end); apostrophes/hyphens/_ join the word, other symbols act as a space
+    return normalizeLookupText(text)
+        .replace(/[\u0640'’‘`´\-‐‑–—_]/g, "")
+        .replace(/[^\p{L}\p{N}\s]/gu, " ")
+        .replace(/ة/g, "ه").replace(/\s+/g, " ").trim();
+}
+function buildLooseIndex() {
+    const idx = new Map();
+    const add = (k, target) => {
+        const p = k.indexOf("|");
+        const lk = k.slice(0, p) + "|" + looseKey(k.slice(p + 1));
+        let set = idx.get(lk);
+        if (!set) idx.set(lk, set = new Set());
+        set.add(target);
+    };
+    for (const k in prebuiltCache) add(k, k);
+    for (const al in prebuiltAliases) { const target = prebuiltAliases[al]; if (prebuiltCache[target]) add(al, target); }
+    prebuiltLoose = idx;
+}
+function editDistanceAtMost(a, b, max) { // Damerau-Levenshtein (adjacent swap counts as 1); returns max+1 when farther
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    const d = [];
+    for (let i = 0; i <= a.length; i++) { d[i] = [i]; }
+    for (let j = 1; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+            d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+            if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+        }
+    }
+    return d[a.length][b.length];
+}
+function loadEnglishWordList() {
+    if (!englishWordsLoading) {
+        englishWordsLoading = fetch("english_words.txt").then(r => r.ok ? r.text() : "").catch(() => "").then(txt => {
+            const m = new Map();
+            txt.split("\n").forEach((w, i) => { w = w.trim(); if (w && !m.has(w)) m.set(w, i); });
+            englishWordRank = m;
+            return m;
+        });
+    }
+    return englishWordsLoading;
+}
+// Spelling suggestions, no AI: a single English word that is not in the cache and not a known word, close to cached words.
+async function suggestEnglishSpelling(norm) {
+    const w = norm.replace(/[.!?,;:]+$/, "");
+    if (!/^[a-z]{4,24}$/.test(w)) return [];
+    const ranks = await loadEnglishWordList();
+    if (ranks.has(w) || ranks.has(simpleEnglishLemma(w))) return [];   // a valid word (or a form of one): never suggest
+    const max = w.length >= 8 ? 2 : 1;
+    const found = [];
+    for (const key in prebuiltCache) {
+        if (!key.startsWith("EN>AR|")) continue;
+        const word = key.slice(6);
+        if (!/^[a-z]+$/.test(word) || Math.abs(word.length - w.length) > max) continue;
+        const dist = editDistanceAtMost(w, word, max);
+        if (dist <= max) found.push({ key, word, score: dist * 1000000 + (ranks.has(word) ? ranks.get(word) : 999999) });
+    }
+    found.sort((x, y) => x.score - y.score);
+    return found.slice(0, 3);
+}
+async function getPrebuiltTranslation(text, src, tgt, allowSuggest = true) {
     if ((localStorage.getItem("smart_trans_tone") || "auto") !== "auto") return null;
     const s = String(src), t = String(tgt);
     const dir = s.startsWith("en") && t.startsWith("ar") ? "EN>AR"
-              : s.startsWith("ar") && t.startsWith("en") ? "AR>EN" : null;
+              : s.startsWith("ar") && t.startsWith("en") ? "AR>EN"
+              : s.startsWith("en") && t.startsWith("en") ? "EN>EN"
+              : s.startsWith("ar") && t.startsWith("ar") ? "AR>AR" : null;
     if (!dir) return null;
     try {
         if (!prebuiltCache) {
@@ -2191,18 +2264,96 @@ async function getPrebuiltTranslation(text, src, tgt) {
             const json = res.ok ? await res.json() : {};
             prebuiltCache = json.entries || {};
             prebuiltAliases = json.aliases || {};
+            buildLooseIndex();
         }
-    } catch (_) { prebuiltCache = {}; prebuiltAliases = {}; }
+    } catch (_) { prebuiltCache = {}; prebuiltAliases = {}; prebuiltLoose = new Map(); }
     const norm = normalizeLookupText(text);
     const stripped = norm.replace(/[.!?؟،,;:]+$/, "");
     const k = dir + "|" + norm;
     const k2 = dir + "|" + stripped;
+    // 1) exact match
     let hit = prebuiltCache[k] || prebuiltCache[k2];
     if (!hit) {
         const target = prebuiltAliases[k] || prebuiltAliases[k2];
         if (target) hit = prebuiltCache[target] || prebuiltCache[dir + "|" + target];
     }
-    return hit ? { data: JSON.parse(JSON.stringify(hit)), source: "Prebuilt cache" } : null;
+    if (!hit) {
+        // symbols/emoji/quotes at the start or end never matter: retry the exact lookup without them
+        const edge = norm.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
+        if (edge && edge !== norm && edge !== stripped) {
+            const k3 = dir + "|" + edge;
+            hit = prebuiltCache[k3];
+            if (!hit) { const target = prebuiltAliases[k3]; if (target) hit = prebuiltCache[target] || prebuiltCache[dir + "|" + target]; }
+        }
+    }
+    if (hit) return { data: JSON.parse(JSON.stringify(hit)), source: "Prebuilt cache" };
+    // 2) loose match: used only when it points to exactly one entry; several entries = ask the user
+    const lkey = looseKey(text);
+    const set = lkey && prebuiltLoose && prebuiltLoose.get(dir + "|" + lkey);
+    if (set && set.size === 1) {
+        const key = [...set][0];
+        return { data: JSON.parse(JSON.stringify(prebuiltCache[key])), source: "Prebuilt cache (normalized)" };
+    }
+    if (allowSuggest && set && set.size > 1) {
+        return { choices: [...set].map(key => ({ key, word: key.slice(key.indexOf("|") + 1), data: prebuiltCache[key] })) };
+    }
+    // 3) English typo suggestion (suggest only, nothing is changed automatically)
+    if (allowSuggest && dir === "EN>AR") {
+        const suggest = await suggestEnglishSpelling(looseKey(text));
+        if (suggest.length) return { suggest: suggest.map(x => ({ key: x.key, word: x.word, data: prebuiltCache[x.key] })) };
+    }
+    return null;
+}
+
+// ---- "Did you mean": buttons, no AI call ----
+let dymResolve = null, dymTimer = null;
+function hideDidYouMean() {
+    clearTimeout(dymTimer);
+    const el = document.getElementById("did-you-mean");
+    if (el) { el.className = "hidden"; el.textContent = ""; }
+}
+function dymPick(word) {
+    const box = document.getElementById(`box${state.activeInputBox}-text`);
+    if (box) box.value = word;
+    if (dymResolve) { dymResolve("picked"); dymResolve = null; }
+    hideDidYouMean();
+    cancelActiveTranslation(false);
+    executeTranslation({ manualTrigger: true, skipSuggest: true });
+}
+function dymNone(kind) {
+    if (kind === "typo") { if (dymResolve) { dymResolve("typed"); dymResolve = null; } hideDidYouMean(); return; }
+    hideDidYouMean();
+    executeTranslation({ manualTrigger: true, skipSuggest: true });
+}
+function showDidYouMean(kind, items) {
+    const el = document.getElementById("did-you-mean");
+    if (!el) return;
+    // small line directly under the input text (like Google Translate)
+    const box = document.getElementById(`box${state.activeInputBox}-text`);
+    if (box && box.parentNode) box.insertAdjacentElement("afterend", el);
+    el.textContent = "";
+    el.className = "mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-slate-500";
+    el.dir = "rtl";
+    const lab = document.createElement("span");
+    lab.textContent = kind === "typo" ? "هل تقصد:" : "هل تقصد أحد هذه؟";
+    el.appendChild(lab);
+    items.forEach(item => {
+        const d = item.data || {};
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "dym-choice px-2 py-0.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold";
+        const w = document.createElement("span"); w.dir = "auto"; w.textContent = item.word; b.appendChild(w);
+        if (kind !== "typo" && d.translation) { const g = document.createElement("span"); g.className = "font-normal text-slate-500 ms-1.5"; g.dir = "auto"; g.textContent = String(d.translation).slice(0, 28); b.appendChild(g); }
+        b.onclick = () => dymPick(item.word);
+        el.appendChild(b);
+    });
+    const none = document.createElement("button");
+    none.type = "button";
+    none.id = "dym-none";
+    none.className = "px-1 underline text-slate-400 hover:text-slate-600";
+    none.textContent = kind === "typo" ? "ترجم كما كتبت" : "غير ذلك، ترجمها بالذكاء الاصطناعي";
+    none.onclick = () => dymNone(kind);
+    el.appendChild(none);
 }
         function cacheKey(text, src, tgt) { return [src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::"); }
         function openTranslatorDB() {
@@ -2773,7 +2924,7 @@ async function getPrebuiltTranslation(text, src, tgt) {
 
         function speakIdiomPhrase(btnElement) {
             const phrase = document.getElementById("idiom-phrase").textContent;
-            speakText(phrase, state.currentDictLang, btnElement);
+            speakText(phrase, document.getElementById("idiom-section").dataset.speakLang || state.currentDictLang, btnElement);
         }
 
         function setActiveBox(boxNum) {
@@ -3043,7 +3194,9 @@ async function getPrebuiltTranslation(text, src, tgt) {
             })[tone] || "";
         }
 
-        function buildUnifiedPrompt(text, effectiveSrcLang, effectiveTgtLang, knowledgeContext = null, lexicalHints = null) {
+        // Lazy details: "fast" = translation, 2 examples, synonyms, antonyms and the idiom flag; "details" = everything behind "إظهار التفاصيل", loaded on tap.
+        const FAST_KEYS = ["plain_meaning", "translation", "examples", "synonyms", "antonyms", "idiom"];
+        function buildUnifiedPrompt(text, effectiveSrcLang, effectiveTgtLang, knowledgeContext = null, lexicalHints = null, phase = "full", finalTranslation = "") {
             const isEnToEn = effectiveSrcLang.startsWith("en") && effectiveTgtLang.startsWith("en");
             const implicitCtx = inferImplicitContext(text, effectiveSrcLang, effectiveTgtLang);
             const sourceName = getLangObj(effectiveSrcLang).name;
@@ -3076,13 +3229,18 @@ async function getPrebuiltTranslation(text, src, tgt) {
                 quality_check: { status: "", issues: [], improvement: "" },
                 context_note: ""
             };
+            const pickKeys = (obj, keys, keep) => Object.fromEntries(Object.entries(obj).filter(([k]) => keys.includes(k) === keep));
+            const activeSchema = phase === "fast" ? pickKeys(schema, FAST_KEYS, true) : phase === "details" ? pickKeys(schema, FAST_KEYS, false) : schema;
 
-            const mode = isEnToEn
+            const mode = phase === "details"
+                ? "Dictionary details for the SOURCE and its final TRANSLATION. Do not change or re-translate the TRANSLATION."
+                : isEnToEn
                 ? "English-English dictionary: keep the headword in translation; give a concise original definition."
                 : `Translate the intended meaning naturally (register: ${implicitCtx.inferredRegister}${implicitCtx.isEgyptianArabic ? "; Egyptian Arabic" : ""}), keeping nuance, slang and technical terms. Idioms, proverbs, phrasal verbs and set formulas (openers like "بيقولك إيه"; wishes like "ربنا يهديك" ("may God guide you") or "عقبال ما نفرح بيك" ("may you be next"); courtesy formulas and hedged requests like "please find attached", "we would appreciate it if" or "I was wondering if" (a direct polite request: "أرجو" or "هل يمكنكم", never "كنت أتساءل"), in the target's own courteous words; situational phrases and everyday feelings as a native says them: "to go" = takeaway ("لأخذه معي", never "للذهاب"), "I don't feel well" = "لست على ما يرام"; "spill the beans"): never translate their words or image; carry their function, tone and general meaning, not one narrow case. In plain_meaning restate the source plainly, figurative phrases resolved; translate from it into the target's genuine equivalent or natural words. Literal only for a real literal event; put literal wording in context_note. Ambiguous words or readings: the sense this context supports; others in context_note. Never add filler. Proofread the translation for spelling, grammar and gender/number agreement.`;
 
             const extras = [
                 getToneInstruction(),
+                phase === "details" && finalTranslation ? `TRANSLATION: ${JSON.stringify(finalTranslation)}` : "",
                 knowledgeContext ? `REFERENCE: ${JSON.stringify(knowledgeContext)}` : "",
                 lexicalHints && (lexicalHints.phrases.length || lexicalHints.lemmas.length)
                     ? `LEXICAL HINTS: ${JSON.stringify(lexicalHints)}` : ""
@@ -3090,7 +3248,7 @@ async function getPrebuiltTranslation(text, src, tgt) {
 
             return `${sourceName}(${effectiveSrcLang}) to ${targetName}(${effectiveTgtLang}). ${mode}
 Return one JSON object only, using exactly these keys in this order (fill every one; list sizes as shown; part_of_speech in English, or "idiom" for an idiom, proverb or fixed expression; idiom.has_idiom true only for a real idiom). Be concise. Write definition, examples, idiom.meaning and context_note in vocabulary at or below cefr_level, never harder than the word itself.
-SCHEMA: ${JSON.stringify(schema)}
+SCHEMA: ${JSON.stringify(activeSchema)}
 ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
         }
 
@@ -3443,6 +3601,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const effectiveTgtLang = tgtState.selectedLang;
             const signature = cacheKey(inputText, effectiveSrcLang, effectiveTgtLang);
             const cacheId = signature + "::token-opt-v5-msa-pv::" + (localStorage.getItem("smart_trans_tone") || "auto");
+            currentCacheId = cacheId;
 
             if (activeRequestSignature === signature && activeControllers.length) {
                 if (manualTrigger) setLoadingStage(t("loadingPrep"));
@@ -3471,10 +3630,20 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
 
             hideAlert();
             document.getElementById("diagnostic-box").classList.add("hidden");
+            hideDidYouMean();
 
           let cached = await getCachedTranslation(cacheId);
-            if (!cached) cached = await getPrebuiltTranslation(inputText, effectiveSrcLang, effectiveTgtLang);
+            if (!cached) cached = await getPrebuiltTranslation(inputText, effectiveSrcLang, effectiveTgtLang, !options.skipSuggest);
             if (requestId !== activeTranslationId) return;
+            let dym = null;
+            if (cached && (cached.choices || cached.suggest)) { dym = cached; cached = null; }
+            if (dym && dym.choices) {
+                // several different cache entries share this loose spelling: let the user pick, no AI call
+                activeRequestSignature = "";
+                setLoading(false);
+                showDidYouMean("choices", dym.choices);
+                return;
+            }
             if (cached) {
                 updateEngineBadge("Cache (instant)", false);
                 updatePerformance({ total: performance.now() - totalStart, knowledge: 0, ai: 0, source: cached.source, route: "Cache hit" });
@@ -3485,6 +3654,13 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                 renderResults(cached.data, inputText, effectiveSrcLang, effectiveTgtLang, tgtNum, { animateStagger: shouldRevealSection });
                 if (shouldRevealSection) lastRenderedSignature = signature;
                 return;
+            }
+
+            if (dym && dym.suggest) {
+                // close cached English word: suggest it, and translate what was typed if the user ignores it (3 s)
+                showDidYouMean("typo", dym.suggest);
+                const decision = await new Promise(resolve => { dymResolve = resolve; dymTimer = setTimeout(() => { dymResolve = null; resolve("typed"); }, 3000); });
+                if (requestId !== activeTranslationId || decision === "picked") return;
             }
 
             const hasWorker = isConfiguredWorkerUrl(state.workerUrl);
@@ -3504,7 +3680,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const knowledgeMs = performance.now() - knowledgeStart;
             if (requestId !== activeTranslationId) return;
 
-            const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, knowledgeContext, lexicalHints);
+            const prompt = buildUnifiedPrompt(inputText, effectiveSrcLang, effectiveTgtLang, knowledgeContext, lexicalHints, "fast");
             const controller = new AbortController();
             activeControllers = [controller];
             const route = chooseModelRoute(inputText, effectiveSrcLang, effectiveTgtLang);
@@ -3563,6 +3739,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                     winner.data._knowledgeVerified = false;
                 }
                 winner.data._route = route.label + " · Self-Audited";
+                winner.data._detailsPending = true; // dictionary details load when the user taps "إظهار التفاصيل"
 
                 saveCache(cacheId, winner.data);
                 addHistory({ input: inputText, translation: winner.data.translation || "", source: effectiveSrcLang, target: effectiveTgtLang });
@@ -3817,7 +3994,11 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const idiomData = data.idiom;
             if (idiomData && idiomData.phrase && String(idiomData.phrase).trim() && (idiomData.has_idiom !== false || idiomData.phrase.trim().length > 0)) {
                 const phraseEl = document.getElementById("idiom-phrase");
-                phraseEl.dir = targetObj.dir;
+                const isSimilar = idiomData.has_idiom === false;
+                const badgeEl = document.getElementById("idiom-badge-text");
+                if (isSimilar) { badgeEl.removeAttribute("data-i18n"); badgeEl.textContent = t("idiomSimilarBadge"); idiomSection.dataset.speakLang = effectiveSrcLang; }
+                else { badgeEl.setAttribute("data-i18n", "idiomBadge"); badgeEl.textContent = t("idiomBadge"); delete idiomSection.dataset.speakLang; }
+                phraseEl.dir = isSimilar ? getLangObj(effectiveSrcLang).dir : targetObj.dir;
                 phraseEl.textContent = idiomData.phrase.trim();
 
                 const meaningEl = document.getElementById("idiom-meaning");
@@ -3831,6 +4012,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
                     idiomExamplesContainer.appendChild(createExampleCard(ex, idx, targetObj.dir, effectiveTgtLang, isEnToEn, "bg-indigo-600"));
                 });
 
+                document.getElementById("idiom-examples-wrap").classList.toggle("hidden", idiomExList.length === 0);
                 idiomSection.classList.remove("hidden");
             } else {
                 idiomSection.classList.add("hidden");
@@ -3873,6 +4055,7 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
 
             scheduleSmartInsights(data, effectiveSrcLang, effectiveTgtLang);
             setupAltRow(originalInput, finalTranslation, effectiveSrcLang, effectiveTgtLang);
+            lazyCtx = data._detailsPending ? { data, originalInput, effectiveSrcLang, effectiveTgtLang, tgtNum, cacheId: currentCacheId, loading: false } : null;
 
             if (animateStagger) {
                 dictSection.classList.remove("hidden");
@@ -3894,9 +4077,42 @@ ${extras ? extras + "\n" : ""}SOURCE: ${JSON.stringify(text)}`;
             const btn = document.getElementById("details-toggle-btn");
             if (btn) btn.setAttribute("aria-expanded", show ? "true" : "false");
         }
+        let currentCacheId = "";
+        let lazyCtx = null;
         function toggleDetails() {
             const wrap = document.getElementById("advanced-wrap");
-            setDetailsVisible(wrap.classList.contains("hidden"));
+            const show = wrap.classList.contains("hidden");
+            setDetailsVisible(show);
+            if (show) loadLazyDetails();
+        }
+        async function loadLazyDetails() {
+            const ctx = lazyCtx;
+            if (!ctx || ctx.loading) return;
+            ctx.loading = true;
+            setAdvancedLoading(true);
+            const controller = new AbortController();
+            try {
+                const prompt = buildUnifiedPrompt(ctx.originalInput, ctx.effectiveSrcLang, ctx.effectiveTgtLang, null,
+                    buildLexicalHints(ctx.originalInput, ctx.effectiveSrcLang, ctx.effectiveTgtLang), "details", ctx.data.translation || "");
+                let res;
+                if (isConfiguredWorkerUrl(state.workerUrl)) {
+                    try { res = await callWorkerGroqStream(prompt, controller.signal, null, { models: ["openai/gpt-oss-120b"] }); }
+                    catch (_) { res = await callWorkerGeminiStream(prompt, controller.signal, null); }
+                } else if (state.groqKey.trim()) res = await callDirectGroqAPI(prompt, controller.signal, null, null);
+                else res = await callDirectGeminiAPI(prompt, controller.signal, null);
+                if (lazyCtx !== ctx) return; // the user moved on to another translation
+                const merged = { ...ctx.data, ...res.data, translation: ctx.data.translation };
+                delete merged._detailsPending;
+                saveCache(ctx.cacheId, merged);
+                if (lastPreparedPayload && lastPreparedPayload.data === ctx.data) lastPreparedPayload.data = merged;
+                renderResults(merged, ctx.originalInput, ctx.effectiveSrcLang, ctx.effectiveTgtLang, ctx.tgtNum, { keepDetails: true, reveal: true, animateStagger: false });
+            } catch (err) {
+                console.warn("details load failed:", err.message);
+                ctx.loading = false;
+                setAdvancedLoading(false);
+                setDetailsVisible(false);
+                showAlert(t("errFailed"));
+            }
         }
         function setAdvancedLoading(on) {
             document.getElementById("dict-advanced-block")?.classList.toggle("advanced-loading", on);
