@@ -2178,24 +2178,32 @@ let GEMINI_MODELS = [
             if (showMessage) showAlert(t("cancelled"));
         }
 let prebuiltCache = null;
-        function prebuiltKey(text) {
-            return normalizeLookupText(text).replace(/[.!?؟،,;:]+$/, "");
+let prebuiltAliases = {};
+async function getPrebuiltTranslation(text, src, tgt) {
+    if ((localStorage.getItem("smart_trans_tone") || "auto") !== "auto") return null;
+    const s = String(src), t = String(tgt);
+    const dir = s.startsWith("en") && t.startsWith("ar") ? "EN>AR"
+              : s.startsWith("ar") && t.startsWith("en") ? "AR>EN" : null;
+    if (!dir) return null;
+    try {
+        if (!prebuiltCache) {
+            const res = await fetch("common_cache.json");
+            const json = res.ok ? await res.json() : {};
+            prebuiltCache = json.entries || {};
+            prebuiltAliases = json.aliases || {};
         }
-        async function getPrebuiltTranslation(text, src, tgt) {
-            if ((localStorage.getItem("smart_trans_tone") || "auto") !== "auto") return null;
-            const s = String(src), t = String(tgt);
-            const dir = s.startsWith("en") && t.startsWith("ar") ? "EN>AR"
-                      : s.startsWith("ar") && t.startsWith("en") ? "AR>EN" : null;
-            if (!dir) return null;
-            try {
-                if (!prebuiltCache) {
-                    const res = await fetch("common_cache.json");
-                    prebuiltCache = res.ok ? ((await res.json()).entries || {}) : {};
-                }
-            } catch (_) { prebuiltCache = {}; }
-            const hit = prebuiltCache[dir + "|" + prebuiltKey(text)];
-            return hit ? { data: JSON.parse(JSON.stringify(hit)), source: "Prebuilt cache" } : null;
-        }
+    } catch (_) { prebuiltCache = {}; prebuiltAliases = {}; }
+    const norm = normalizeLookupText(text);
+    const stripped = norm.replace(/[.!?؟،,;:]+$/, "");
+    const k = dir + "|" + norm;
+    const k2 = dir + "|" + stripped;
+    let hit = prebuiltCache[k] || prebuiltCache[k2];
+    if (!hit) {
+        const target = prebuiltAliases[k] || prebuiltAliases[k2];
+        if (target) hit = prebuiltCache[target] || prebuiltCache[dir + "|" + target];
+    }
+    return hit ? { data: JSON.parse(JSON.stringify(hit)), source: "Prebuilt cache" } : null;
+}
         function cacheKey(text, src, tgt) { return [src, tgt, text.trim().replace(/\s+/g, " ").toLowerCase()].join("::"); }
         function openTranslatorDB() {
             if (!('indexedDB' in window)) return Promise.resolve(null);
