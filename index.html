@@ -2310,7 +2310,7 @@ let dymResolve = null, dymTimer = null;
 function hideDidYouMean() {
     clearTimeout(dymTimer);
     const el = document.getElementById("did-you-mean");
-    if (el) { el.className = "hidden"; el.textContent = ""; }
+    if (el) { el.className = "hidden"; el.style.cssText = ""; el.textContent = ""; }
 }
 function dymPick(word) {
     const box = document.getElementById(`box${state.activeInputBox}-text`);
@@ -2332,8 +2332,23 @@ function showDidYouMean(kind, items) {
     const box = document.getElementById(`box${state.activeInputBox}-text`);
     if (box && box.parentNode) box.insertAdjacentElement("afterend", el);
     el.textContent = "";
-    el.className = "mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-slate-500";
+    el.className = "absolute z-10 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-slate-500";
     el.dir = "rtl";
+    // sit right under the last line of the typed text (the textarea itself is taller than its text)
+    if (box) {
+        const probe = box.cloneNode(false);
+        probe.removeAttribute("id");
+        const cs = getComputedStyle(box);
+        const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+        probe.style.cssText = "position:absolute;visibility:hidden;height:0;min-height:0;overflow:hidden;padding:0;border:0;box-sizing:content-box;width:" + (box.clientWidth - padX) + "px";
+        probe.value = box.value;
+        box.parentNode.appendChild(probe);
+        const textBottom = box.offsetTop + parseFloat(cs.paddingTop) + probe.scrollHeight;
+        probe.remove();
+        el.style.top = (textBottom + 2) + "px";
+        el.style.left = box.offsetLeft + "px";
+        el.style.width = box.offsetWidth + "px";
+    }
     const lab = document.createElement("span");
     lab.textContent = kind === "typo" ? "هل تقصد:" : "هل تقصد أحد هذه؟";
     el.appendChild(lab);
