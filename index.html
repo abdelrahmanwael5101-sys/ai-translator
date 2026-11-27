@@ -2116,7 +2116,7 @@
         }
         function setUILanguage(lang) { applyUILanguage(lang); }
 
-        const KEY_VERSION = "v22_combo_proofread";
+        const KEY_VERSION = "v23_formula_fixes";
         if (localStorage.getItem("smart_trans_key_ver") !== KEY_VERSION) {
             localStorage.removeItem("smart_trans_gemini_key");
             localStorage.removeItem("smart_trans_groq_key");
@@ -3071,7 +3071,7 @@ let prebuiltCache = null;
 
             const mode = isEnToEn
                 ? "English-English dictionary: keep the headword in translation; give a concise original definition."
-                : `Translate the intended meaning naturally (register: ${implicitCtx.inferredRegister}${implicitCtx.isEgyptianArabic ? "; Egyptian Arabic" : ""}), keeping nuance, slang and technical terms. Idioms, proverbs, phrasal verbs and figurative phrases (e.g. "spill the beans", "pick up"): never translate their words or image. In plain_meaning restate the whole source in plain literal English with every figurative phrase resolved; then translate from plain_meaning, using the target language's genuine equivalent expression or natural words with the same meaning. Literal only for a real literal event ("He broke a leg yesterday"). Put any literal wording only in context_note. Everyday feelings: say what a native says ("I don't feel well" becomes "لست على ما يرام" in standard Arabic). Ambiguous words: give the most precise equivalent first and mention other senses in context_note. Never add filler or remarks not in the source. Proofread the translation once for spelling and grammar.`;
+                : `Translate the intended meaning naturally (register: ${implicitCtx.inferredRegister}${implicitCtx.isEgyptianArabic ? "; Egyptian Arabic" : ""}), keeping nuance, slang and technical terms. Idioms, proverbs, phrasal verbs and set formulas (openers like "بيقولك إيه", goodwill wishes like "ربنا يهديك" ("may God guide you"), business formulas like "please find attached", "spill the beans"): never translate their words or image; carry their function, tone and general meaning, not one narrow case. In plain_meaning restate the source plainly, figurative phrases resolved; translate from it into the target's genuine equivalent or natural words. Literal only for a real literal event; put literal wording in context_note. Everyday feelings: say what a native says ("I don't feel well" = "لست على ما يرام"). Ambiguous words: most precise sense first; others in context_note. Never add filler. Proofread the translation for spelling, grammar and gender/number agreement.`;
 
             const extras = [
                 getToneInstruction(),
