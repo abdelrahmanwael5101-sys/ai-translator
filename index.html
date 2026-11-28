@@ -2274,6 +2274,36 @@ async function suggestEnglishSpelling(norm) {
     found.sort((x, y) => x.score - y.score);
     return found.slice(0, 3);
 }
+        const FILLER_START = /^(?:it's|it’s|it is|that's|that’s|that is|this is|there is|a|an|the)\s+/;
+const FILLER_NEGATION = /\b(?:not|no|never|none|nobody|nothing|nowhere|neither|nor|without|cannot|hardly|barely)\b|n['’]t\b/;
+function fillerVariants(text) {
+    const start = normalizeLookupText(text).replace(/^[^\p{L}\p{N}]+/u, "");
+    if (FILLER_NEGATION.test(start)) return [];
+    const out = [];
+    let s = start.replace(/^(?:oh|well|so),\s*/, "");          // interjection followed by a comma: "Oh, ..." / "Well, ..."
+    if (s !== start) out.push(s);
+    for (let i = 0; i < 4; i++) {
+        const m = s.match(FILLER_START);
+        if (!m) break;
+        const rest = s.slice(m[0].length).replace(/^[,\s]+/, "");
+        if (rest.split(" ").length < 2) break;                 // never reduce to one word ("that's a wrap" must not become "wrap")
+        s = rest;
+        out.push(s);
+    }
+    return out;
+}
+function prebuiltLookupKey(dir, text) {
+    const norm = normalizeLookupText(text);
+    const stripped = norm.replace(/[.!?؟،,;:]+$/, "");
+    for (const k of [dir + "|" + norm, dir + "|" + stripped]) {
+        if (prebuiltCache[k]) return k;
+        const target = prebuiltAliases[k];
+        if (target) { if (prebuiltCache[target]) return target; if (prebuiltCache[dir + "|" + target]) return dir + "|" + target; }
+    }
+    const set = prebuiltLoose && prebuiltLoose.get(dir + "|" + looseKey(text));
+    return set && set.size === 1 ? [...set][0] : null;
+}
+
 async function getPrebuiltTranslation(text, src, tgt, allowSuggest = true) {
     if ((localStorage.getItem("smart_trans_tone") || "auto") !== "auto") return null;
     const s = String(src), t = String(tgt);
@@ -2326,6 +2356,13 @@ async function getPrebuiltTranslation(text, src, tgt, allowSuggest = true) {
     }
     if (allowSuggest && set && set.size > 1) {
         return { choices: [...set].map(key => ({ key, word: key.slice(key.indexOf("|") + 1), data: prebuiltCache[key] })) };
+    }
+   // 2b) same lookup again after dropping filler words at the start ("It's a piece of cake" -> "piece of cake")
+    if (dir === "EN>AR") {
+        for (const v of fillerVariants(text)) {
+            const fk = prebuiltLookupKey(dir, v);
+            if (fk) return { data: JSON.parse(JSON.stringify(prebuiltCache[fk])), source: "Prebuilt cache (filler removed)" };
+        }
     }
     // 3) English typo suggestion (suggest only, nothing is changed automatically)
     if (allowSuggest && dir === "EN>AR") {
