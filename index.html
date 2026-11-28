@@ -2283,13 +2283,18 @@ async function getPrebuiltTranslation(text, src, tgt, allowSuggest = true) {
               : s.startsWith("ar") && t.startsWith("ar") ? "AR>AR" : null;
     if (!dir) return null;
     try {
-        if (!prebuiltCache) {
+     if (!prebuiltCache) {
             loadIpaData();
-            const res = await fetch("common_cache.json");
-            const json = res.ok ? await res.json() : {};
+            // part 1 + aliases first (the first translation waits only for these); parts 2 and 3 load in the background
+            const getJ = async (u) => { try { const r = await fetch(u); return r.ok ? await r.json() : {}; } catch (_) { return {}; } };
+            const [json, jsonA] = await Promise.all([getJ("common_cache.json"), getJ("common_cache_aliases.json")]);
             prebuiltCache = json.entries || {};
-            prebuiltAliases = json.aliases || {};
+            prebuiltAliases = Object.assign({}, json.aliases || {}, jsonA.aliases || {});
             buildLooseIndex();
+            Promise.all([getJ("common_cache_2.json"), getJ("common_cache_3.json")]).then(([j2, j3]) => {
+                prebuiltCache = Object.assign({}, j3.entries || {}, j2.entries || {}, prebuiltCache);   // part 1 wins on conflicts
+                buildLooseIndex();
+            });
         }
     } catch (_) { prebuiltCache = {}; prebuiltAliases = {}; prebuiltLoose = new Map(); }
     const norm = normalizeLookupText(text);
